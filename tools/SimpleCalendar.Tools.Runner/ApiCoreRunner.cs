@@ -37,7 +37,7 @@ namespace SimpleCalendar.Tools.Runner
             var result = await eventService.CreateEventAsync(new EventCreate()
             {
                 Name = "My Event",
-                RegionId = "nz.wellington"
+                RegionId = "new_zealand.wellington"
             });
         }
     }

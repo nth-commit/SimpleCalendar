@@ -5,23 +5,33 @@ VisualStudioVersion = 15.0.27130.2027
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{F1164879-A6C2-4BB3-9EB4-B387F35B59B4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleCalendar.Api", "src\SimpleCalendar.Api\SimpleCalendar.Api.csproj", "{EEBB40C3-761E-467F-8FCA-2081D80D9A9F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleCalendar.Api", "src\SimpleCalendar.Api\SimpleCalendar.Api.csproj", "{EEBB40C3-761E-467F-8FCA-2081D80D9A9F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleCalendar.Api.Core", "src\SimpleCalendar.Api.Core\SimpleCalendar.Api.Core.csproj", "{319192B5-0BB7-40AF-B36B-0B2DAE311950}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleCalendar.Api.Core", "src\SimpleCalendar.Api.Core\SimpleCalendar.Api.Core.csproj", "{319192B5-0BB7-40AF-B36B-0B2DAE311950}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "util", "util", "{F618B39A-282C-4FF5-A71A-C5A1A6EFC4C3}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleCalendar.Utility.Validation", "util\SimpleCalendar.Utility.Validation\SimpleCalendar.Utility.Validation.csproj", "{EB8BBCB8-0089-4AD7-A72F-0B3316696BB1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleCalendar.Utility.DependencyInjection", "util\SimpleCalendar.Utility.DependencyInjection\SimpleCalendar.Utility.DependencyInjection.csproj", "{FA03ED4D-71AA-43DD-92CC-EB217D286AC5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleCalendar.Utility.DependencyInjection", "util\SimpleCalendar.Utility.DependencyInjection\SimpleCalendar.Utility.DependencyInjection.csproj", "{FA03ED4D-71AA-43DD-92CC-EB217D286AC5}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleCalendar.Utility.WindowsAzure.Storage", "util\SimpleCalendar.Utility.WindowsAzure.Storage\SimpleCalendar.Utility.WindowsAzure.Storage.csproj", "{0FF8C884-597A-4094-B23A-F0F25EC60B54}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleCalendar.Utility.Configuration", "util\SimpleCalendar.Utility.Configuration\SimpleCalendar.Utility.Configuration.csproj", "{73161659-5A80-4C8D-B9F4-037FF68973A0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleCalendar.Utility.Configuration", "util\SimpleCalendar.Utility.Configuration\SimpleCalendar.Utility.Configuration.csproj", "{73161659-5A80-4C8D-B9F4-037FF68973A0}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tools", "tools", "{5DC40953-CFA7-4401-9BCD-01F6A5B481E1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleCalendar.Tools.Runner", "tools\SimpleCalendar.Tools.Runner\SimpleCalendar.Tools.Runner.csproj", "{9F92E2CA-88E0-4F77-B107-95ADF05650F6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleCalendar.Tools.Runner", "tools\SimpleCalendar.Tools.Runner\SimpleCalendar.Tools.Runner.csproj", "{9F92E2CA-88E0-4F77-B107-95ADF05650F6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleCalendar.App", "src\SimpleCalendar.App\SimpleCalendar.App.csproj", "{DC35A096-E852-405A-BDF1-707785C14E13}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "config", "config", "{82E6F7BB-523C-4E05-9ED0-FE62D572F15C}"
+	ProjectSection(SolutionItems) = preProject
+		appsettings.Shared.Development.json = appsettings.Shared.Development.json
+		appsettings.Shared.json = appsettings.Shared.json
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleCalendar.Framework", "src\SimpleCalendar.Framework\SimpleCalendar.Framework.csproj", "{3EBBDA03-940C-4F5C-9FDC-A17024F0F77C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -87,6 +97,22 @@ Global
 		{9F92E2CA-88E0-4F77-B107-95ADF05650F6}.Release|Any CPU.Build.0 = Release|Any CPU
 		{9F92E2CA-88E0-4F77-B107-95ADF05650F6}.Release|x64.ActiveCfg = Release|Any CPU
 		{9F92E2CA-88E0-4F77-B107-95ADF05650F6}.Release|x64.Build.0 = Release|Any CPU
+		{DC35A096-E852-405A-BDF1-707785C14E13}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DC35A096-E852-405A-BDF1-707785C14E13}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DC35A096-E852-405A-BDF1-707785C14E13}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{DC35A096-E852-405A-BDF1-707785C14E13}.Debug|x64.Build.0 = Debug|Any CPU
+		{DC35A096-E852-405A-BDF1-707785C14E13}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DC35A096-E852-405A-BDF1-707785C14E13}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DC35A096-E852-405A-BDF1-707785C14E13}.Release|x64.ActiveCfg = Release|Any CPU
+		{DC35A096-E852-405A-BDF1-707785C14E13}.Release|x64.Build.0 = Release|Any CPU
+		{3EBBDA03-940C-4F5C-9FDC-A17024F0F77C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3EBBDA03-940C-4F5C-9FDC-A17024F0F77C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3EBBDA03-940C-4F5C-9FDC-A17024F0F77C}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{3EBBDA03-940C-4F5C-9FDC-A17024F0F77C}.Debug|x64.Build.0 = Debug|Any CPU
+		{3EBBDA03-940C-4F5C-9FDC-A17024F0F77C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3EBBDA03-940C-4F5C-9FDC-A17024F0F77C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3EBBDA03-940C-4F5C-9FDC-A17024F0F77C}.Release|x64.ActiveCfg = Release|Any CPU
+		{3EBBDA03-940C-4F5C-9FDC-A17024F0F77C}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -99,6 +125,8 @@ Global
 		{0FF8C884-597A-4094-B23A-F0F25EC60B54} = {F618B39A-282C-4FF5-A71A-C5A1A6EFC4C3}
 		{73161659-5A80-4C8D-B9F4-037FF68973A0} = {F618B39A-282C-4FF5-A71A-C5A1A6EFC4C3}
 		{9F92E2CA-88E0-4F77-B107-95ADF05650F6} = {5DC40953-CFA7-4401-9BCD-01F6A5B481E1}
+		{DC35A096-E852-405A-BDF1-707785C14E13} = {F1164879-A6C2-4BB3-9EB4-B387F35B59B4}
+		{3EBBDA03-940C-4F5C-9FDC-A17024F0F77C} = {F1164879-A6C2-4BB3-9EB4-B387F35B59B4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {76CCE767-D905-4917-B186-261D280DB6B7}

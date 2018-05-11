@@ -1,0 +1,13 @@
+{
+  "version": "1.0.0",
+  "name": "asp.net",
+  "private": true,
+  "devDependencies": {
+  },
+  "scripts": {
+    "install": "cd ./simplecalendar-app && yarn install",
+    "start": "cd ./simplecalendar-app && yarn run start",
+    "build": "cd ./simplecalendar-app &&  ng build --prod --aot --output-path \"../wwwroot\""
+  },
+  "-vs-binding": { "ProjectOpened": [ "start" ] }
+}
