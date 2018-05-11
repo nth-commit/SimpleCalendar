@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\SimpleCalendar.Api.Core\SimpleCalendar.Api.Core.csproj" />
+    <ProjectReference Include="..\..\util\SimpleCalendar.Utility.Configuration\SimpleCalendar.Utility.Configuration.csproj" />
+    <ProjectReference Include="..\..\util\SimpleCalendar.Utility.DependencyInjection\SimpleCalendar.Utility.DependencyInjection.csproj" />
+    <ProjectReference Include="..\..\util\SimpleCalendar.Utility.Validation\SimpleCalendar.Utility.Validation.csproj" />
+    <ProjectReference Include="..\..\util\SimpleCalendar.Utility.WindowsAzure.Storage\SimpleCalendar.Utility.WindowsAzure.Storage.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="appsettings.Shared.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="3.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\util\SimpleCalendar.Utility.Configuration\SimpleCalendar.Utility.Configuration.csproj" />
+    <ProjectReference Include="..\..\util\SimpleCalendar.Utility.DependencyInjection\SimpleCalendar.Utility.DependencyInjection.csproj" />
+    <ProjectReference Include="..\..\util\SimpleCalendar.Utility.WindowsAzure.Storage\SimpleCalendar.Utility.WindowsAzure.Storage.csproj" />
+    <ProjectReference Include="..\SimpleCalendar.Api.Core\SimpleCalendar.Api.Core.csproj" />
+  </ItemGroup>
+
+</Project>
