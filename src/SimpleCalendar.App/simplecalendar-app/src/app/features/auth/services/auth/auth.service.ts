@@ -11,7 +11,7 @@ import { authFlowHelper } from './auth-flow.helper';
 interface AuthLocalStorageItem {
   expiresAt: number;
   bearerToken: string,
-  authResult: IAuthResult
+  authResult: IAuthResult;
 }
 
 @Injectable()
@@ -24,20 +24,20 @@ export class AuthService {
   ) { }
 
   redirectToLogin(authorityName?: string) {
-    let resolvedAuthorityName = this.getAuthorityName(authorityName);
-    let authHandler = this.authHanderFactory.createAuthHandler(resolvedAuthorityName);
+    const resolvedAuthorityName = this.getAuthorityName(authorityName);
+    const authHandler = this.authHanderFactory.createAuthHandler(resolvedAuthorityName);
 
-    let state = `${resolvedAuthorityName}-${new Date().getTime()}`;
+    const state = `${resolvedAuthorityName}-${new Date().getTime()}`;
     localStorage.setItem('auth:state', state);
 
     authFlowHelper.begin(authHandler.authConfig, resolvedAuthorityName, state);
   }
 
   onLoginCallback(authorityName?: string): Promise<void> {
-    let authHandler = this.authHanderFactory.createAuthHandler(this.getAuthorityName(authorityName));
+    const authHandler = this.authHanderFactory.createAuthHandler(this.getAuthorityName(authorityName));
 
-    let router = this.injector.get(Router);
-    let url = router.parseUrl(router.url);
+    const router = this.injector.get(Router);
+    const url = router.parseUrl(router.url);
 
     return authHandler.handleCallback(url)
       .then(authResult => {
@@ -55,12 +55,12 @@ export class AuthService {
   }
 
   isAuthenticated(authorityName?: string): boolean {
-    let authInfo = this.getAuthLocalStorageItem(authorityName);
+    const authInfo = this.getAuthLocalStorageItem(authorityName);
     return authInfo ? new Date().getTime() < authInfo.expiresAt : false;
   }
 
   getBearerToken(authorityName?: string): string {
-    let authInfo = this.getAuthLocalStorageItem(authorityName);
+    const authInfo = this.getAuthLocalStorageItem(authorityName);
     return authInfo ? authInfo.bearerToken : null;
   }
 
@@ -69,7 +69,7 @@ export class AuthService {
   }
 
   private getAuthLocalStorageItem(authorityName?: string): AuthLocalStorageItem {
-    let json = this.getLocalStorageItem(authorityName);
+    const json = this.getLocalStorageItem(authorityName);
     return json ? JSON.parse(json) : null;
   }
 

@@ -16,9 +16,9 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
     this.route.queryParams.subscribe(queryParams => {
-      let { redirect } = queryParams;
+      const { redirect } = queryParams;
       if (redirect) {
-        localStorage.setItem('login:redirect', redirect)
+        localStorage.setItem('login:redirect', redirect);
       }
 
       this.route.params.subscribe(params => {

@@ -9,9 +9,6 @@ namespace SimpleCalendar.Utility.Configuration
     public class ConfigureOptionsFromProvider<TOptions> : IConfigureOptions<TOptions>
         where TOptions : class
     {
-        //public ConfigureOptionsFromProvider(IConfigurationProvider configurationProvider, string name)
-        //    : base(name, configurationProvider.Configuration) { }
-
         private readonly IConfigurationProvider _configurationProvider;
         private readonly string _name;
 

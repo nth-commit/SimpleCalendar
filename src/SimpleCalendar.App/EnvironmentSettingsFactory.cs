@@ -25,11 +25,14 @@ namespace SimpleCalendar.App
     public class EnvironmentSettingsFactory : IEnvironmentSettingsFactory
     {
         private readonly Auth0AuthOptions _auth0AuthOptions;
+        private readonly HostsOptions _hostsOptions;
 
         public EnvironmentSettingsFactory(
-            IOptions<Auth0AuthOptions> auth0AuthOptions)
+            IOptions<Auth0AuthOptions> auth0AuthOptions,
+            IOptions<HostsOptions> hostsOptions)
         {
             _auth0AuthOptions = auth0AuthOptions.Value;
+            _hostsOptions = hostsOptions.Value;
         }
 
         public object Create(HttpContext context)
@@ -40,11 +43,7 @@ namespace SimpleCalendar.App
                 {
                     Auth0 = GetPublicAuthOptions(_auth0AuthOptions)
                 },
-                Hosts = new
-                {
-                    Api = "localhost:5000",
-                    App = "localhost:5001"
-                }
+                Hosts = _hostsOptions
             };
         }
 

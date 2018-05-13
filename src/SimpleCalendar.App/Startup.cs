@@ -31,6 +31,7 @@ namespace SimpleCalendar.App
 
             services.AddConfigurationServices(_hostingEnvironment.EnvironmentName);
             services.ConfigureFromProvider<Auth0AuthOptions>("Auth0");
+            services.ConfigureFromProvider<HostsOptions>("Hosts");
 
             if (_hostingEnvironment.IsDevelopment())
             {
@@ -61,6 +62,17 @@ namespace SimpleCalendar.App
                         context.Response.ContentType = "application/json";
                         var envSettings = environmentSettingsFactory.CreateJson(context);
                         await context.Response.WriteAsync(envSettings);
+                    }
+                    else
+                    {
+                        await next.Invoke();
+                    }
+                });
+
+                app.Use(async (context, next) => {
+                    if (context.Request.Path == "/auth/login")
+                    {
+                        context.Response.Redirect("http://localhost:4200/auth/login");
                     }
                     else
                     {

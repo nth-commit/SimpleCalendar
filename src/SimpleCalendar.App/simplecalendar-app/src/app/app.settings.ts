@@ -1,3 +1,5 @@
+import { environment } from '../environments/environment';
+
 export interface AppAuthSettings {
   ClientId: string;
   Domain: string;
@@ -6,11 +8,13 @@ export interface AppAuthSettings {
 export interface AppSettings {
   Auth: {
     Auth0: AppAuthSettings
-  },
+  };
   Hosts: {
     Api: string;
     App: string;
-  }
+  };
 }
 
 export const getAppSettings = (): AppSettings => window['ENVIRONMENT_SETTINGS'];
+
+export const isDevelopment = !environment.production;

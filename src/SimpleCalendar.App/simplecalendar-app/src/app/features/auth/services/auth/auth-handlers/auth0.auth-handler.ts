@@ -25,12 +25,12 @@ export class Auth0AuthHandler implements IAuthHandler {
   }
 
   handleCallback(url: UrlTree): Promise<IAuthResult> {
-    let auth0 = auth0Helper.getAuth0(
+    const auth = auth0Helper.getAuth0(
       this.authConfig,
       CONSTANTS.AUTHORITY_NAMES.AUTH0);
 
     return new Promise<IAuthResult>((resolve, reject) => {
-      auth0.parseHash((err, authResult) => {
+      auth.parseHash((err, authResult) => {
         if (authResult && authResult.accessToken && authResult.idToken) {
           resolve(<IAuthResult>{
             bearerToken: authResult.idToken,
