@@ -43,5 +43,4 @@ export class Auth0AuthHandler implements IAuthHandler {
       });
     });
   }
-
 }

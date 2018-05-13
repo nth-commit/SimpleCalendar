@@ -10,7 +10,7 @@ class Auth0Helper {
     const appSettings = getAppSettings();
     const auth0Settings = appSettings.Auth.Auth0;
     const hostSettings = appSettings.Hosts;
-    const host = isDevelopment ? "http://localhost:4200" : hostSettings.App;
+    const host = isDevelopment ? 'http://localhost:4200' : hostSettings.App;
 
     let redirectUri = `${host}/auth/callback`;
     if (authorityName && authorityName !== CONSTANTS.AUTHORITY_NAMES.AUTH0) {

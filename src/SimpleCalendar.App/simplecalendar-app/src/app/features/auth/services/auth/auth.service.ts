@@ -10,7 +10,7 @@ import { authFlowHelper } from './auth-flow.helper';
 
 interface AuthLocalStorageItem {
   expiresAt: number;
-  bearerToken: string,
+  bearerToken: string;
   authResult: IAuthResult;
 }
 
