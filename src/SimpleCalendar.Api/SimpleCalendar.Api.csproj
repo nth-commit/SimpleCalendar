@@ -6,6 +6,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Include="..\..\appsettings.Shared.Development.json" Link="appsettings.Shared.Development.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\appsettings.Shared.json" Link="appsettings.Shared.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="wwwroot\" />
   </ItemGroup>
 
@@ -19,6 +28,16 @@
     <ProjectReference Include="..\..\util\SimpleCalendar.Utility.DependencyInjection\SimpleCalendar.Utility.DependencyInjection.csproj" />
     <ProjectReference Include="..\..\util\SimpleCalendar.Utility.WindowsAzure.Storage\SimpleCalendar.Utility.WindowsAzure.Storage.csproj" />
     <ProjectReference Include="..\SimpleCalendar.Api.Core\SimpleCalendar.Api.Core.csproj" />
+    <ProjectReference Include="..\SimpleCalendar.Framework\SimpleCalendar.Framework.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="appsettings.Development.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>
