@@ -36,9 +36,14 @@ namespace SimpleCalendar.App
         {
             return new
             {
-                auth = new
+                Auth = new
                 {
-                    auth0 = GetPublicAuthOptions(_auth0AuthOptions)
+                    Auth0 = GetPublicAuthOptions(_auth0AuthOptions)
+                },
+                Hosts = new
+                {
+                    Api = "localhost:5000",
+                    App = "localhost:5001"
                 }
             };
         }
@@ -47,8 +52,8 @@ namespace SimpleCalendar.App
         {
             return new
             {
-                clientId = options.ClientId,
-                domain = options.Domain
+                 options.ClientId,
+                 options.Domain
             };
         }
     }
