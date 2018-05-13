@@ -19,22 +19,22 @@ export class Auth0AuthHandler implements IAuthHandler {
       clientId: auth0Settings.ClientId,
       domain: auth0Settings.Domain,
       audience: `https://${auth0Settings.Domain}/userinfo`,
-      responseType: 'token id_token',
-      scope: 'open_id'
+      responseType: 'id_token',
+      scope: 'openid profile'
     };
   }
 
-  handleCallback(url: UrlTree): Promise<IAuthResult> {
+  handleCallback(url: UrlTree, state: string): Promise<IAuthResult> {
     const auth = auth0Helper.getAuth0(
       this.authConfig,
       CONSTANTS.AUTHORITY_NAMES.AUTH0);
 
     return new Promise<IAuthResult>((resolve, reject) => {
-      auth.parseHash((err, authResult) => {
-        if (authResult && authResult.accessToken && authResult.idToken) {
+      auth.parseHash({ state }, (err, authResult) => {
+        if (authResult && authResult.idToken) {
           resolve(<IAuthResult>{
             bearerToken: authResult.idToken,
-            expiresIn: authResult.expiresIn,
+            expiresIn: authResult.expiresIn || 1 * (24 * 60 * 60 * 1000),
             accessToken: authResult.accessToken
           });
         } else {

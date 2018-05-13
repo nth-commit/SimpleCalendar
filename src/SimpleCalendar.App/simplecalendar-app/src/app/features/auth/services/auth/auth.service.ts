@@ -39,7 +39,10 @@ export class AuthService {
     const router = this.injector.get(Router);
     const url = router.parseUrl(router.url);
 
-    return authHandler.handleCallback(url)
+    const state = localStorage.getItem('auth:state');
+    localStorage.removeItem('auth:state');
+
+    return authHandler.handleCallback(url, state)
       .then(authResult => {
         this.setAuthLocalStorageItem({
           expiresAt: (authResult.expiresIn * 1000) + new Date().getTime(),

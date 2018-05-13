@@ -5,5 +5,5 @@ import { IAuthResult } from './auth-result.interface';
 
 export interface IAuthHandler {
   authConfig: IAuthConfig;
-  handleCallback(url: UrlTree): Promise<IAuthResult>;
+  handleCallback(url: UrlTree, state: string): Promise<IAuthResult>;
 }

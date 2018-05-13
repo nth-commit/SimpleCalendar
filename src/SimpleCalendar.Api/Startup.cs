@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using IdentityModel.Client;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -44,6 +46,7 @@ namespace SimpleCalendar.Api
                 {
                     var sp = services.BuildServiceProvider();
                     var auth0AuthOptions = sp.GetRequiredService<IOptions<Auth0AuthOptions>>().Value;
+
                     options.Authority = auth0AuthOptions.GetAuthority();
                     options.Audience = auth0AuthOptions.ClientId;
                 });
