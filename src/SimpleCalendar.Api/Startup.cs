@@ -14,6 +14,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using SimpleCalendar.Api.Core.Data;
 using SimpleCalendar.Framework;
 using SimpleCalendar.Utility.Configuration;
 using SimpleCalendar.Utility.DependencyInjection;
@@ -54,6 +55,7 @@ namespace SimpleCalendar.Api
             services.AddTransient<ConfigureJwtBearerOptions>();
 
             services.AddApiCoreServices();
+            services.AddApiCoreDataServices();
             services.AddWindowsAzureStorageServices();
             services.AddConfigurationServices(_hostingEnvironment.EnvironmentName);
 
@@ -73,9 +75,15 @@ namespace SimpleCalendar.Api
         public void Configure(
             IApplicationBuilder app,
             IHostingEnvironment env,
-            ILoggerFactory loggerFactory)
+            ILoggerFactory loggerFactory,
+            CoreDbContext coreDbContext)
         {
             loggerFactory.AddConsole();
+
+            if (env.IsDevelopment())
+            {
+                coreDbContext.Database.EnsureCreated();
+            }
 
             if (!env.IsDevelopment())
             {

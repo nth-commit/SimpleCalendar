@@ -10,7 +10,6 @@ namespace SimpleCalendar.Api.Controllers
     [Route("events")]
     public class EventsController : Controller
     {
-
         [Authorize]
         [HttpGet("")]
         public IActionResult List()
@@ -22,6 +21,13 @@ namespace SimpleCalendar.Api.Controllers
                     Name = "Test event"
                 }
             });
+        }
+
+        [Authorize]
+        [HttpPost("")]
+        public IActionResult Create()
+        {
+            return Ok();
         }
     }
 }

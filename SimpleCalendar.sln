@@ -23,7 +23,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tools", "tools", "{5DC40953
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleCalendar.Tools.Runner", "tools\SimpleCalendar.Tools.Runner\SimpleCalendar.Tools.Runner.csproj", "{9F92E2CA-88E0-4F77-B107-95ADF05650F6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleCalendar.App", "src\SimpleCalendar.App\SimpleCalendar.App.csproj", "{DC35A096-E852-405A-BDF1-707785C14E13}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleCalendar.App", "src\SimpleCalendar.App\SimpleCalendar.App.csproj", "{DC35A096-E852-405A-BDF1-707785C14E13}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "config", "config", "{82E6F7BB-523C-4E05-9ED0-FE62D572F15C}"
 	ProjectSection(SolutionItems) = preProject
@@ -32,6 +32,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "config", "config", "{82E6F7
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleCalendar.Framework", "src\SimpleCalendar.Framework\SimpleCalendar.Framework.csproj", "{3EBBDA03-940C-4F5C-9FDC-A17024F0F77C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleCalendar.Api.Core.Data", "src\SimpleCalendar.Api.Core.Data\SimpleCalendar.Api.Core.Data.csproj", "{BEDCD07D-36A1-4632-9A82-5DBE8DB90412}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -113,6 +115,14 @@ Global
 		{3EBBDA03-940C-4F5C-9FDC-A17024F0F77C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3EBBDA03-940C-4F5C-9FDC-A17024F0F77C}.Release|x64.ActiveCfg = Release|Any CPU
 		{3EBBDA03-940C-4F5C-9FDC-A17024F0F77C}.Release|x64.Build.0 = Release|Any CPU
+		{BEDCD07D-36A1-4632-9A82-5DBE8DB90412}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BEDCD07D-36A1-4632-9A82-5DBE8DB90412}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BEDCD07D-36A1-4632-9A82-5DBE8DB90412}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{BEDCD07D-36A1-4632-9A82-5DBE8DB90412}.Debug|x64.Build.0 = Debug|Any CPU
+		{BEDCD07D-36A1-4632-9A82-5DBE8DB90412}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BEDCD07D-36A1-4632-9A82-5DBE8DB90412}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BEDCD07D-36A1-4632-9A82-5DBE8DB90412}.Release|x64.ActiveCfg = Release|Any CPU
+		{BEDCD07D-36A1-4632-9A82-5DBE8DB90412}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -127,6 +137,7 @@ Global
 		{9F92E2CA-88E0-4F77-B107-95ADF05650F6} = {5DC40953-CFA7-4401-9BCD-01F6A5B481E1}
 		{DC35A096-E852-405A-BDF1-707785C14E13} = {F1164879-A6C2-4BB3-9EB4-B387F35B59B4}
 		{3EBBDA03-940C-4F5C-9FDC-A17024F0F77C} = {F1164879-A6C2-4BB3-9EB4-B387F35B59B4}
+		{BEDCD07D-36A1-4632-9A82-5DBE8DB90412} = {F1164879-A6C2-4BB3-9EB4-B387F35B59B4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {76CCE767-D905-4917-B186-261D280DB6B7}
