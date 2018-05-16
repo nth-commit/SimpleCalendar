@@ -35,7 +35,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleCalendar.Framework", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleCalendar.Api.Core.Data", "src\SimpleCalendar.Api.Core.Data\SimpleCalendar.Api.Core.Data.csproj", "{BEDCD07D-36A1-4632-9A82-5DBE8DB90412}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleCalendar.Api.Core.Initializer", "tools\SimpleCalendar.Api.Core.Initializer\SimpleCalendar.Api.Core.Initializer.csproj", "{44CAD246-8341-42DE-9D46-762B91B9A26B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleCalendar.Api.Core.Initializer", "tools\SimpleCalendar.Api.Core.Initializer\SimpleCalendar.Api.Core.Initializer.csproj", "{44CAD246-8341-42DE-9D46-762B91B9A26B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleCalendar.Utility.Authorization", "util\SimpleCalendar.Utility.Authorization\SimpleCalendar.Utility.Authorization.csproj", "{13DABBE3-963E-4A49-BE46-C1F3872DD6F0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -133,6 +135,14 @@ Global
 		{44CAD246-8341-42DE-9D46-762B91B9A26B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{44CAD246-8341-42DE-9D46-762B91B9A26B}.Release|x64.ActiveCfg = Release|Any CPU
 		{44CAD246-8341-42DE-9D46-762B91B9A26B}.Release|x64.Build.0 = Release|Any CPU
+		{13DABBE3-963E-4A49-BE46-C1F3872DD6F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{13DABBE3-963E-4A49-BE46-C1F3872DD6F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{13DABBE3-963E-4A49-BE46-C1F3872DD6F0}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{13DABBE3-963E-4A49-BE46-C1F3872DD6F0}.Debug|x64.Build.0 = Debug|Any CPU
+		{13DABBE3-963E-4A49-BE46-C1F3872DD6F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{13DABBE3-963E-4A49-BE46-C1F3872DD6F0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{13DABBE3-963E-4A49-BE46-C1F3872DD6F0}.Release|x64.ActiveCfg = Release|Any CPU
+		{13DABBE3-963E-4A49-BE46-C1F3872DD6F0}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -149,6 +159,7 @@ Global
 		{3EBBDA03-940C-4F5C-9FDC-A17024F0F77C} = {F1164879-A6C2-4BB3-9EB4-B387F35B59B4}
 		{BEDCD07D-36A1-4632-9A82-5DBE8DB90412} = {F1164879-A6C2-4BB3-9EB4-B387F35B59B4}
 		{44CAD246-8341-42DE-9D46-762B91B9A26B} = {5DC40953-CFA7-4401-9BCD-01F6A5B481E1}
+		{13DABBE3-963E-4A49-BE46-C1F3872DD6F0} = {F618B39A-282C-4FF5-A71A-C5A1A6EFC4C3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {76CCE767-D905-4917-B186-261D280DB6B7}

@@ -1,29 +1,41 @@
-﻿using AutoMapper;
+﻿using Microsoft.AspNetCore.Authorization;
+using AutoMapper;
+using SimpleCalendar.Utility.Authorization;
 using SimpleCalendar.Utiltiy.Validation;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using SimpleCalendar.Api.Core.Data;
 
 namespace SimpleCalendar.Api.Core.Events
 {
     public class EventService
     {
         private readonly IMapper _mapper;
-        private readonly IEventRepository _eventRepository;
+        private readonly CoreDbContext _coreDbContext;
+        private readonly IClaimsPrincipalAuthorizationService _claimsPrincipalAuthorizationService;
+        private readonly IAuthorizationService _authorizationService;
 
         public EventService(
             IMapper mapper,
-            IEventRepository eventRepository)
+            CoreDbContext coreDbContext,
+            IClaimsPrincipalAuthorizationService claimsPrincipalAuthorizationService,
+            IAuthorizationService authorizationService)
         {
             _mapper = mapper;
-            _eventRepository = eventRepository;
+            _coreDbContext = coreDbContext;
+            _claimsPrincipalAuthorizationService = claimsPrincipalAuthorizationService;
+            _authorizationService = authorizationService;
         }
 
         public async Task<Event> CreateEventAsync(EventCreate create, bool dryRun = false)
         {
             Validator.ValidateNotNull(create, nameof(create));
             Validator.Validate(create);
+
+            var region = await _coreDbContext.GetRegionByCodesAsync(create.RegionId.ToLower().Split('.'));
+            //_authorizationService.AuthorizeAsync()
 
             var ev = _mapper.Map<Event>(create);
             if (dryRun)
@@ -32,7 +44,7 @@ namespace SimpleCalendar.Api.Core.Events
             }
             else
             {
-                return await _eventRepository.CreateEventAsync(ev);
+                return await Task.FromResult(new Event());
             }
         }
     }

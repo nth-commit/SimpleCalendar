@@ -14,11 +14,13 @@ namespace SimpleCalendar.Api.Core.Data
             IEnumerable<string> codes)
         {
             var query = coreDbContext.Regions
-                .Include(r => r.Parent)
-                .Where(r => r.ParentId == Data.Constants.RootRegionId)
-                .Where(r => r.Code == codes.First());
+                .Include(r => r.Roles)
+                .Where(r => r.Id == Data.Constants.RootRegionId);
 
-            foreach (var code in codes.Skip(1))
+            // Force the root region to be loaded.
+            var x = await query.FirstOrDefaultAsync();
+
+            foreach (var code in codes)
             {
                 query = query
                     .Join(
@@ -26,7 +28,9 @@ namespace SimpleCalendar.Api.Core.Data
                         a => a.Id,
                         b => b.ParentId,
                         (a, b) => b)
-                    .Include(r => r.Parent)
+                    .Include(r => r.Roles)
+                    .Include(r => r.Parent).ThenInclude(r => r.Roles)
+                    .Include(r => r.Parent).ThenInclude(r => r.Parent).ThenInclude(r => r.Roles)
                     .Where(r => r.Code == code);
             }
 

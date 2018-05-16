@@ -25,6 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\util\SimpleCalendar.Utility.Authorization\SimpleCalendar.Utility.Authorization.csproj" />
     <ProjectReference Include="..\..\util\SimpleCalendar.Utility.Configuration\SimpleCalendar.Utility.Configuration.csproj" />
     <ProjectReference Include="..\..\util\SimpleCalendar.Utility.DependencyInjection\SimpleCalendar.Utility.DependencyInjection.csproj" />
     <ProjectReference Include="..\..\util\SimpleCalendar.Utility.WindowsAzure.Storage\SimpleCalendar.Utility.WindowsAzure.Storage.csproj" />

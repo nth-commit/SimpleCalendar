@@ -23,5 +23,8 @@ namespace SimpleCalendar.Api.Core.Data
 
         [InverseProperty(nameof(Parent))]
         public List<RegionEntity> Children { get; set; }
+
+        [InverseProperty(nameof(RegionRoleEntity.Region))]
+        public List<RegionRoleEntity> Roles { get; set; }
     }
 }

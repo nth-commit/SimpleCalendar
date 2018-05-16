@@ -14,8 +14,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using SimpleCalendar.Api.Services;
 using SimpleCalendar.Api.Core.Data;
 using SimpleCalendar.Framework;
+using SimpleCalendar.Framework.Identity;
 using SimpleCalendar.Utility.Configuration;
 using SimpleCalendar.Utility.DependencyInjection;
 
@@ -36,6 +38,9 @@ namespace SimpleCalendar.Api
             var services = new ValidatableServiceCollection(innerServices);
 
             services.AddMvc();
+
+            services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddTransient<IClaimsPrincipalAccessor, HttpClaimsPrincipalAccessor>();
 
             services
                 .AddAuthentication(options =>
