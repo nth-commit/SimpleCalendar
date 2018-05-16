@@ -119,7 +119,15 @@
   <ItemGroup>
     <Compile Include="ApiCoreDataServices.cs" />
     <Compile Include="CoreDbContext.cs" />
+    <Compile Include="EventEntity.cs" />
+    <Compile Include="Migrations\20180515233857_InitialCreate.cs" />
+    <Compile Include="Migrations\20180515233857_InitialCreate.designer.cs">
+      <DependentUpon>20180515233857_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\CoreDbContextModelSnapshot.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RegionEntity.cs" />
+    <Compile Include="RegionRoleEntity.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -130,6 +138,13 @@
       <Project>{73161659-5A80-4C8D-B9F4-037FF68973A0}</Project>
       <Name>SimpleCalendar.Utility.Configuration</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SimpleCalendar.Framework\SimpleCalendar.Framework.csproj">
+      <Project>{3EBBDA03-940C-4F5C-9FDC-A17024F0F77C}</Project>
+      <Name>SimpleCalendar.Framework</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Queries\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

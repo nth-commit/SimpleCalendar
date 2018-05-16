@@ -11,9 +11,9 @@ namespace SimpleCalendar.Utility.DependencyInjection
         private readonly IServiceCollection _innerServiceCollection;
         private readonly List<Type> _requiredTypes = new List<Type>();
 
-        public ValidatableServiceCollection(IServiceCollection innerSeviceCollection)
+        public ValidatableServiceCollection(IServiceCollection innerSeviceCollection = null)
         {
-            _innerServiceCollection = innerSeviceCollection;
+            _innerServiceCollection = innerSeviceCollection ?? new ServiceCollection();
         }
 
         public void AddRequirement(Type type)

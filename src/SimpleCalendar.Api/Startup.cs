@@ -52,8 +52,6 @@ namespace SimpleCalendar.Api
                     options.Audience = auth0AuthOptions.ClientId;
                 });
 
-            services.AddTransient<ConfigureJwtBearerOptions>();
-
             services.AddApiCoreServices();
             services.AddApiCoreDataServices();
             services.AddWindowsAzureStorageServices();

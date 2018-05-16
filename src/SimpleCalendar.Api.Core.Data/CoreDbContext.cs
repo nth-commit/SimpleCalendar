@@ -12,8 +12,18 @@ namespace SimpleCalendar.Api.Core.Data
         public CoreDbContext(DbContextOptions<CoreDbContext> options)
             : base(options) { }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<RegionRoleEntity>()
+                .HasAlternateKey(nameof(RegionRoleEntity.RegionId), nameof(RegionRoleEntity.UserId));
 
-        public DbSet<Region> Regions { get; set; }
+            base.OnModelCreating(modelBuilder);
+        }
 
+        public DbSet<RegionEntity> Regions { get; set; }
+
+        public DbSet<RegionRoleEntity> RegionRoles { get; set; }
+
+        public DbSet<EventEntity> Events { get; set; }
     }
 }

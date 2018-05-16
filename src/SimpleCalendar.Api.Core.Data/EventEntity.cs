@@ -6,13 +6,17 @@ using System.Threading.Tasks;
 
 namespace SimpleCalendar.Api.Core.Data
 {
-    public class Region
+    public class EventEntity
     {
         public string Id { get; set; }
 
-        public string ParentId { get; set; }
+        public DateTime StartTime { get; set; }
 
-        public Region Parent { get; set; }
+        public DateTime EndTime { get; set; }
+
+        public string RegionId { get; set; }
+
+        public RegionEntity Region { get; set; }
 
         public string DataJson { get; set; }
 
