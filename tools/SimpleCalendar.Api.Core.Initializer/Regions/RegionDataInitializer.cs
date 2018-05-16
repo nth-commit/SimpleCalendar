@@ -28,22 +28,34 @@ namespace SimpleCalendar.Api.Core.Initializer.Regions
 
         public async Task RunAsync()
         {
-            var regions = new RegionCreate[]
+            await _coreDbContext.Database.EnsureCreatedAsync();
+
+            var regionsById = new Dictionary<string, RegionCreate>()
             {
-                new RegionCreate()
                 {
-                    Id = "266fde3e-18da-44b4-9880-d7a3235a4f0f",
-                    Name = "New Zealand"
+                    "266fde3e-18da-44b4-9880-d7a3235a4f0f",
+                    new RegionCreate()
+                    {
+                        Name = "New Zealand"
+                    }
                 },
-                new RegionCreate()
                 {
-                    Id = "092460d3-d85e-4df8-81b6-07a38c105307",
-                    Name = "Wellington",
-                    ParentId = "266fde3e-18da-44b4-9880-d7a3235a4f0f"
+                    "092460d3-d85e-4df8-81b6-07a38c105307",
+                    new RegionCreate()
+                    {
+                        Name = "Wellington",
+                        ParentId = "266fde3e-18da-44b4-9880-d7a3235a4f0f"
+                    }
+                },
+                {
+                    "192460d3-d85e-4df8-81b6-07a38c105307",
+                    new RegionCreate()
+                    {
+                        Name = "Wellington City",
+                        ParentId = "092460d3-d85e-4df8-81b6-07a38c105307"
+                    }
                 }
             };
-
-            var regionsById = regions.ToDictionary(r => r.Id);
             var regionIds = regionsById.Keys;
 
             var existingRegions = await _coreDbContext.Regions.ToListAsync();
@@ -55,7 +67,7 @@ namespace SimpleCalendar.Api.Core.Initializer.Regions
 
             foreach (var regionId in regionIdsToAdd)
             {
-                await _regionService.CreateRegionAsync(regionsById[regionId]);
+                await _regionService.CreateRegionAsync(regionsById[regionId], regionId);
             }
 
             foreach (var regionId in regionIdsToUpdate)
@@ -68,7 +80,7 @@ namespace SimpleCalendar.Api.Core.Initializer.Regions
                 }
 
                 var regionUpdate = _mapper.Map<RegionUpdate>(region);
-                await _regionService.UpdateRegionAsync(region.Id, regionUpdate);
+                await _regionService.UpdateRegionAsync(regionId, regionUpdate);
             }
         }
     }

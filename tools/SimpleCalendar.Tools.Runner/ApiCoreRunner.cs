@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.Extensions.DependencyInjection;
 using SimpleCalendar.Api.Core.Events;
+using SimpleCalendar.Api.Core.Regions;
 using SimpleCalendar.Utility.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -16,6 +17,7 @@ namespace SimpleCalendar.Tools.Runner
             var services = new ValidatableServiceCollection(new ServiceCollection());
 
             services.AddApiCoreServices();
+            services.AddApiCoreDataServices();
             services.AddWindowsAzureStorageServices();
             services.AddConfigurationServices("Development");
 
@@ -27,7 +29,8 @@ namespace SimpleCalendar.Tools.Runner
             services.ValidateRequirements();
             var serviceProvider = services.BuildServiceProvider();
 
-            await CreateEventAsync(serviceProvider);
+            //await CreateEventAsync(serviceProvider);
+            await GetRegionAsync(serviceProvider);
         }
 
         public static async Task CreateEventAsync(IServiceProvider serviceProvider)
@@ -39,6 +42,13 @@ namespace SimpleCalendar.Tools.Runner
                 Name = "My Event",
                 RegionId = "new_zealand.wellington"
             });
+        }
+
+        public static async Task GetRegionAsync(IServiceProvider serviceProvider)
+        {
+            var regionService = serviceProvider.GetRequiredService<RegionService>();
+
+            var result = await regionService.ListRegionsAsync("new_zealand.wellington");
         }
     }
 }
