@@ -127,6 +127,7 @@
     </Compile>
     <Compile Include="Migrations\CoreDbContextModelSnapshot.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Queries\RegionQueries.cs" />
     <Compile Include="RegionEntity.cs" />
     <Compile Include="RegionRoleEntity.cs" />
   </ItemGroup>
@@ -144,8 +145,6 @@
       <Name>SimpleCalendar.Framework</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Queries\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

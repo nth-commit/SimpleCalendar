@@ -32,24 +32,7 @@ namespace SimpleCalendar.Api.Core.Regions
             var codesJoinedLower = publicId.ToLower();
             var codes = codesJoinedLower.Split('.');
 
-            var query = _coreDbContext.Regions
-                .Include(r => r.Parent)
-                .Where(r => r.ParentId == Data.Constants.RootRegionId)
-                .Where(r => r.Code == codes.First());
-
-            foreach (var code in codes.Skip(1))
-            {
-                query = query
-                    .Join(
-                        _coreDbContext.Regions,
-                        a => a.Id,
-                        b => b.ParentId,
-                        (a, b) => b)
-                    .Include(r => r.Parent)
-                    .Where(r => r.Code == code);
-            }
-
-            var region = await query.FirstOrDefaultAsync();
+            var region = await _coreDbContext.GetRegionByCodesAsync(codes);
             if (region == null)
             {
                 throw new Exception("Entity not found");
@@ -66,24 +49,11 @@ namespace SimpleCalendar.Api.Core.Regions
             var parentCodesJoinedLower = parentPublicId.ToLower();
             var parentCodes = parentCodesJoinedLower.Split('.');
 
-            var query = _coreDbContext.Regions
-                .Include(r => r.Parent)
-                .Where(r => r.ParentId == Data.Constants.RootRegionId)
-                .Where(r => r.Code == parentCodes.First());
-
-            foreach (var code in parentCodes.Skip(1))
+            var region = await _coreDbContext.GetRegionByCodesAsync(parentCodes);
+            if (region == null)
             {
-                query = query
-                    .Join(
-                        _coreDbContext.Regions,
-                        a => a.Id,
-                        b => b.ParentId,
-                        (a, b) => b)
-                    .Include(r => r.Parent)
-                    .Where(r => r.Code == code);
+                throw new Exception("Entity not found");
             }
-
-            var region = await query.Include(r => r.Children).FirstOrDefaultAsync();
 
             return region.Children.Select(r => new RegionResult
             {

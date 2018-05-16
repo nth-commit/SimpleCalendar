@@ -48,7 +48,8 @@ namespace SimpleCalendar.Tools.Runner
         {
             var regionService = serviceProvider.GetRequiredService<RegionService>();
 
-            var result = await regionService.ListRegionsAsync("new_zealand.wellington");
+            var result = await regionService.GetRegionAsync("new_zealand.wellington");
+            var result2 = await regionService.ListRegionsAsync("new_zealand.wellington");
         }
     }
 }
