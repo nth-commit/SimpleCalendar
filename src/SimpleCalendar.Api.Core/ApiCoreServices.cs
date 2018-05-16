@@ -22,6 +22,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddTransient<OrganisationService>();
 
             services.AddTransient<RegionService>();
+            services.AddTransient<RegionRoleService>();
 
             services.AddRequirement<IMapper>();
             services.AddRequirement<ICloudStorageClientFactory>();

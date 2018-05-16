@@ -12,7 +12,5 @@ namespace SimpleCalendar.Api.Core.Regions
         public string Name { get; set; }
 
         public string ParentId { get; set; }
-
-        public Dictionary<string, IEnumerable<RegionRole>> RolesByUser { get; set; }
     }
 }

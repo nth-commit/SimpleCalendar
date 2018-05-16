@@ -7,7 +7,5 @@ namespace SimpleCalendar.Api.Core.Regions
     public class RegionUpdate
     {
         public string Name { get; set; }
-
-        public Dictionary<string, IEnumerable<RegionRole>> RolesByUser { get; set; }
     }
 }

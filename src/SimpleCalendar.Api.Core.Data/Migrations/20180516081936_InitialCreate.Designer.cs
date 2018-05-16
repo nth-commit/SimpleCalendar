@@ -10,7 +10,7 @@ using SimpleCalendar.Api.Core.Data;
 namespace SimpleCalendar.Api.Core.Data.Migrations
 {
     [DbContext(typeof(CoreDbContext))]
-    [Migration("20180515233857_InitialCreate")]
+    [Migration("20180516081936_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -61,6 +61,10 @@ namespace SimpleCalendar.Api.Core.Data.Migrations
                     b.HasIndex("ParentId");
 
                     b.ToTable("Regions");
+
+                    b.HasData(
+                        new { Id = "ROOT", DataJsonVersion = 0 }
+                    );
                 });
 
             modelBuilder.Entity("SimpleCalendar.Api.Core.Data.RegionRoleEntity", b =>
@@ -68,10 +72,10 @@ namespace SimpleCalendar.Api.Core.Data.Migrations
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int>("Flags");
-
                     b.Property<string>("RegionId")
                         .IsRequired();
+
+                    b.Property<int>("Role");
 
                     b.Property<string>("UserId")
                         .IsRequired();
@@ -81,6 +85,10 @@ namespace SimpleCalendar.Api.Core.Data.Migrations
                     b.HasAlternateKey("RegionId", "UserId");
 
                     b.ToTable("RegionRoles");
+
+                    b.HasData(
+                        new { Id = "ROOT_ADMIN", RegionId = "ROOT", Role = 0, UserId = "ROOT_ADMIN" }
+                    );
                 });
 
             modelBuilder.Entity("SimpleCalendar.Api.Core.Data.EventEntity", b =>

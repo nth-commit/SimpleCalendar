@@ -56,7 +56,7 @@ namespace SimpleCalendar.Api.Core.Data.Migrations
                 {
                     Id = table.Column<string>(nullable: false),
                     RegionId = table.Column<string>(nullable: false),
-                    Flags = table.Column<int>(nullable: false),
+                    Role = table.Column<int>(nullable: false),
                     UserId = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
@@ -70,6 +70,16 @@ namespace SimpleCalendar.Api.Core.Data.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.InsertData(
+                table: "Regions",
+                columns: new[] { "Id", "Code", "DataJson", "DataJsonVersion", "ParentId" },
+                values: new object[] { "ROOT", null, null, 0, null });
+
+            migrationBuilder.InsertData(
+                table: "RegionRoles",
+                columns: new[] { "Id", "RegionId", "Role", "UserId" },
+                values: new object[] { "ROOT_ADMIN", "ROOT", 0, "ROOT_ADMIN" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Events_RegionId",

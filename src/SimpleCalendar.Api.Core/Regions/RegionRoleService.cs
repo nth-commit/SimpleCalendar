@@ -24,6 +24,7 @@ namespace SimpleCalendar.Api.Core.Regions
             var regionRole = await _coreDbContext.RegionRoles
                 .Include(r => r.Region)
                 .Where(r => r.RegionId == regionId)
+                .Where(r => r.UserId == userId)
                 .FirstOrDefaultAsync();
 
             if (regionRole == null)
@@ -49,7 +50,28 @@ namespace SimpleCalendar.Api.Core.Regions
 
         public async Task RemoveRegionRole(string regionId, string userId, Role role)
         {
-            await Task.FromResult(0);
+            var regionRole = await _coreDbContext.RegionRoles
+                .Include(r => r.Region)
+                .Where(r => r.RegionId == regionId)
+                .Where(r => r.UserId == userId)
+                .FirstOrDefaultAsync();
+
+            if (regionRole == null)
+            {
+                throw new Exception("Entity not found");
+            }
+
+            if (regionRole.Role.HasFlag(role))
+            {
+                regionRole.Role -= role;
+            }
+
+            if (regionRole.Role == Role.Unknown)
+            {
+                _coreDbContext.RegionRoles.Remove(regionRole);
+            }
+
+            await _coreDbContext.SaveChangesAsync();
         }
 
         public async Task GetRegionAdministrators(string regionId)

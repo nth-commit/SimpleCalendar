@@ -14,8 +14,19 @@ namespace SimpleCalendar.Api.Core.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<RegionRoleEntity>()
-                .HasAlternateKey(nameof(RegionRoleEntity.RegionId), nameof(RegionRoleEntity.UserId));
+            modelBuilder.Entity<RegionEntity>().HasData(new RegionEntity()
+            {
+                Id = Constants.RootRegionId
+            });
+
+            modelBuilder.Entity<RegionRoleEntity>().HasAlternateKey(nameof(RegionRoleEntity.RegionId), nameof(RegionRoleEntity.UserId));
+            modelBuilder.Entity<RegionRoleEntity>().HasData(new RegionRoleEntity()
+            {
+                Id = "ROOT_ADMIN",
+                RegionId = Constants.RootRegionId,
+                UserId = "ROOT_ADMIN",
+                Role = Framework.Identity.Role.Administrator & Framework.Identity.Role.User
+            });
 
             base.OnModelCreating(modelBuilder);
         }

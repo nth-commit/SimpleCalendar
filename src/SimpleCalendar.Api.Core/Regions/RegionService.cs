@@ -24,7 +24,11 @@ namespace SimpleCalendar.Api.Core.Regions
         public async Task<RegionEntity> CreateRegionAsync(RegionCreate create)
         {
             RegionEntity parentEntity = null;
-            if (!string.IsNullOrEmpty(create.ParentId))
+            if (string.IsNullOrEmpty(create.ParentId))
+            {
+                create.ParentId = Data.Constants.RootRegionId;
+            }
+            else
             {
                 parentEntity = await _coreDbContext.Regions.FindAsync(create.ParentId);
                 if (parentEntity == null)

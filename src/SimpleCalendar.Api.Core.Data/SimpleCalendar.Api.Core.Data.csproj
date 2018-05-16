@@ -118,11 +118,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApiCoreDataServices.cs" />
+    <Compile Include="Constants.cs" />
     <Compile Include="CoreDbContext.cs" />
     <Compile Include="EventEntity.cs" />
-    <Compile Include="Migrations\20180515233857_InitialCreate.cs" />
-    <Compile Include="Migrations\20180515233857_InitialCreate.designer.cs">
-      <DependentUpon>20180515233857_InitialCreate.cs</DependentUpon>
+    <Compile Include="Migrations\20180516081936_InitialCreate.cs" />
+    <Compile Include="Migrations\20180516081936_InitialCreate.designer.cs">
+      <DependentUpon>20180516081936_InitialCreate.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\CoreDbContextModelSnapshot.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
