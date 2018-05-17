@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SimpleCalendar.Framework.Identity;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -30,7 +31,6 @@ namespace SimpleCalendar.Api.Core.Data
 
     public static class RegionEntityExtensions
     {
-
         public static IEnumerable<RegionEntity> GetRegions(
             this RegionEntity region,
             bool includeRoot = false)
@@ -54,6 +54,24 @@ namespace SimpleCalendar.Api.Core.Data
             }
 
             return result;
+        }
+
+        public static bool IsAdministrator(this RegionEntity region, string userId) => region.IsInRole(userId, Role.Administrator);
+
+        public static bool IsUser(this RegionEntity region, string userId) => region.IsInRole(userId, Role.User);
+
+        private static bool IsInRole(
+            this RegionEntity region,
+            string userId,
+            Role role)
+        {
+            if (region.Roles == null)
+            {
+                throw new InvalidOperationException("Roles cannot be null to determine if user is in role");
+            }
+
+            return region.Roles.Where(r => r.UserId == userId).Any(r => r.Role.HasFlag(role)) ||
+                (region.Id != Constants.RootRegionId && IsInRole(region.Parent, userId, role));
         }
     }
 }

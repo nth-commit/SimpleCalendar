@@ -36,8 +36,10 @@ namespace SimpleCalendar.Api.Core.Data.Migrations
                     StartTime = table.Column<DateTime>(nullable: false),
                     EndTime = table.Column<DateTime>(nullable: false),
                     RegionId = table.Column<string>(nullable: true),
+                    IsPublic = table.Column<bool>(nullable: false),
                     IsDeleted = table.Column<bool>(nullable: false),
                     IsPublished = table.Column<bool>(nullable: false),
+                    CreatedById = table.Column<string>(nullable: true),
                     DataJson = table.Column<string>(nullable: true),
                     DataJsonVersion = table.Column<int>(nullable: false)
                 },
@@ -81,7 +83,7 @@ namespace SimpleCalendar.Api.Core.Data.Migrations
             migrationBuilder.InsertData(
                 table: "RegionRoles",
                 columns: new[] { "Id", "RegionId", "Role", "UserId" },
-                values: new object[] { "ROOT_ADMIN", "ROOT", 3, "ROOT_ADMIN" });
+                values: new object[] { "ROOT_ADMIN", "ROOT", 3, "google-oauth2|103074202427969604113" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Events_RegionId",

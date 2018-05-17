@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using AutoMapper;
+using SimpleCalendar.Framework;
 using SimpleCalendar.Utility.Authorization;
 using SimpleCalendar.Utiltiy.Validation;
 using System;
@@ -9,6 +10,7 @@ using System.Threading.Tasks;
 using SimpleCalendar.Api.Core.Data;
 using SimpleCalendar.Api.Core.Regions.Authorization;
 using SimpleCalendar.Framework.Identity;
+using SimpleCalendar.Api.Core.Events.Authorization;
 
 namespace SimpleCalendar.Api.Core.Events
 {
@@ -39,7 +41,11 @@ namespace SimpleCalendar.Api.Core.Events
                 throw new Exception("Entity not found");
             }
 
-            // TODO: Authorize user is creator or event is published and user is in region or event is public
+            var canView = (await _userAuthorizationService.AuthorizeAsync(entity, new ViewEventRequirement())).Succeeded;
+            if (!canView)
+            {
+                throw new Exception("Entity not found");
+            }
 
             return _mapper.MapEntityToResult(entity, entity.Region);
         }
@@ -58,7 +64,7 @@ namespace SimpleCalendar.Api.Core.Events
 
             var ev = _mapper.Map<Event>(create);
             ev.Created = DateTime.UtcNow;
-            ev.CreatedById = _userAccessor.User.Identity.Name;
+            ev.CreatedById = _userAccessor.User.GetUserId();
 
             var canPublish = (await _userAuthorizationService.AuthorizeAsync(region, new PublishEventsRequirement())).Succeeded;
             if (canPublish)

@@ -10,7 +10,7 @@ using SimpleCalendar.Api.Core.Data;
 namespace SimpleCalendar.Api.Core.Data.Migrations
 {
     [DbContext(typeof(CoreDbContext))]
-    [Migration("20180517044855_InitialCreate")]
+    [Migration("20180517231005_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -26,6 +26,8 @@ namespace SimpleCalendar.Api.Core.Data.Migrations
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("CreatedById");
+
                     b.Property<string>("DataJson");
 
                     b.Property<int>("DataJsonVersion");
@@ -33,6 +35,8 @@ namespace SimpleCalendar.Api.Core.Data.Migrations
                     b.Property<DateTime>("EndTime");
 
                     b.Property<bool>("IsDeleted");
+
+                    b.Property<bool>("IsPublic");
 
                     b.Property<bool>("IsPublished");
 

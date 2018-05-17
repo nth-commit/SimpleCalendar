@@ -24,7 +24,7 @@ namespace SimpleCalendar.Api.Core.Data
             {
                 Id = "ROOT_ADMIN",
                 RegionId = Constants.RootRegionId,
-                UserId = "ROOT_ADMIN",
+                UserId = "google-oauth2|103074202427969604113",
                 Role = Framework.Identity.Role.Administrator | Framework.Identity.Role.User
             });
 

@@ -24,6 +24,8 @@ namespace SimpleCalendar.Api.Core.Data.Migrations
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("CreatedById");
+
                     b.Property<string>("DataJson");
 
                     b.Property<int>("DataJsonVersion");
@@ -31,6 +33,8 @@ namespace SimpleCalendar.Api.Core.Data.Migrations
                     b.Property<DateTime>("EndTime");
 
                     b.Property<bool>("IsDeleted");
+
+                    b.Property<bool>("IsPublic");
 
                     b.Property<bool>("IsPublished");
 

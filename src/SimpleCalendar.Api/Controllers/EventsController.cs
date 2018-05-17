@@ -33,7 +33,7 @@ namespace SimpleCalendar.Api.Controllers
         }
 
         [Authorize]
-        [HttpGet("{id}"]
+        [HttpGet("{id}")]
         public async Task<IActionResult> Get([FromRoute] string id)
         {
             return Ok(await _eventService.GetEventAsync(id));
