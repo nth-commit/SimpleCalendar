@@ -2,9 +2,11 @@
 using Microsoft.Extensions.DependencyInjection;
 using SimpleCalendar.Api.Core.Events;
 using SimpleCalendar.Api.Core.Regions;
+using SimpleCalendar.Framework.Identity;
 using SimpleCalendar.Utility.DependencyInjection;
 using System;
 using System.Collections.Generic;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -15,6 +17,10 @@ namespace SimpleCalendar.Tools.Runner
         public static async Task RunAsync()
         {
             var services = new ValidatableServiceCollection(new ServiceCollection());
+
+            services.AddTransient<IUserAccessor, StubbedUserAccessor>();
+            services.AddAuthorization();
+            services.AddAuthorizationUtilityServices();
 
             services.AddApiCoreServices();
             services.AddApiCoreDataServices();
@@ -29,8 +35,8 @@ namespace SimpleCalendar.Tools.Runner
             services.ValidateRequirements();
             var serviceProvider = services.BuildServiceProvider();
 
-            //await CreateEventAsync(serviceProvider);
-            await GetRegionAsync(serviceProvider);
+            await CreateEventAsync(serviceProvider);
+            //await GetRegionAsync(serviceProvider);
         }
 
         public static async Task CreateEventAsync(IServiceProvider serviceProvider)
@@ -52,6 +58,19 @@ namespace SimpleCalendar.Tools.Runner
 
             //var result = await regionService.GetRegionAsync("new_zealand.wellington.wellington_city");
             var result2 = await regionService.ListRegionsAsync("new_zealand.wellington");
+        }
+
+        public class StubbedUserAccessor : IUserAccessor
+        {
+            public ClaimsPrincipal User
+            {
+                get
+                {
+                    var identity = new ClaimsIdentity("test", "sub", "role");
+                    identity.AddClaim(new Claim("sub", "ROOT_ADMIN"));
+                    return new ClaimsPrincipal(identity);
+                }
+            }
         }
     }
 }

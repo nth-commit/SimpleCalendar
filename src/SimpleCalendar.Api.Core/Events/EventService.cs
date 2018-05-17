@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using SimpleCalendar.Api.Core.Data;
+using SimpleCalendar.Api.Core.Regions.Authorization;
 
 namespace SimpleCalendar.Api.Core.Events
 {
@@ -14,19 +15,16 @@ namespace SimpleCalendar.Api.Core.Events
     {
         private readonly IMapper _mapper;
         private readonly CoreDbContext _coreDbContext;
-        private readonly IClaimsPrincipalAuthorizationService _claimsPrincipalAuthorizationService;
-        private readonly IAuthorizationService _authorizationService;
+        private readonly IUserAuthorizationService _userAuthorizationService;
 
         public EventService(
             IMapper mapper,
             CoreDbContext coreDbContext,
-            IClaimsPrincipalAuthorizationService claimsPrincipalAuthorizationService,
-            IAuthorizationService authorizationService)
+            IUserAuthorizationService userAuthorizationService)
         {
             _mapper = mapper;
             _coreDbContext = coreDbContext;
-            _claimsPrincipalAuthorizationService = claimsPrincipalAuthorizationService;
-            _authorizationService = authorizationService;
+            _userAuthorizationService = userAuthorizationService;
         }
 
         public async Task<Event> CreateEventAsync(EventCreate create, bool dryRun = false)
@@ -35,7 +33,11 @@ namespace SimpleCalendar.Api.Core.Events
             Validator.Validate(create);
 
             var region = await _coreDbContext.GetRegionByCodesAsync(create.RegionId.ToLower().Split('.'));
-            //_authorizationService.AuthorizeAsync()
+            if (region == null)
+            {
+                throw new ArgumentNullException(nameof(EventCreate.RegionId));
+            }
+            await _userAuthorizationService.AssertAuthorizedAsync(region, new CreateEventsRequirement());
 
             var ev = _mapper.Map<Event>(create);
             if (dryRun)

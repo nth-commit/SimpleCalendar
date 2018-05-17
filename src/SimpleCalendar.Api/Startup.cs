@@ -40,7 +40,7 @@ namespace SimpleCalendar.Api
             services.AddMvc();
 
             services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddTransient<IClaimsPrincipalAccessor, HttpClaimsPrincipalAccessor>();
+            services.AddTransient<IUserAccessor, HttpUserAccessor>();
 
             services
                 .AddAuthentication(options =>

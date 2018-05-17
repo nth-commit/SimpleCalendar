@@ -4,6 +4,7 @@ using SimpleCalendar.Api.Core.Data;
 using SimpleCalendar.Api.Core.Events;
 using SimpleCalendar.Api.Core.Organisation;
 using SimpleCalendar.Api.Core.Regions;
+using SimpleCalendar.Api.Core.Regions.Authorization;
 using SimpleCalendar.Framework.Identity;
 using SimpleCalendar.Utility.Authorization;
 using SimpleCalendar.Utility.DependencyInjection;
@@ -26,13 +27,14 @@ namespace Microsoft.Extensions.DependencyInjection
 
             services.AddTransient<RegionService>();
             services.AddTransient<RegionRoleService>();
+            services.AddTransient<IAuthorizationHandler, RegionAuthorizationHandler>();
 
             services.AddRequirement<IMapper>();
             services.AddRequirement<ICloudStorageClientFactory>();
             services.AddRequirement<CoreDbContext>();
-            services.AddRequirement<IClaimsPrincipalAccessor>();
+            services.AddRequirement<IUserAccessor>();
             services.AddRequirement<IAuthorizationService>();
-            services.AddRequirement<IClaimsPrincipalAuthorizationService>();
+            services.AddRequirement<IUserAuthorizationService>();
 
             return services;
         }

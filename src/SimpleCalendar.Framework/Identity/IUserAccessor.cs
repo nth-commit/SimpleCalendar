@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace SimpleCalendar.Framework.Identity
 {
-    public interface IClaimsPrincipalAccessor
+    public interface IUserAccessor
     {
-        ClaimsPrincipal ClaimsPrincipal { get; }
+        ClaimsPrincipal User { get; }
     }
 }

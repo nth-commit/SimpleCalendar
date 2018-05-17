@@ -2,28 +2,29 @@
 using SimpleCalendar.Framework.Identity;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace SimpleCalendar.Utility.Authorization
 {
-    public class DefaultClaimsPrincipalAuthorizationService : IClaimsPrincipalAuthorizationService
+    public class DefaultUserAuthorizationService : IUserAuthorizationService
     {
         private readonly IAuthorizationService _authorizationService;
-        private readonly IClaimsPrincipalAccessor _claimsPrincipalAccessor;
+        private readonly IUserAccessor _claimsPrincipalAccessor;
 
-        public DefaultClaimsPrincipalAuthorizationService(
+        public DefaultUserAuthorizationService(
             IAuthorizationService authorizationService,
-            IClaimsPrincipalAccessor claimsPrincipalAccessor)
+            IUserAccessor claimsPrincipalAccessor)
         {
             _authorizationService = authorizationService;
             _claimsPrincipalAccessor = claimsPrincipalAccessor;
         }
 
         public Task<AuthorizationResult> AuthorizeAsync(object resource, IEnumerable<IAuthorizationRequirement> requirements)
-            => _authorizationService.AuthorizeAsync(_claimsPrincipalAccessor.ClaimsPrincipal, resource, requirements);
+            => _authorizationService.AuthorizeAsync(_claimsPrincipalAccessor.User, resource, requirements);
 
         public Task<AuthorizationResult> AuthorizeAsync(object resource, string policyName)
-            => _authorizationService.AuthorizeAsync(_claimsPrincipalAccessor.ClaimsPrincipal, resource, policyName);
+            => _authorizationService.AuthorizeAsync(_claimsPrincipalAccessor.User, resource, policyName);
     }
 }

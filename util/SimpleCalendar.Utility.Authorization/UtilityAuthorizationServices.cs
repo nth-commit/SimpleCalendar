@@ -14,9 +14,9 @@ namespace Microsoft.Extensions.DependencyInjection
             this TServiceCollection services)
             where TServiceCollection : IValidatableServiceCollection
         {
-            services.AddTransient<IClaimsPrincipalAuthorizationService, DefaultClaimsPrincipalAuthorizationService>();
+            services.AddTransient<IUserAuthorizationService, DefaultUserAuthorizationService>();
 
-            services.AddRequirement<IClaimsPrincipalAccessor>();
+            services.AddRequirement<IUserAccessor>();
             services.AddRequirement<IAuthorizationService>();
 
             return services;

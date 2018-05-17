@@ -8,16 +8,16 @@ using System.Threading.Tasks;
 
 namespace SimpleCalendar.Api.Services
 {
-    public class HttpClaimsPrincipalAccessor : IClaimsPrincipalAccessor
+    public class HttpUserAccessor : IUserAccessor
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public HttpClaimsPrincipalAccessor(
+        public HttpUserAccessor(
             IHttpContextAccessor httpContextAccessor)
         {
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public ClaimsPrincipal ClaimsPrincipal => _httpContextAccessor.HttpContext.User;
+        public ClaimsPrincipal User => _httpContextAccessor.HttpContext.User;
     }
 }

@@ -25,7 +25,7 @@ namespace SimpleCalendar.Api.Core.Data
                 Id = "ROOT_ADMIN",
                 RegionId = Constants.RootRegionId,
                 UserId = "ROOT_ADMIN",
-                Role = Framework.Identity.Role.Administrator & Framework.Identity.Role.User
+                Role = Framework.Identity.Role.Administrator | Framework.Identity.Role.User
             });
 
             base.OnModelCreating(modelBuilder);
