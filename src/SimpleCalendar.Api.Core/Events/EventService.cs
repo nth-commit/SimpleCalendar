@@ -31,6 +31,19 @@ namespace SimpleCalendar.Api.Core.Events
             _userAccessor = userAccessor;
         }
 
+        public async Task<EventResult> GetEventAsync(string id)
+        {
+            var entity = await _coreDbContext.GetEventByIdAsync(id);
+            if (entity == null)
+            {
+                throw new Exception("Entity not found");
+            }
+
+            // TODO: Authorize user is creator or event is published and user is in region or event is public
+
+            return _mapper.MapEntityToResult(entity, entity.Region);
+        }
+
         public async Task<EventResult> CreateEventAsync(EventCreate create, bool dryRun = false)
         {
             Validator.ValidateNotNull(create, nameof(create));
@@ -66,9 +79,7 @@ namespace SimpleCalendar.Api.Core.Events
                 await _coreDbContext.Events.AddAsync(entity);
                 await _coreDbContext.SaveChangesAsync();
 
-                var result = _mapper.Map<EventResult>(_mapper.Map<Event>(entity));
-                result.RegionId = create.RegionId;
-                return result;
+                return _mapper.MapEntityToResult(entity, region);
             }
         }
     }

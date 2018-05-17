@@ -35,8 +35,16 @@ namespace SimpleCalendar.Tools.Runner
             services.ValidateRequirements();
             var serviceProvider = services.BuildServiceProvider();
 
-            await CreateEventAsync(serviceProvider);
+            await GetEventAsync(serviceProvider);
+            //await CreateEventAsync(serviceProvider);
             //await GetRegionAsync(serviceProvider);
+        }
+
+        public static async Task GetEventAsync(IServiceProvider serviceProvider)
+        {
+            var eventService = serviceProvider.GetRequiredService<EventService>();
+
+            var result = await eventService.GetEventAsync("e4b91764-dd7c-4681-8b90-8b862d4ed24d");
         }
 
         public static async Task CreateEventAsync(IServiceProvider serviceProvider)

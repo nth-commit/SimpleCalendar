@@ -75,6 +75,8 @@ namespace SimpleCalendar.Api.Core.Regions
                 {
                     throw new ArgumentNullException(nameof(RegionCreate.ParentId));
                 }
+
+                // TODO: Ensure max region recursion
             }
 
             var entity = _mapper.Map<RegionEntity>(create);

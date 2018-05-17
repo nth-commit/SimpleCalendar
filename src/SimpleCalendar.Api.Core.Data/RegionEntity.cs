@@ -27,4 +27,33 @@ namespace SimpleCalendar.Api.Core.Data
         [InverseProperty(nameof(RegionRoleEntity.Region))]
         public List<RegionRoleEntity> Roles { get; set; }
     }
+
+    public static class RegionEntityExtensions
+    {
+
+        public static IEnumerable<RegionEntity> GetRegions(
+            this RegionEntity region,
+            bool includeRoot = false)
+        {
+            if (!includeRoot && region.Id == Constants.RootRegionId)
+            {
+                return Enumerable.Empty<RegionEntity>();
+            }
+
+            var result = new List<RegionEntity>() { region };
+
+            while ((includeRoot && region.Id != Constants.RootRegionId) || (!includeRoot && region.ParentId != Constants.RootRegionId))
+            {
+                if (region.Parent == null)
+                {
+                    throw new InvalidOperationException("Could not resolve all regions");
+                }
+
+                region = region.Parent;
+                result.Insert(0, region);
+            }
+
+            return result;
+        }
+    }
 }

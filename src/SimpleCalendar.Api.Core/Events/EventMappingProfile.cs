@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using SimpleCalendar.Api.Core.Data;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace SimpleCalendar.Api.Core.Events
@@ -24,6 +25,21 @@ namespace SimpleCalendar.Api.Core.Events
                 .ConvertUsing((src, dest) => JsonConvert.DeserializeObject<Event>(src.DataJson));
 
             CreateMap<Event, EventResult>();            
+        }
+    }
+
+    public static class MapperExtensions
+    {
+        public static EventResult MapEntityToResult(this IMapper mapper, EventEntity entity, RegionEntity region)
+        {
+            return mapper.MapToResult(mapper.Map<Event>(entity), region);
+        }
+
+        public static EventResult MapToResult(this IMapper mapper, Event ev, RegionEntity region)
+        {
+            var result = mapper.Map<EventResult>(ev);
+            result.RegionId = string.Join(".", region.GetRegions().Select(r => r.Code));
+            return result;
         }
     }
 }

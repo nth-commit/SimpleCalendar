@@ -127,6 +127,7 @@
     </Compile>
     <Compile Include="Migrations\CoreDbContextModelSnapshot.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Queries\EventQueries.cs" />
     <Compile Include="Queries\RegionQueries.cs" />
     <Compile Include="RegionEntity.cs" />
     <Compile Include="RegionRoleEntity.cs" />
