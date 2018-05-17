@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Newtonsoft.Json;
+using SimpleCalendar.Api.Core.Data;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -13,13 +14,16 @@ namespace SimpleCalendar.Api.Core.Events
             CreateMap<EventCreate, Event>()
                 .ForMember(dest => dest.Id, opts => opts.ResolveUsing(src => Guid.NewGuid()));
 
-            CreateMap<Event, EventTableEntity>()
-                .ForMember(dest => dest.RowKey, opts => opts.ResolveUsing(src => src.Id))
-                .ForMember(dest => dest.PartitionKey, opts => opts.ResolveUsing(src => src.RegionId))
-                .ForMember(dest => dest.DataJson, opts => opts.ResolveUsing(src => JsonConvert.SerializeObject(src)));
+            CreateMap<Event, EventEntity>()
+                .ForMember(dest => dest.IsDeleted, opts => opts.ResolveUsing(src => src.Deleted.HasValue))
+                .ForMember(dest => dest.IsPublished, opts => opts.ResolveUsing(src => src.Published.HasValue))
+                .ForMember(dest => dest.DataJson, opts => opts.ResolveUsing(src => JsonConvert.SerializeObject(src)))
+                .ForMember(dest => dest.DataJsonVersion, opts => opts.UseValue(1));
 
-            CreateMap<EventTableEntity, Event>()
+            CreateMap<EventEntity, Event>()
                 .ConvertUsing((src, dest) => JsonConvert.DeserializeObject<Event>(src.DataJson));
+
+            CreateMap<Event, EventResult>();            
         }
     }
 }

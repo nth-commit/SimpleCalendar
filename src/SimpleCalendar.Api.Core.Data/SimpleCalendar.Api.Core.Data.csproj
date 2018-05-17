@@ -121,9 +121,9 @@
     <Compile Include="Constants.cs" />
     <Compile Include="CoreDbContext.cs" />
     <Compile Include="EventEntity.cs" />
-    <Compile Include="Migrations\20180516081936_InitialCreate.cs" />
-    <Compile Include="Migrations\20180516081936_InitialCreate.designer.cs">
-      <DependentUpon>20180516081936_InitialCreate.cs</DependentUpon>
+    <Compile Include="Migrations\20180517044855_InitialCreate.cs" />
+    <Compile Include="Migrations\20180517044855_InitialCreate.designer.cs">
+      <DependentUpon>20180517044855_InitialCreate.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\CoreDbContextModelSnapshot.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

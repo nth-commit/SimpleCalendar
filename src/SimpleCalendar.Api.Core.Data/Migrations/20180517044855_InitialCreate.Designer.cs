@@ -10,7 +10,7 @@ using SimpleCalendar.Api.Core.Data;
 namespace SimpleCalendar.Api.Core.Data.Migrations
 {
     [DbContext(typeof(CoreDbContext))]
-    [Migration("20180516081936_InitialCreate")]
+    [Migration("20180517044855_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -31,6 +31,10 @@ namespace SimpleCalendar.Api.Core.Data.Migrations
                     b.Property<int>("DataJsonVersion");
 
                     b.Property<DateTime>("EndTime");
+
+                    b.Property<bool>("IsDeleted");
+
+                    b.Property<bool>("IsPublished");
 
                     b.Property<string>("RegionId");
 
@@ -87,7 +91,7 @@ namespace SimpleCalendar.Api.Core.Data.Migrations
                     b.ToTable("RegionRoles");
 
                     b.HasData(
-                        new { Id = "ROOT_ADMIN", RegionId = "ROOT", Role = 0, UserId = "ROOT_ADMIN" }
+                        new { Id = "ROOT_ADMIN", RegionId = "ROOT", Role = 3, UserId = "ROOT_ADMIN" }
                     );
                 });
 
@@ -108,7 +112,7 @@ namespace SimpleCalendar.Api.Core.Data.Migrations
             modelBuilder.Entity("SimpleCalendar.Api.Core.Data.RegionRoleEntity", b =>
                 {
                     b.HasOne("SimpleCalendar.Api.Core.Data.RegionEntity", "Region")
-                        .WithMany()
+                        .WithMany("Roles")
                         .HasForeignKey("RegionId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });

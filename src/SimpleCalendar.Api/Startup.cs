@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Rewrite;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -18,7 +17,6 @@ using SimpleCalendar.Api.Services;
 using SimpleCalendar.Api.Core.Data;
 using SimpleCalendar.Framework;
 using SimpleCalendar.Framework.Identity;
-using SimpleCalendar.Utility.Configuration;
 using SimpleCalendar.Utility.DependencyInjection;
 
 namespace SimpleCalendar.Api
@@ -61,6 +59,7 @@ namespace SimpleCalendar.Api
             services.AddApiCoreDataServices();
             services.AddWindowsAzureStorageServices();
             services.AddConfigurationServices(_hostingEnvironment.EnvironmentName);
+            services.AddAuthorizationUtilityServices();
 
             services.AddAutoMapper(conf =>
             {

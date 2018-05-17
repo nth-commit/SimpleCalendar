@@ -20,6 +20,10 @@ namespace SimpleCalendar.Api.Core.Events
 
         public string CreatedById { get; set; }
 
+        public DateTime? Published { get; set; }
+
+        public string PublishedById { get; set; }
+
         public DateTime? Deleted { get; set; }
 
         public string DeletedById { get; set; }

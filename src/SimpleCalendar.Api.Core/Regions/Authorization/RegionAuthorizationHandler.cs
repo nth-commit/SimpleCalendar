@@ -21,6 +21,13 @@ namespace SimpleCalendar.Api.Core.Regions.Authorization
                     context.Succeed(requirement);
                 }
             }
+            else if (requirement is PublishEventsRequirement)
+            {
+                if (IsRegionAdministrator(context.User, resource))
+                {
+                    context.Succeed(requirement);
+                }
+            }
 
             return Task.CompletedTask;
         }

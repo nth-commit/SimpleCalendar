@@ -30,6 +30,10 @@ namespace SimpleCalendar.Api.Core.Data.Migrations
 
                     b.Property<DateTime>("EndTime");
 
+                    b.Property<bool>("IsDeleted");
+
+                    b.Property<bool>("IsPublished");
+
                     b.Property<string>("RegionId");
 
                     b.Property<DateTime>("StartTime");
@@ -85,7 +89,7 @@ namespace SimpleCalendar.Api.Core.Data.Migrations
                     b.ToTable("RegionRoles");
 
                     b.HasData(
-                        new { Id = "ROOT_ADMIN", RegionId = "ROOT", Role = 0, UserId = "ROOT_ADMIN" }
+                        new { Id = "ROOT_ADMIN", RegionId = "ROOT", Role = 3, UserId = "ROOT_ADMIN" }
                     );
                 });
 
@@ -106,7 +110,7 @@ namespace SimpleCalendar.Api.Core.Data.Migrations
             modelBuilder.Entity("SimpleCalendar.Api.Core.Data.RegionRoleEntity", b =>
                 {
                     b.HasOne("SimpleCalendar.Api.Core.Data.RegionEntity", "Region")
-                        .WithMany()
+                        .WithMany("Roles")
                         .HasForeignKey("RegionId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });

@@ -18,6 +18,10 @@ namespace SimpleCalendar.Api.Core.Data
 
         public RegionEntity Region { get; set; }
 
+        public bool IsDeleted { get; set; }
+
+        public bool IsPublished { get; set; }
+
         public string DataJson { get; set; }
 
         public int DataJsonVersion { get; set; }
