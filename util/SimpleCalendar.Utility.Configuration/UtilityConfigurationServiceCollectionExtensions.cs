@@ -8,13 +8,13 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static class UtilityConfigurationServiceCollectionExtensions
     {
-        public static IServiceCollection ConfigureFromProvider<TOptions>(
+        public static IServiceCollection ConfigureFromAppConfigurationSection<TOptions>(
             this IServiceCollection services,
-            string name)
+            string key)
             where TOptions : class
         {
             services.AddSingleton<IConfigureOptions<TOptions>>(sp =>
-                ActivatorUtilities.CreateInstance<ConfigureOptionsFromProvider<TOptions>>(sp, name));
+                ActivatorUtilities.CreateInstance<ConfigureFromAppConfigurationSection<TOptions>>(sp, key));
 
             return services;
         }

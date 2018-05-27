@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Rewrite;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
@@ -18,20 +19,22 @@ namespace SimpleCalendar.App
 {
     public class Startup
     {
+        private readonly IConfiguration _configuration;
         private readonly IHostingEnvironment _hostingEnvironment;
 
-        public Startup(IHostingEnvironment hostingEnvironment)
+        public Startup(
+            IConfiguration configuration,
+            IHostingEnvironment hostingEnvironment)
         {
+            _configuration = configuration;
             _hostingEnvironment = hostingEnvironment;
         }
 
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddTransient<IEnvironmentSettingsFactory, EnvironmentSettingsFactory>();
-
-            services.AddConfigurationServices(_hostingEnvironment.EnvironmentName);
-            services.ConfigureFromProvider<Auth0AuthOptions>("Auth0");
-            services.ConfigureFromProvider<HostsOptions>("Hosts");
+            services.ConfigureAuth0();
+            services.ConfigureHosts();
 
             if (_hostingEnvironment.IsDevelopment())
             {

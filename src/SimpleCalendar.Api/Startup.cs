@@ -18,17 +18,17 @@ using SimpleCalendar.Api.Core.Data;
 using SimpleCalendar.Framework;
 using SimpleCalendar.Framework.Identity;
 using SimpleCalendar.Utility.DependencyInjection;
+using Microsoft.Extensions.Configuration;
 
 namespace SimpleCalendar.Api
 {
     public class Startup
     {
-        private readonly IHostingEnvironment _hostingEnvironment;
+        private readonly IConfiguration _configuration;
 
-        public Startup(
-            IHostingEnvironment hostingEnvironment)
+        public Startup(IConfiguration configuration)
         {
-            _hostingEnvironment = hostingEnvironment;
+            _configuration = configuration;
         }
 
         public IServiceProvider ConfigureServices(IServiceCollection innerServices)
@@ -56,9 +56,8 @@ namespace SimpleCalendar.Api
                 });
 
             services.AddApiCoreServices();
-            services.AddApiCoreDataServices();
-            services.AddWindowsAzureStorageServices();
-            services.AddConfigurationServices(_hostingEnvironment.EnvironmentName);
+            services.AddApiCoreDataServices(_configuration);
+            //services.AddWindowsAzureStorageServices();
             services.AddAuthorizationUtilityServices();
 
             services.AddAutoMapper(conf =>
@@ -66,8 +65,8 @@ namespace SimpleCalendar.Api
                 conf.AddApiCoreMappers();
             });
 
-            services.ConfigureFromProvider<Auth0AuthOptions>("Auth0");
-            services.ConfigureFromProvider<HostsOptions>("Hosts");
+            services.ConfigureAuth0();
+            services.ConfigureHosts();
 
             services.ValidateRequirements();
             return services.BuildServiceProvider();

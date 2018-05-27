@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using SimpleCalendar.Api.Core.Data;
 using SimpleCalendar.Utility.Configuration;
 using System;
@@ -11,14 +12,13 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static class ApiCoreDataServices
     {
-
         public static IServiceCollection AddApiCoreDataServices(
-            this IServiceCollection services)
+            this IServiceCollection services,
+            IConfiguration configuration)
         {
             services.AddDbContext<CoreDbContext>(options =>
             {
-                var configurationProvider = services.BuildServiceProvider().GetRequiredService<IConfigurationProvider>();
-                options.UseSqlServer(configurationProvider.GetConnectionString(typeof(CoreDbContext)));
+                options.UseSqlServer(configuration.GetConnectionString(typeof(CoreDbContext)));
             });
             return services;
         }

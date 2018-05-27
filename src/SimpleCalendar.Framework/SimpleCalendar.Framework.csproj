@@ -30,6 +30,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.Extensions.DependencyInjection, Version=2.1.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.Extensions.DependencyInjection.2.1.0-rc1-final\lib\net461\Microsoft.Extensions.DependencyInjection.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions, Version=2.1.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.Extensions.DependencyInjection.Abstractions.2.1.0-rc1-final\lib\netstandard2.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -42,11 +48,21 @@
   <ItemGroup>
     <Compile Include="Auth0AuthOptions.cs" />
     <Compile Include="ClaimsPrincipalExtensions.cs" />
+    <Compile Include="FrameworkServiceCollectionExtensions.cs" />
     <Compile Include="HostsOptions.cs" />
     <Compile Include="IAuthOptions.cs" />
     <Compile Include="Identity\IUserAccessor.cs" />
     <Compile Include="Identity\Role.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\util\SimpleCalendar.Utility.Configuration\SimpleCalendar.Utility.Configuration.csproj">
+      <Project>{73161659-5a80-4c8d-b9f4-037ff68973a0}</Project>
+      <Name>SimpleCalendar.Utility.Configuration</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using SimpleCalendar.Utility.Configuration;
 using SimpleCalendar.Utility.DependencyInjection;
 using SimpleCalendar.Utility.WindowsAzure.Storage;
@@ -16,7 +17,7 @@ namespace SimpleCalendar.Utility.DependencyInjection
         {
             services.AddTransient<ICloudStorageClientFactory, CloudStorageClientFactory>();
 
-            services.AddRequirement<IConfigurationProvider>();
+            services.AddRequirement<IConfiguration>();
 
             return services;
         }

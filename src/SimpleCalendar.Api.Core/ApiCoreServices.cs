@@ -30,7 +30,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddTransient<IAuthorizationHandler, RegionAuthorizationHandler>();
 
             services.AddRequirement<IMapper>();
-            services.AddRequirement<ICloudStorageClientFactory>();
+            //services.AddRequirement<ICloudStorageClientFactory>();
             services.AddRequirement<CoreDbContext>();
             services.AddRequirement<IUserAccessor>();
             services.AddRequirement<IAuthorizationService>();

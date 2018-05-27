@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Microsoft.Extensions.Configuration;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
 using Microsoft.WindowsAzure.Storage.Table;
@@ -10,18 +11,18 @@ namespace SimpleCalendar.Utility.WindowsAzure.Storage.Impl
 {
     class CloudStorageClientFactory : ICloudStorageClientFactory
     {
-        private readonly IConfigurationProvider _configurationProvider;
+        private readonly IConfiguration _configuration;
 
         public CloudStorageClientFactory(
-            IConfigurationProvider configurationProvider)
+            IConfiguration configuration)
         {
-            _configurationProvider = configurationProvider;
+            _configuration = configuration;
         }
 
         public CloudBlobClient CreateBlobClient() => GetStorageAccount().CreateCloudBlobClient();
 
         public CloudTableClient CreateTableClient() => GetStorageAccount().CreateCloudTableClient();
 
-        private CloudStorageAccount GetStorageAccount() => CloudStorageAccount.Parse(_configurationProvider.GetConnectionString(typeof(Marker)));
+        private CloudStorageAccount GetStorageAccount() => CloudStorageAccount.Parse(_configuration.GetConnectionString(typeof(Marker)));
     }
 }

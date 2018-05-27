@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
@@ -14,11 +15,15 @@ namespace SimpleCalendar.Api
     {
         public static void Main(string[] args)
         {
+            var test = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             BuildWebHost(args).Run();
         }
 
         public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
+                .UseContentRoot(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location))
+                .ConfigureAppConfiguration((context, builder) => 
+                    builder.AddCommonConfigurationSources(context.HostingEnvironment.EnvironmentName))
                 .UseStartup<Startup>()
                 .Build();
     }

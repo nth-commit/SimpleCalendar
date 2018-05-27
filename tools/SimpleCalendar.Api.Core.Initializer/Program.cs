@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using SimpleCalendar.Api.Core.Data;
 using SimpleCalendar.Api.Core.Initializer.Regions;
+using SimpleCalendar.Utility.Configuration;
 using SimpleCalendar.Utility.DependencyInjection;
 using System;
 using System.Collections;
@@ -14,13 +15,13 @@ namespace SimpleCalendar.Api.Core.Initializer
     {
         static void Main(string[] args)
         {
+            var configuration = ConfigurationFactory.Create("Development");
+
             var services = new ValidatableServiceCollection();
 
-            services.AddConfigurationServices("Development");
-            services.AddWindowsAzureStorageServices();
-
+            services.AddSingleton(configuration);
             services.AddApiCoreServices();
-            services.AddApiCoreDataServices();
+            services.AddApiCoreDataServices(configuration);
 
             services.AddAutoMapper(conf =>
             {

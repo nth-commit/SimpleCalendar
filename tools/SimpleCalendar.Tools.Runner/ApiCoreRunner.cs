@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using SimpleCalendar.Api.Core.Events;
 using SimpleCalendar.Api.Core.Regions;
 using SimpleCalendar.Framework.Identity;
+using SimpleCalendar.Utility.Configuration;
 using SimpleCalendar.Utility.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -16,16 +17,18 @@ namespace SimpleCalendar.Tools.Runner
     {
         public static async Task RunAsync()
         {
+            var configuration = ConfigurationFactory.Create("Development");
+
             var services = new ValidatableServiceCollection(new ServiceCollection());
 
+            services.AddSingleton(configuration);
             services.AddTransient<IUserAccessor, StubbedUserAccessor>();
             services.AddAuthorization();
             services.AddAuthorizationUtilityServices();
 
             services.AddApiCoreServices();
-            services.AddApiCoreDataServices();
+            services.AddApiCoreDataServices(configuration);
             services.AddWindowsAzureStorageServices();
-            services.AddConfigurationServices("Development");
 
             services.AddAutoMapper(conf =>
             {
