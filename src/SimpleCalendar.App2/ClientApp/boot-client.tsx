@@ -8,7 +8,7 @@ import { createBrowserHistory } from 'history';
 import configureStore from './configureStore';
 import { ApplicationState }  from './store';
 import * as RoutesModule from './routes';
-import { environment, configuration } from './configuration';
+import { environment, CONFIGURATION } from './configuration';
 let routes = RoutesModule.routes;
 
 const baseUrl = document.getElementsByTagName('base')[0].getAttribute('href')!;

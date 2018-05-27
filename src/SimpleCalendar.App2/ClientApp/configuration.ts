@@ -16,4 +16,4 @@ export interface IConfiguration {
     };
 }
 
-export const configuration = JSON.parse((window as any).SIMPLE_CALENDAR_CONFIGURATION);
+export const CONFIGURATION = JSON.parse((window as any).SIMPLE_CALENDAR_CONFIGURATION);

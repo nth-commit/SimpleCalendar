@@ -13,8 +13,8 @@ namespace Microsoft.Extensions.Configuration
             builder
                 .AddJsonFile("appsettings.json", optional: false)
                 .AddJsonFile($"appsettings.{environmentName}.json", optional: true)
-                .AddJsonFile("appsettings.Shared.json", optional: false)
-                .AddJsonFile($"appsettings.Shared.{environmentName}.json", optional: true);
+                .AddJsonFile("../../appsettings.Shared.json", optional: false)
+                .AddJsonFile($"../../appsettings.Shared.{environmentName}.json", optional: true);
 
             if (environmentName == "Development")
             {

@@ -2,6 +2,8 @@ import * as React from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 import * as queryString from 'query-string';
 
+import { default as AuthHelper } from '../AuthHelper';
+
 export default class AuthLogin extends React.Component<RouteComponentProps<{}>, {}> {
 
     public render() {
@@ -10,9 +12,11 @@ export default class AuthLogin extends React.Component<RouteComponentProps<{}>, 
             localStorage.setItem('login:redirect', query.redirect);
         }
 
+        AuthHelper.redirectToLogin();
+
         return (
             <div>
-                AuthLogin
+                Logging in...
             </div>
         );
     }
