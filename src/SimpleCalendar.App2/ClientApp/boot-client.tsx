@@ -6,7 +6,7 @@ import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'react-router-redux';
 import { createBrowserHistory } from 'history';
 import configureStore from './configureStore';
-import { ApplicationState }  from './store';
+import { ApplicationState } from './store';
 import * as RoutesModule from './routes';
 import { environment, CONFIGURATION } from './configuration';
 let routes = RoutesModule.routes;
@@ -18,24 +18,22 @@ const initialState = (window as any).initialReduxState as ApplicationState;
 const store = configureStore(history, initialState);
 
 function renderApp() {
-    ReactDOM.render(
-        <AppContainer>
-            <Provider store={ store }>
-                <ConnectedRouter history={ history } children={ routes } />
-            </Provider>
-        </AppContainer>,
-        document.getElementById('react-app')
-    );
+	ReactDOM.render(
+		<AppContainer>
+			<Provider store={store}>
+				<ConnectedRouter history={history} children={routes} />
+			</Provider>
+		</AppContainer>,
+		document.getElementById('react-app')
+	);
 }
 
 renderApp();
 
-if (environment === 'development') {
-    // Allow Hot Module Replacement
-    if (module.hot) {
-        module.hot.accept('./routes', () => {
-            routes = require<typeof RoutesModule>('./routes').routes;
-            renderApp();
-        });
-    }
+// Allow Hot Module Replacement
+if (module.hot) {
+	module.hot.accept('./routes', () => {
+		routes = require<typeof RoutesModule>('./routes').routes;
+		renderApp();
+	});
 }

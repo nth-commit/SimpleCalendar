@@ -21,7 +21,6 @@ namespace SimpleCalendar.Api
 
         public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-                .UseContentRoot(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location))
                 .ConfigureAppConfiguration((context, builder) => 
                     builder.AddCommonConfigurationSources(context.HostingEnvironment.EnvironmentName))
                 .UseStartup<Startup>()

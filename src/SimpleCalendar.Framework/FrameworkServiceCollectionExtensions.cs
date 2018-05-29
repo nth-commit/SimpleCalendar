@@ -12,7 +12,7 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IServiceCollection ConfigureAuth0(
             this IServiceCollection services)
         {
-            services.ConfigureFromAppConfigurationSection<Auth0AuthOptions>("Auth");
+            services.ConfigureFromAppConfigurationSection<Auth0AuthOptions>("Auth0");
             return services;
         }
 

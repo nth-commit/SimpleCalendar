@@ -11,5 +11,7 @@ namespace SimpleCalendar.Framework
         public string Api { get; set; }
 
         public string App { get; set; }
+
+        public string App2 { get; set; }
     }
 }

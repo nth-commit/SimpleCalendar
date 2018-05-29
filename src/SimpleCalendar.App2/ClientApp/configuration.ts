@@ -13,6 +13,7 @@ export interface IConfiguration {
     Hosts: {
         Api: string;
         App: string;
+        App2: string;
     };
 }
 

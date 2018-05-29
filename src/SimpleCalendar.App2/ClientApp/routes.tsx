@@ -6,8 +6,8 @@ import { AuthLogin, AuthLoginCallback } from './features/Auth';
 
 export const routes = (
     <Layout>
-        <Route exact path='/' component={ Home } />
-        <Route exact path='/auth/login' component={ AuthLogin } />
-        <Route exact path='/auth/callback' component={ AuthLoginCallback } />
+        <Route exact path='/' component={Home} />
+        <Route exact path='/auth/login' component={AuthLogin} />
+        <Route exact path='/auth/callback' component={AuthLoginCallback} />
     </Layout>
 );
