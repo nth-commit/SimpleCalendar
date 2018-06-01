@@ -8,7 +8,6 @@ using SimpleCalendar.Api.Core.Regions.Authorization;
 using SimpleCalendar.Framework.Identity;
 using SimpleCalendar.Utility.Authorization;
 using SimpleCalendar.Utility.DependencyInjection;
-using SimpleCalendar.Utility.WindowsAzure.Storage;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -21,7 +20,6 @@ namespace Microsoft.Extensions.DependencyInjection
             this IValidatableServiceCollection services)
         {
             services.AddTransient<EventService>();
-            services.AddTransient<IEventRepository, TableStorageEventRepository>();
 
             services.AddTransient<OrganisationService>();
 
@@ -30,7 +28,6 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddTransient<IAuthorizationHandler, RegionAuthorizationHandler>();
 
             services.AddRequirement<IMapper>();
-            //services.AddRequirement<ICloudStorageClientFactory>();
             services.AddRequirement<CoreDbContext>();
             services.AddRequirement<IUserAccessor>();
             services.AddRequirement<IAuthorizationService>();

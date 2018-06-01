@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
@@ -6,32 +6,38 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="..\..\appsettings.Shared.Development.json" Link="appsettings.Shared.Development.json">
+    <Compile Remove="wwwroot\**" />
+    <Content Remove="wwwroot\**" />
+    <EmbeddedResource Remove="wwwroot\**" />
+    <None Remove="wwwroot\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="..\appsettings.Shared.Development.json" Link="appsettings.Shared.Development.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\appsettings.Shared.json" Link="appsettings.Shared.json">
+    <Content Include="..\appsettings.Shared.json" Link="appsettings.Shared.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\" />
+    <PackageReference Include="IdentityModel" Version="3.7.0" />
+    <PackageReference Include="Microsoft.AspNetCore" Version="2.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="2.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Rewrite" Version="2.1.0" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="5.2.2" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="3.2.0" />
-    <PackageReference Include="IdentityModel" Version="3.6.1" />
-    <PackageReference Include="Microsoft.AspNetCore.App" Version="2.1.0-rc1-final" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\util\SimpleCalendar.Utility.Authorization\SimpleCalendar.Utility.Authorization.csproj" />
-    <ProjectReference Include="..\..\util\SimpleCalendar.Utility.Configuration\SimpleCalendar.Utility.Configuration.csproj" />
-    <ProjectReference Include="..\..\util\SimpleCalendar.Utility.DependencyInjection\SimpleCalendar.Utility.DependencyInjection.csproj" />
-    <ProjectReference Include="..\..\util\SimpleCalendar.Utility.WindowsAzure.Storage\SimpleCalendar.Utility.WindowsAzure.Storage.csproj" />
-    <ProjectReference Include="..\SimpleCalendar.Api.Core.Data\SimpleCalendar.Api.Core.Data.csproj" />
     <ProjectReference Include="..\SimpleCalendar.Api.Core\SimpleCalendar.Api.Core.csproj" />
+    <ProjectReference Include="..\SimpleCalendar.Api.Tests\SimpleCalendar.Api.Tests.csproj" />
     <ProjectReference Include="..\SimpleCalendar.Framework\SimpleCalendar.Framework.csproj" />
+    <ProjectReference Include="..\util\SimpleCalendar.Utility.Authorization\SimpleCalendar.Utility.Authorization.csproj" />
+    <ProjectReference Include="..\util\SimpleCalendar.Utility.Configuration\SimpleCalendar.Utility.Configuration.csproj" />
+    <ProjectReference Include="..\util\SimpleCalendar.Utility.DependencyInjection\SimpleCalendar.Utility.DependencyInjection.csproj" />
+    <ProjectReference Include="..\util\SimpleCalendar.Utility.Validation\SimpleCalendar.Utility.Validation.csproj" />
   </ItemGroup>
 
   <ItemGroup>
