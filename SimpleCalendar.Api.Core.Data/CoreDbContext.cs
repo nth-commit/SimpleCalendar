@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,8 +10,25 @@ namespace SimpleCalendar.Api.Core.Data
 {
     public class CoreDbContext : DbContext
     {
-        public CoreDbContext(DbContextOptions<CoreDbContext> options)
-            : base(options) { }
+        private readonly IConfiguration _configuration;
+
+        public CoreDbContext(
+            IConfiguration configuration,
+            DbContextOptions<CoreDbContext> options) : base(options)
+        {
+            _configuration = configuration;
+        }
+
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured)
+            {
+                optionsBuilder.UseSqlServer(_configuration.GetConnectionString(typeof(CoreDbContext)));
+            }
+
+            base.OnConfiguring(optionsBuilder);
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

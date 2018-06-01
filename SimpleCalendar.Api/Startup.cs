@@ -31,7 +31,7 @@ namespace SimpleCalendar.Api
             _configuration = configuration;
         }
 
-        public IServiceProvider ConfigureServices(IServiceCollection innerServices)
+        public virtual void ConfigureServices(IServiceCollection innerServices)
         {
             var services = new ValidatableServiceCollection(innerServices);
 
@@ -57,7 +57,6 @@ namespace SimpleCalendar.Api
 
             services.AddApiCoreServices();
             services.AddApiCoreDataServices(_configuration);
-            //services.AddWindowsAzureStorageServices();
             services.AddAuthorizationUtilityServices();
 
             services.AddAutoMapper(conf =>
@@ -69,11 +68,10 @@ namespace SimpleCalendar.Api
             services.ConfigureHosts();
 
             services.ValidateRequirements();
-            return services.BuildServiceProvider();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(
+        public virtual void Configure(
             IApplicationBuilder app,
             IHostingEnvironment env,
             ILoggerFactory loggerFactory,

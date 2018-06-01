@@ -16,10 +16,7 @@ namespace Microsoft.Extensions.DependencyInjection
             this IServiceCollection services,
             IConfiguration configuration)
         {
-            services.AddDbContext<CoreDbContext>(options =>
-            {
-                options.UseSqlServer(configuration.GetConnectionString(typeof(CoreDbContext)));
-            });
+            services.AddDbContext<CoreDbContext>();
             return services;
         }
     }

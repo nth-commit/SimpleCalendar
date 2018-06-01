@@ -9,6 +9,7 @@ namespace SimpleCalendar.Api.Controllers
     [Route("regions")]
     public class RegionsController : Controller
     {
+        [HttpGet]
         public Task<IActionResult> List(
             [FromQuery] string parentId)
         {
