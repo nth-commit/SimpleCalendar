@@ -92,6 +92,11 @@ namespace SimpleCalendar.Utiltiy.Validation
             }
         }
 
+        public static void ThrowInvalid(string paramName, string reason = null)
+        {
+            throw new ClientArgumentException(paramName, reason);
+        }
+
 
         #region Helpers
 

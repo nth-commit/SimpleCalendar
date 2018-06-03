@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using SimpleCalendar.Api.Core.Data;
+using SimpleCalendar.Utiltiy.Validation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,14 +23,14 @@ namespace SimpleCalendar.Api.Core.Regions
             _mapper = mapper;
         }
 
-        public async Task<RegionResult> GetRegionAsync(string publicId)
+        public async Task<RegionResult> GetRegionAsync(string id)
         {
-            if (string.IsNullOrEmpty(publicId))
+            if (string.IsNullOrEmpty(id))
             {
-                throw new ArgumentNullException(nameof(publicId));
+                throw new ArgumentNullException(nameof(id));
             }
 
-            var codesJoinedLower = publicId.ToLower();
+            var codesJoinedLower = id.ToLower();
             var codes = codesJoinedLower.Split('.');
 
             var region = await _coreDbContext.GetRegionByCodesAsync(codes);
@@ -44,21 +45,31 @@ namespace SimpleCalendar.Api.Core.Regions
             };
         }
 
-        public async Task<IEnumerable<RegionResult>> ListRegionsAsync(string parentPublicId)
+        public async Task<IEnumerable<RegionResult>> ListRegionsAsync(string parentId)
         {
-            var parentCodesJoinedLower = parentPublicId.ToLower();
-            var parentCodes = parentCodesJoinedLower.Split('.');
-
+            var parentCodes = string.IsNullOrEmpty(parentId) ? Enumerable.Empty<string>() : parentId.ToLower().Split('.');
             var region = await _coreDbContext.GetRegionByCodesAsync(parentCodes);
             if (region == null)
             {
-                throw new Exception("Entity not found");
+                Validator.ThrowInvalid(nameof(parentId), $"Could not find region with {nameof(parentId)} \"{parentId}\"");
             }
 
             return region.Children.Select(r => new RegionResult
             {
-                Id = $"{parentCodesJoinedLower}.{r.Code}"
+                Id = GetId(r)
             });
+        }
+
+        private string GetId(RegionEntity region)
+        {
+            if (region.ParentId == Constants.RootRegionId)
+            {
+                return region.Id;
+            }
+            else
+            {
+                return $"{GetId(region.Parent)}.{region.Id}";
+            }
         }
 
         public async Task<RegionEntity> CreateRegionAsync(RegionCreate create, string id = null)

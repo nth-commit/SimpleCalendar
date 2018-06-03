@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SimpleCalendar.Api.Core.Regions;
+using SimpleCalendar.Utiltiy.Validation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,11 +11,25 @@ namespace SimpleCalendar.Api.Controllers
     [Route("regions")]
     public class RegionsController : Controller
     {
-        [HttpGet]
-        public Task<IActionResult> List(
-            [FromQuery] string parentId)
+        private readonly RegionService _regionService;
+
+        public RegionsController(RegionService regionService)
         {
-            throw new NotImplementedException();
+            _regionService = regionService;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ListAsync([FromQuery] string parentId)
+        {
+            try
+            {
+                var result = await _regionService.ListRegionsAsync(parentId);
+                return Ok(result);
+            }
+            catch (ClientValidationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }
