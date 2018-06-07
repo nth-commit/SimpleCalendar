@@ -16,7 +16,7 @@ namespace SimpleCalendar.Api.UnitTests.Regions
             public async Task WhenRegionsEndpointCalled_ThenReturnsEmptyResult()
             {
                 var response = await Client.GetAsync("/regions");
-                var regions = await response.GetRegionsAsync();
+                var regions = await response.DeserializeRegionsAsync();
                 Assert.Empty(regions);
             }
 

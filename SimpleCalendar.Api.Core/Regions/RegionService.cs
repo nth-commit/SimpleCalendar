@@ -53,45 +53,25 @@ namespace SimpleCalendar.Api.Core.Regions
             {
                 Validator.ThrowInvalid(nameof(parentId), $"Could not find region with {nameof(parentId)} \"{parentId}\"");
             }
-
-            return region.Children.Select(r => new RegionResult
-            {
-                Id = GetId(r)
-            });
-        }
-
-        private string GetId(RegionEntity region)
-        {
-            if (region.ParentId == Constants.RootRegionId)
-            {
-                return region.Id;
-            }
-            else
-            {
-                return $"{GetId(region.Parent)}.{region.Id}";
-            }
+            return region.Children.Select(r => _mapper.Map<RegionResult>(r));
         }
 
         public async Task<RegionEntity> CreateRegionAsync(RegionCreate create, string id = null)
         {
             RegionEntity parentEntity = null;
-            if (string.IsNullOrEmpty(create.ParentId))
+            if (!string.IsNullOrEmpty(create.ParentId))
             {
-                create.ParentId = Data.Constants.RootRegionId;
-            }
-            else
-            {
-                parentEntity = await _coreDbContext.Regions.FindAsync(create.ParentId);
+                parentEntity = await _coreDbContext.GetRegionByCodesAsync(create.ParentId);
                 if (parentEntity == null)
                 {
                     throw new ArgumentNullException(nameof(RegionCreate.ParentId));
                 }
-
                 // TODO: Ensure max region recursion
             }
 
             var entity = _mapper.Map<RegionEntity>(create);
             entity.Id = string.IsNullOrEmpty(id) ? Guid.NewGuid().ToString() : id;
+            entity.ParentId = parentEntity?.Id ?? Data.Constants.RootRegionId;
 
             await _coreDbContext.Regions.AddAsync(entity);
             await _coreDbContext.SaveChangesAsync();

@@ -15,6 +15,8 @@ namespace SimpleCalendar.Api.UnitTests
     {
         protected HttpClient Client { get; private set; }
 
+        protected IServiceProvider Services { get; private set; }
+
         public GivenAnyContext()
         {
             var webHostBuilder = new WebHostBuilder()
@@ -27,7 +29,9 @@ namespace SimpleCalendar.Api.UnitTests
                     services.AddDbContext<CoreDbContext>(optionsBuilder => optionsBuilder.UseInMemoryDatabase(databaseName: "Test"));
                 });
 
-            Client = new TestServer(webHostBuilder).CreateClient();
+            var testServer = new TestServer(webHostBuilder);
+            Services = testServer.Host.Services;
+            Client = testServer.CreateClient();
         }
     }
 }

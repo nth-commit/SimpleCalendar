@@ -10,7 +10,7 @@ namespace SimpleCalendar.Api.UnitTests.Regions
 {
     public static class ResponseHttpMessageExtensions
     {
-        public static async Task<IEnumerable<RegionResult>> GetRegionsAsync(
+        public static async Task<IEnumerable<RegionResult>> DeserializeRegionsAsync(
             this HttpResponseMessage response)
         {
             response.EnsureSuccessStatusCode();
