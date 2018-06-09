@@ -35,7 +35,7 @@ namespace SimpleCalendar.Api.UnitTests
             }
         };
 
-        public static async Task CreateRegionHierarchyAsync(this GivenAnyContext context)
+        public static async Task GivenARegionHierarchyAsync(this GivenAnyContext context)
         {
             var regionService = context.GetRequiredService<RegionService>();
             foreach (var region in _regions)

@@ -31,7 +31,7 @@ namespace SimpleCalendar.Api.UnitTests.Events.Create.Authorization
 
             await dbContext.SaveChangesAsync();
 
-            this.SetupUser(Level2AdministratorId);
+            this.GivenIHaveAUserId(Level2AdministratorId);
         }
 
         public new class Tests : GivenIAmALevel2Administrator

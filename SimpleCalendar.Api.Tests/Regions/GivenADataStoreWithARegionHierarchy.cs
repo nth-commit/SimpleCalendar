@@ -15,7 +15,7 @@ namespace SimpleCalendar.Api.UnitTests.Regions
     {
         public GivenADataStoreWithARegionHierarchy()
         {
-            this.CreateRegionHierarchyAsync().GetAwaiter().GetResult();
+            this.GivenARegionHierarchyAsync().GetAwaiter().GetResult();
         }
 
         public class Tests : GivenADataStoreWithARegionHierarchy

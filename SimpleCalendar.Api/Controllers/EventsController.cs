@@ -36,7 +36,17 @@ namespace SimpleCalendar.Api.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> Get([FromRoute] string id)
         {
-            return Ok(await _eventService.GetEventAsync(id));
+            var result = await _eventService.GetEventAsync(id);
+            switch (result.Status)
+            {
+                case EventGetResult.EventGetResultStatus.NotFound:
+                case EventGetResult.EventGetResultStatus.Unauthorized:
+                    return NotFound();
+                case EventGetResult.EventGetResultStatus.Success:
+                    return Ok(result);
+                default:
+                    throw new Exception("Unrecognised value");
+            }
         }
 
         [Authorize]

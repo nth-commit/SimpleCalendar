@@ -8,7 +8,7 @@ namespace SimpleCalendar.Api.UnitTests
     {
         public GivenIAmARootAdministrator()
         {
-            this.SetupUserIsRootAdministrator();
+            this.GivenIAmARootAdministrator();
         }
     }
 }

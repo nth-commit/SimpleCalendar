@@ -6,7 +6,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SimpleCalendar.Api.UnitTests.Events.Create
+namespace SimpleCalendar.Api.UnitTests.Events
 {
     public static class HttpClientExtensions
     {
@@ -16,6 +16,13 @@ namespace SimpleCalendar.Api.UnitTests.Events.Create
         {
             var content = new StringContent(JsonConvert.SerializeObject(create), Encoding.UTF8, "application/json");
             return await client.PostAsync("/events", content);
+        }
+
+        public static async Task<HttpResponseMessage> GetEventAsync(
+            this HttpClient client,
+            Guid eventId)
+        {
+            return await client.GetAsync($"/events/{eventId}");
         }
     }
 }

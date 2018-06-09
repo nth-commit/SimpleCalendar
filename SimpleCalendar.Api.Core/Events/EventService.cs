@@ -33,21 +33,21 @@ namespace SimpleCalendar.Api.Core.Events
             _userAccessor = userAccessor;
         }
 
-        public async Task<EventResult> GetEventAsync(string id)
+        public async Task<EventGetResult> GetEventAsync(string id)
         {
             var entity = await _coreDbContext.GetEventByIdAsync(id);
             if (entity == null)
             {
-                throw new Exception("Entity not found");
+                return EventGetResult.NotFound;
             }
 
             var canView = (await _userAuthorizationService.AuthorizeAsync(entity, new ViewEventRequirement())).Succeeded;
             if (!canView)
             {
-                throw new Exception("Entity not found");
+                return EventGetResult.Unauthorized;
             }
 
-            return _mapper.MapEntityToResult(entity, entity.Region);
+            return EventGetResult.Success(_mapper.MapEntityToResult(entity, entity.Region));
         }
 
         public async Task<EventCreateResult> CreateEventAsync(EventCreate create, bool dryRun = false)

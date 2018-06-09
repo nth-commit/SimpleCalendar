@@ -15,9 +15,9 @@ namespace SimpleCalendar.Api.UnitTests.Events.Create
         protected const string Level2RegionId = GivenAnyContextRegionExtensions.Level2RegionId;
         protected const string Level3RegionId = GivenAnyContextRegionExtensions.Level3RegionId;
 
-        protected static readonly DateTime CurrentTime = new DateTime(2010, 10, 10);
+        protected DateTime CurrentTime => new DateTime(2010, 10, 10);
 
-        protected static readonly EventCreate ValidEvent = new EventCreate()
+        protected EventCreate ValidEvent => new EventCreate()
         {
             Name = "My Event!",
             Description = "This is my event!",
@@ -28,7 +28,7 @@ namespace SimpleCalendar.Api.UnitTests.Events.Create
 
         public GivenAValidEvent()
         {
-            this.CreateRegionHierarchyAsync().GetAwaiter().GetResult();
+            this.GivenARegionHierarchyAsync().GetAwaiter().GetResult();
         }
 
         public class Tests : GivenAValidEvent
