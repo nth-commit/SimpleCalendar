@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using SimpleCalendar.Api.Core.Data;
 using SimpleCalendar.Api.Core.Regions;
+using SimpleCalendar.Api.UnitTests.Utility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,41 +13,9 @@ namespace SimpleCalendar.Api.UnitTests.Regions
 {
     public class GivenADataStoreWithARegionHierarchy : GivenAnyContext
     {
-        private readonly IReadOnlyList<RegionCreate> _regions = new List<RegionCreate>()
-        {
-            new RegionCreate()
-            {
-                Name = "New Zealand"
-            },
-            new RegionCreate()
-            {
-                Name = "Wellington",
-                ParentId = "new_zealand"
-            },
-            new RegionCreate()
-            {
-                Name = "Mount Victoria",
-                ParentId = "new_zealand.wellington"
-            },
-            new RegionCreate()
-            {
-                Name = "Auckland",
-                ParentId = "new_zealand"
-            }
-        };
-
         public GivenADataStoreWithARegionHierarchy()
         {
-            InitializeAsync().GetAwaiter().GetResult();
-        }
-
-        private async Task InitializeAsync()
-        {
-            var regionService = Services.GetRequiredService<RegionService>();
-            foreach (var region in _regions)
-            {
-                await regionService.CreateRegionAsync(region);
-            }
+            this.CreateRegionHierarchyAsync().GetAwaiter().GetResult();
         }
 
         public class Tests : GivenADataStoreWithARegionHierarchy

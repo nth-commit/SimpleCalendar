@@ -1,22 +1,65 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
 using System.Text;
+using System.Text.Encodings.Web;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using Moq;
+using MoreLinq;
+using SimpleCalendar.Api.Core.Data;
+using SimpleCalendar.Api.UnitTests.Utililty;
 
 namespace SimpleCalendar.Api.UnitTests
 {
     public class UnitTestStartup : Startup
     {
-        public UnitTestStartup(IConfiguration configuration) : base(configuration)
+        private readonly MockCollection _mockCollection;
+
+        public UnitTestStartup(
+            IConfiguration configuration,
+            MockCollection mockCollection)
+            : base(configuration)
         {
+            _mockCollection = mockCollection;
         }
 
         public override void ConfigureServices(IServiceCollection services)
         {
+            // Need to add EntityFramework services before Startup services, as first configuration counts for EF
+            services.AddEntityFrameworkInMemoryDatabase();
+            services.AddDbContext<CoreDbContext>(optionsBuilder => optionsBuilder.UseInMemoryDatabase(databaseName: "Test"));
+
             base.ConfigureServices(services);
 
-            services.AddEntityFrameworkInMemoryDatabase();
+            typeof(MockCollection).GetProperties().ForEach(p =>
+            {
+                if (p.PropertyType.GetGenericTypeDefinition() != typeof(Mock<>))
+                {
+                    throw new Exception($"Properties on {typeof(MockCollection).FullName} must implement {typeof(Mock<>).FullName}");
+                }
+
+                services.AddSingleton(p.PropertyType.GetGenericArguments().First(), (((Mock)p.GetValue(_mockCollection)).Object));
+            });
+        }
+
+        public override void ConfigureAuthenticationServices(IServiceCollection services)
+        {
+            services
+                .AddAuthentication(options =>
+                {
+                    options.DefaultAuthenticateScheme = "TestScheme";
+                    options.DefaultChallengeScheme = "TestScheme";
+                })
+                .AddScheme<AuthenticationSchemeOptions, FromUserIdAuthenticationHandler>("TestScheme", options => { });
         }
     }
 }

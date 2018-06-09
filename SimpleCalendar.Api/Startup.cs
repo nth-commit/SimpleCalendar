@@ -19,6 +19,7 @@ using SimpleCalendar.Framework;
 using SimpleCalendar.Framework.Identity;
 using SimpleCalendar.Utility.DependencyInjection;
 using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Authentication;
 
 namespace SimpleCalendar.Api
 {
@@ -40,20 +41,7 @@ namespace SimpleCalendar.Api
             services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
             services.AddTransient<IUserAccessor, HttpUserAccessor>();
 
-            services
-                .AddAuthentication(options =>
-                {
-                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                })
-                .AddJwtBearer(options =>
-                {
-                    var sp = services.BuildServiceProvider();
-                    var auth0AuthOptions = sp.GetRequiredService<IOptions<Auth0AuthOptions>>().Value;
-
-                    options.Authority = auth0AuthOptions.GetAuthority();
-                    options.Audience = auth0AuthOptions.ClientId;
-                });
+            ConfigureAuthenticationServices(services);
 
             services.AddApiCoreServices();
             services.AddApiCoreDataServices(_configuration);
@@ -68,6 +56,24 @@ namespace SimpleCalendar.Api
             services.ConfigureHosts();
 
             services.ValidateRequirements();
+        }
+
+        public virtual void ConfigureAuthenticationServices(IServiceCollection services)
+        {
+            services
+                .AddAuthentication(options =>
+                {
+                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                })
+                .AddJwtBearer(options =>
+                {
+                    var sp = services.BuildServiceProvider();
+                    var auth0AuthOptions = sp.GetRequiredService<IOptions<Auth0AuthOptions>>().Value;
+
+                    options.Authority = auth0AuthOptions.GetAuthority();
+                    options.Audience = auth0AuthOptions.ClientId;
+                });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

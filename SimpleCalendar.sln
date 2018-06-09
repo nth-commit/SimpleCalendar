@@ -31,13 +31,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleCalendar.App2", "Simp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleCalendar.Api.UnitTests", "SimpleCalendar.Api.Tests\SimpleCalendar.Api.UnitTests.csproj", "{C11B24C8-8B53-4C10-876D-BEB55AD4DD50}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleCalendar.Framework", "SimpleCalendar.Framework\SimpleCalendar.Framework.csproj", "{AE0190EB-ED05-4505-AFBB-89490573A4B4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleCalendar.Framework", "SimpleCalendar.Framework\SimpleCalendar.Framework.csproj", "{AE0190EB-ED05-4505-AFBB-89490573A4B4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleCalendar.Api.Core.Data", "SimpleCalendar.Api.Core.Data\SimpleCalendar.Api.Core.Data.csproj", "{86258058-D7C7-4B7C-B2C5-14F5BC032015}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleCalendar.Api.Core.Data", "SimpleCalendar.Api.Core.Data\SimpleCalendar.Api.Core.Data.csproj", "{86258058-D7C7-4B7C-B2C5-14F5BC032015}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleCalendar.Api.Core.Initializer", "SimpleCalendar.Api.Core.Initializer\SimpleCalendar.Api.Core.Initializer.csproj", "{CAE09982-7484-4430-995C-E7B746370FAC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleCalendar.Api.Core.Initializer", "SimpleCalendar.Api.Core.Initializer\SimpleCalendar.Api.Core.Initializer.csproj", "{CAE09982-7484-4430-995C-E7B746370FAC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleCalendar.Tools.Runner", "SimpleCalendar.Tools.Runner\SimpleCalendar.Tools.Runner.csproj", "{B01BDDBB-2353-4A17-8652-B6EC57762B3F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleCalendar.Tools.Runner", "SimpleCalendar.Tools.Runner\SimpleCalendar.Tools.Runner.csproj", "{B01BDDBB-2353-4A17-8652-B6EC57762B3F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

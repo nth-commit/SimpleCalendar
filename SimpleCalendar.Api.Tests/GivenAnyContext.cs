@@ -3,7 +3,9 @@ using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Moq;
 using SimpleCalendar.Api.Core.Data;
+using SimpleCalendar.Api.UnitTests.Utililty;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -13,9 +15,13 @@ namespace SimpleCalendar.Api.UnitTests
 {
     public class GivenAnyContext
     {
-        protected HttpClient Client { get; private set; }
+        private readonly MockCollection _mocks = new MockCollection();
 
-        protected IServiceProvider Services { get; private set; }
+        public HttpClient Client { get; private set; }
+
+        public IServiceProvider Services { get; private set; }
+
+        public Mock<IUserIdContainer> UserId => _mocks.UserId;
 
         public GivenAnyContext()
         {
@@ -25,8 +31,7 @@ namespace SimpleCalendar.Api.UnitTests
                 .UseStartup<UnitTestStartup>()
                 .ConfigureServices(services =>
                 {
-                    services.AddEntityFrameworkInMemoryDatabase();
-                    services.AddDbContext<CoreDbContext>(optionsBuilder => optionsBuilder.UseInMemoryDatabase(databaseName: "Test"));
+                    services.AddSingleton(_mocks);
                 });
 
             var testServer = new TestServer(webHostBuilder);

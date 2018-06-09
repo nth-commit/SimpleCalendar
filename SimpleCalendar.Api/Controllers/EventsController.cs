@@ -43,6 +43,11 @@ namespace SimpleCalendar.Api.Controllers
         [HttpPost("")]
         public async Task<IActionResult> Create([FromBody] EventCreate create)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             var result = await _eventService.CreateEventAsync(create);
             return CreatedAtAction(
                 nameof(Get),

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using Xunit;
 
-namespace SimpleCalendar.Api.UnitTests
+namespace SimpleCalendar.Api.UnitTests.Utility
 {
     public static class CollectionAssert
     {
@@ -23,7 +23,6 @@ namespace SimpleCalendar.Api.UnitTests
             {
                 Assert.True(false, $"The following values were found but not expected: {string.Join(", ", notInActual)}");
             }
-
         }
     }
 }
