@@ -49,10 +49,18 @@ namespace SimpleCalendar.Api.Controllers
             }
 
             var result = await _eventService.CreateEventAsync(create);
-            return CreatedAtAction(
-                nameof(Get),
-                new { id = result.Id },
-                result);
+            if (result.Status == EventCreateResult.EventCreateResultStatus.Unauthorized)
+            {
+                return Unauthorized();
+            }
+            else
+            {
+                return CreatedAtAction(
+                    nameof(Get),
+                    new { id = result.Event.Id },
+                    result.Event);
+            }
+
         }
     }
 }

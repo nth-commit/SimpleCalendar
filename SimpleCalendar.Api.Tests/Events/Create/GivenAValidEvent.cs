@@ -11,13 +11,17 @@ namespace SimpleCalendar.Api.UnitTests.Events.Create
 {
     public class GivenAValidEvent : GivenIAmARootAdministrator
     {
+        protected const string Level1RegionId = GivenAnyContextRegionExtensions.Level1RegionId;
+        protected const string Level2RegionId = GivenAnyContextRegionExtensions.Level2RegionId;
+        protected const string Level3RegionId = GivenAnyContextRegionExtensions.Level3RegionId;
+
         protected static readonly DateTime CurrentTime = new DateTime(2010, 10, 10);
 
         protected static readonly EventCreate ValidEvent = new EventCreate()
         {
             Name = "My Event!",
             Description = "This is my event!",
-            RegionId = "new_zealand.wellington.mount_victoria",
+            RegionId = Level3RegionId,
             StartTime = CurrentTime.AddDays(5).AddHours(6),
             EndTime = CurrentTime.AddDays(5).AddHours(12)
         };

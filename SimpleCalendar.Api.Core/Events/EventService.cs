@@ -50,7 +50,7 @@ namespace SimpleCalendar.Api.Core.Events
             return _mapper.MapEntityToResult(entity, entity.Region);
         }
 
-        public async Task<EventResult> CreateEventAsync(EventCreate create, bool dryRun = false)
+        public async Task<EventCreateResult> CreateEventAsync(EventCreate create, bool dryRun = false)
         {
             Validator.ValidateNotNull(create, nameof(create));
             Validator.Validate(create);
@@ -60,13 +60,18 @@ namespace SimpleCalendar.Api.Core.Events
             {
                 throw new ArgumentNullException(nameof(EventCreate.RegionId));
             }
-            await _userAuthorizationService.AssertAuthorizedAsync(region, new CreateEventsRequirement());
+
+            var canCreate = await _userAuthorizationService.IsAuthorizedAsync(region, new CreateEventsRequirement());
+            if (!canCreate)
+            {
+                return EventCreateResult.Unauthorized;
+            }
 
             var ev = _mapper.Map<Event>(create);
             ev.Created = DateTime.UtcNow;
             ev.CreatedById = _userAccessor.User.GetUserId();
 
-            var canPublish = (await _userAuthorizationService.AuthorizeAsync(region, new PublishEventsRequirement())).Succeeded;
+            var canPublish = await _userAuthorizationService.IsAuthorizedAsync(region, new PublishEventsRequirement());
             if (canPublish)
             {
                 ev.Published = ev.Created;
@@ -75,7 +80,7 @@ namespace SimpleCalendar.Api.Core.Events
 
             if (dryRun)
             {
-                return _mapper.Map<EventResult>(ev);
+                return EventCreateResult.Success(_mapper.Map<EventResult>(ev), canPublish);
             }
             else
             {
@@ -85,7 +90,7 @@ namespace SimpleCalendar.Api.Core.Events
                 await _coreDbContext.Events.AddAsync(entity);
                 await _coreDbContext.SaveChangesAsync();
 
-                return _mapper.MapEntityToResult(entity, region);
+                return EventCreateResult.Success(_mapper.MapEntityToResult(entity, region), canPublish);
             }
         }
     }
