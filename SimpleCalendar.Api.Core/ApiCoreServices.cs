@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using SimpleCalendar.Api.Core.Data;
 using SimpleCalendar.Api.Core.Events;
+using SimpleCalendar.Api.Core.Events.Authorization;
 using SimpleCalendar.Api.Core.Organisation;
 using SimpleCalendar.Api.Core.Regions;
 using SimpleCalendar.Api.Core.Regions.Authorization;
@@ -20,6 +21,7 @@ namespace Microsoft.Extensions.DependencyInjection
             this IValidatableServiceCollection services)
         {
             services.AddTransient<EventService>();
+            services.AddTransient<IAuthorizationHandler, EventAuthorizationHandler>();
 
             services.AddTransient<OrganisationService>();
 

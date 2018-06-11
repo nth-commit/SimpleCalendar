@@ -13,16 +13,14 @@ namespace SimpleCalendar.Api.Core.Data
             this CoreDbContext coreDbContext,
             string id)
         {
-            var query = coreDbContext.Events
-                .Where(e => e.Id == id)
-                .Include(e => e.Region);
+            var ev = await coreDbContext.Events.FindAsync(id);
 
-            for (var i = 0; i < 10; i++)
+            if (ev != null)
             {
-                query = query.ThenInclude(r => r.Parent);
+                ev.Region = await coreDbContext.GetRegionByIdAsync(ev.RegionId);
             }
 
-            return await query.FirstOrDefaultAsync();
+            return ev;
         }
     }
 }

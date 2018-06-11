@@ -20,7 +20,7 @@ namespace SimpleCalendar.Api.Core.Data
         {
             var query = coreDbContext.Regions
                 .Include(r => r.Roles)
-                .Where(r => r.Id == Data.Constants.RootRegionId);
+                .Where(r => r.Id == Constants.RootRegionId);
 
             // Force the root region to be loaded.
             var x = await query.FirstOrDefaultAsync();
@@ -42,6 +42,24 @@ namespace SimpleCalendar.Api.Core.Data
             return await query
                 .Include(r => r.Children)
                 .FirstOrDefaultAsync();
+        }
+
+        // TODO: Make this query way faster
+        public static async Task<RegionEntity> GetRegionByIdAsync(
+            this CoreDbContext coreDbContext,
+            string id)
+        {
+            var region = await coreDbContext.Regions
+                .Where(r => r.Id == id)
+                .Include(r => r.Roles)
+                .SingleOrDefaultAsync();
+
+            if (!string.IsNullOrEmpty(region.ParentId))
+            {
+                region.Parent = await coreDbContext.GetRegionByIdAsync(region.ParentId);
+            }
+
+            return region;
         }
     }
 }

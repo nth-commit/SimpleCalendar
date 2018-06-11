@@ -36,7 +36,9 @@ namespace SimpleCalendar.Api.UnitTests.Events.Get.Authorization
                 Id = EventId.ToString(),
                 RegionId = region.Id,
                 IsPublished = false,
-                IsPublic = true
+                IsPublic = true,
+                DataJson = "{}",
+                DataJsonVersion = 1
             });
         }
 

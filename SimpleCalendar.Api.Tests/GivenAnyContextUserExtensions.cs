@@ -38,7 +38,7 @@ namespace SimpleCalendar.Api.UnitTests
             await coreDbContext.RegionRoles.AddAsync(new RegionRoleEntity()
             {
                 UserId = userId,
-                RegionId = regionId,
+                RegionId = region.Id,
                 Role = role
             });
             await coreDbContext.SaveChangesAsync();
