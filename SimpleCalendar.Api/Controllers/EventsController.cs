@@ -32,7 +32,6 @@ namespace SimpleCalendar.Api.Controllers
             });
         }
 
-        [Authorize]
         [HttpGet("{id}")]
         public async Task<IActionResult> Get([FromRoute] string id)
         {

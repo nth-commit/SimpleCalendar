@@ -12,6 +12,7 @@ namespace SimpleCalendar.Api.UnitTests.Events.Get.Authorization
     public class GivenANonPublishedEvent : GivenAnyContext
     {
         public const string RegionId = GivenAnyContextRegionExtensions.Level1RegionId;
+        public const string CreatorUserId = "CreatorUserId";
         public static readonly Guid EventId = Guid.NewGuid();
 
         public GivenANonPublishedEvent()
@@ -38,14 +39,22 @@ namespace SimpleCalendar.Api.UnitTests.Events.Get.Authorization
                 IsPublished = false,
                 IsPublic = true,
                 DataJson = "{}",
-                DataJsonVersion = 1
+                DataJsonVersion = 1,
+                CreatedById = CreatorUserId
             });
         }
 
         public class Tests : GivenANonPublishedEvent
         {
             [Fact]
-            public async Task GivenIAmAUserFromThatRegion_WhenIGetTheEvent_ItReturns403Unauthorized()
+            public async Task WhenIAmAnonymousAndGetTheEvent_ItReturns403Unauthorized()
+            {
+                var response = await Client.GetEventAsync(EventId);
+                response.AssertStatusCode(HttpStatusCode.NotFound);
+            }
+
+            [Fact]
+            public async Task WhenIAmAUserAndGetTheEvent_ItReturns403Unauthorized()
             {
                 await this.GivenIAmARegionUserAsync("UserId", RegionId);
 
@@ -54,9 +63,18 @@ namespace SimpleCalendar.Api.UnitTests.Events.Get.Authorization
             }
 
             [Fact]
-            public async Task GivenIAmAnAdministratorFromThatRegion_WhenIGetTheEvent_ItReturns200OK()
+            public async Task WhenIAmAnAdministratorAndGetTheEvent_ItReturns200OK()
             {
                 await this.GivenIAmARegionAdministratorAsync("UserId", RegionId);
+
+                var response = await Client.GetEventAsync(EventId);
+                response.AssertStatusCode(HttpStatusCode.OK);
+            }
+
+            [Fact]
+            public async Task WhenIAmTheCreatorAndGetTheEvent_ItReturns200OK()
+            {
+                await this.GivenIAmARegionUserAsync(CreatorUserId, RegionId);
 
                 var response = await Client.GetEventAsync(EventId);
                 response.AssertStatusCode(HttpStatusCode.OK);

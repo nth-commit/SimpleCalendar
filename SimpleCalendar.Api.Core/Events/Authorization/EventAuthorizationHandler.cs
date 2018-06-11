@@ -15,8 +15,7 @@ namespace SimpleCalendar.Api.Core.Events.Authorization
             var userId = context.User.GetUserId();
             if (requirement is ViewEventRequirement)
             {
-                if (resource.Region.IsAdministrator(userId) ||
-                    resource.CreatedById == userId ||
+                if (IsAdministrator(context, resource) || IsCreator(context, resource) ||
                     (resource.IsPublished && (resource.Region.IsUser(userId) || resource.IsPublic)))
                 {
                     context.Succeed(requirement);
@@ -24,6 +23,16 @@ namespace SimpleCalendar.Api.Core.Events.Authorization
             }
 
             return Task.CompletedTask;
+        }
+
+        private bool IsAdministrator(AuthorizationHandlerContext context, EventEntity resource)
+        {
+            return resource.Region.IsAdministrator(context.User.GetUserId());
+        }
+
+        private bool IsCreator(AuthorizationHandlerContext context, EventEntity resource)
+        {
+            return !string.IsNullOrEmpty(resource.CreatedById) && resource.CreatedById == context.User.GetUserId();
         }
     }
 }
