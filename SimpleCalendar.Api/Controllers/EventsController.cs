@@ -12,24 +12,24 @@ namespace SimpleCalendar.Api.Controllers
     public class EventsController : Controller
     {
         private readonly EventService _eventService;
+        private readonly IEventQueryService _eventQueryService;
 
         public EventsController(
-            EventService eventService)
+            EventService eventService,
+            IEventQueryService eventQueryService)
         {
             _eventService = eventService;
+            _eventQueryService = eventQueryService;
         }
 
-        [Authorize]
         [HttpGet("")]
-        public IActionResult List()
+        public async Task<IActionResult> List(
+            [FromQuery] string regionId)
         {
-            return Ok(new object[]
+            return Ok(await _eventQueryService.QueryEventsAsync(new EventQuery()
             {
-                new
-                {
-                    Name = "Test event"
-                }
-            });
+                RegionId = regionId
+            }));
         }
 
         [HttpGet("{id}")]

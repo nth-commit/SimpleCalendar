@@ -1,4 +1,5 @@
 ﻿using SimpleCalendar.Api.Core.Regions;
+using SimpleCalendar.Api.Core.Data;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -42,6 +43,11 @@ namespace SimpleCalendar.Api.UnitTests
             {
                 await regionService.CreateRegionAsync(region);
             }
+        }
+
+        public static async Task<RegionEntity> GetAGivenRegionById(this GivenAnyContext context, string id)
+        {
+            return await context.GetCoreDbContext().GetRegionByCodesAsync(id);
         }
     }
 }

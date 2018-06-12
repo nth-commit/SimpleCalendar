@@ -21,6 +21,7 @@ namespace Microsoft.Extensions.DependencyInjection
             this IValidatableServiceCollection services)
         {
             services.AddTransient<EventService>();
+            services.AddTransient<IEventQueryService, EventQueryService>();
             services.AddTransient<IAuthorizationHandler, EventAuthorizationHandler>();
 
             services.AddTransient<OrganisationService>();

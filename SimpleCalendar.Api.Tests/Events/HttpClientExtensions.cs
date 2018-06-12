@@ -24,5 +24,11 @@ namespace SimpleCalendar.Api.UnitTests.Events
         {
             return await client.GetAsync($"/events/{eventId}");
         }
+
+        public static async Task<HttpResponseMessage> ListEventsAsync(
+            this HttpClient client)
+        {
+            return await client.GetAsync("/events");
+        }
     }
 }
