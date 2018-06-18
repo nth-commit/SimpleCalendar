@@ -22,5 +22,33 @@ namespace SimpleCalendar.Api.Core.Data
 
             return ev;
         }
+
+        public static IQueryable<EventEntity> IncludeRegionHierarchy(
+            this IQueryable<EventEntity> events,
+            bool includeRoles = true)
+        {
+            // HACK!
+            return events
+                .Include(e => e.Region)
+                    .ThenInclude(r => r.Roles)
+                .Include(e => e.Region)
+                    .ThenInclude(r => r.Parent)
+                    .ThenInclude(r => r.Roles)
+                .Include(e => e.Region)
+                    .ThenInclude(r => r.Parent)
+                    .ThenInclude(r => r.Parent)
+                    .ThenInclude(r => r.Roles)
+                .Include(e => e.Region)
+                    .ThenInclude(r => r.Parent)
+                    .ThenInclude(r => r.Parent)
+                    .ThenInclude(r => r.Parent)
+                    .ThenInclude(r => r.Roles)
+                .Include(e => e.Region)
+                    .ThenInclude(r => r.Parent)
+                    .ThenInclude(r => r.Parent)
+                    .ThenInclude(r => r.Parent)
+                    .ThenInclude(r => r.Parent)
+                    .ThenInclude(r => r.Roles);
+        }
     }
 }

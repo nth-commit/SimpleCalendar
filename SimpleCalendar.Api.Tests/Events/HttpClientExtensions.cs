@@ -2,6 +2,7 @@
 using SimpleCalendar.Api.Core.Events;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,9 +27,36 @@ namespace SimpleCalendar.Api.UnitTests.Events
         }
 
         public static async Task<HttpResponseMessage> ListEventsAsync(
-            this HttpClient client)
+            this HttpClient client,
+            string regionId = null,
+            DateTime? fromDate = null,
+            DateTime? toDate = null)
         {
-            return await client.GetAsync("/events");
+            var query = new Dictionary<string, string>();
+
+            if (!string.IsNullOrEmpty(regionId))
+            {
+                query.Add("regionId", regionId);
+            }
+
+            if (fromDate.HasValue)
+            {
+                query.Add("from", fromDate.Value.ToString("s"));
+            }
+
+            if (toDate.HasValue)
+            {
+                query.Add("to", toDate.Value.ToString("s"));
+            }
+
+            var path = "/events";
+
+            if (query.Any())
+            {
+                path += "?" + string.Join("&", query.Select(kvp => $"{kvp.Key}={kvp.Value}"));
+            }
+
+            return await client.GetAsync(path);
         }
     }
 }

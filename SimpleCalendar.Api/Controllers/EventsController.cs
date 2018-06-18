@@ -24,11 +24,15 @@ namespace SimpleCalendar.Api.Controllers
 
         [HttpGet("")]
         public async Task<IActionResult> List(
-            [FromQuery] string regionId)
+            [FromQuery] string regionId,
+            [FromQuery] DateTime? from,
+            [FromQuery] DateTime? to)
         {
             return Ok(await _eventQueryService.QueryEventsAsync(new EventQuery()
             {
-                RegionId = regionId
+                RegionId = regionId,
+                From = from ?? DateTime.MinValue,
+                To = to ?? DateTime.MaxValue
             }));
         }
 

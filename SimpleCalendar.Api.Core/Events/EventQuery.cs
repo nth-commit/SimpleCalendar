@@ -8,8 +8,8 @@ namespace SimpleCalendar.Api.Core.Events
     {
         public string RegionId { get; set; }
 
-        public DateTime StartTime { get; set; }
+        public DateTime From { get; set; }
 
-        public DateTime EndTime { get; set; }
+        public DateTime To { get; set; }
     }
 }

@@ -19,7 +19,7 @@ namespace SimpleCalendar.Api.UnitTests.Events.List
         }
 
         [Fact]
-        public async Task WhenIAmAUser_ItReturns200OK()
+        public async Task WhenIAmAnonymous_ItReturns200OK()
         {
             var response = await Client.ListEventsAsync();
             response.AssertStatusCode(HttpStatusCode.OK);

@@ -21,13 +21,21 @@ namespace SimpleCalendar.Api.UnitTests.Events.List
 
         protected class EventDefinition
         {
-            public bool IsDeleted { get; set; }
+            public bool IsDeleted { get; set; } = false;
 
-            public bool IsPublished { get; set; }
+            public bool IsPublished { get; set; } = true;
+
+            public bool IsPublic { get; set; } = true;
 
             public string RegionId { get; set; }
 
             public string Name { get; set; }
+
+            public string CreatedById { get; set; }
+
+            public DateTime StartTime { get; set; }
+
+            public DateTime EndTime { get; set; }
         }
 
         protected abstract IEnumerable<EventDefinition> EventDefinitions { get; }
@@ -54,12 +62,15 @@ namespace SimpleCalendar.Api.UnitTests.Events.List
                     RegionId = region.Id,
                     IsDeleted = eventDefinition.IsDeleted,
                     IsPublished = eventDefinition.IsPublished,
-
+                    IsPublic = eventDefinition.IsPublic,
+                    CreatedById = eventDefinition.CreatedById,
                     DataJson = JsonConvert.SerializeObject(new
                     {
                         Name = eventDefinition.Name
                     }),
-                    DataJsonVersion = 1
+                    DataJsonVersion = 1,
+                    StartTime = eventDefinition.StartTime,
+                    EndTime = eventDefinition.EndTime
                 });
             }
         }

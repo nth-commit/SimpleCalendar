@@ -11,6 +11,8 @@ namespace SimpleCalendar.Api.UnitTests
     {
         public const string Level1RegionId = "new_zealand";
         public const string Level2RegionId = "new_zealand.wellington";
+        public const string Level2ARegionId = "new_zealand.wellington";
+        public const string Level2BRegionId = "new_zealand.auckland";
         public const string Level3RegionId = "new_zealand.wellington.mount_victoria";
 
         private readonly static IReadOnlyList<RegionCreate> _regions = new List<RegionCreate>()
