@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using SimpleCalendar.Api.Core.Data;
+using SimpleCalendar.Api.Models;
 using SimpleCalendar.Framework;
 using System;
 using System.Collections.Generic;
@@ -22,9 +23,16 @@ namespace SimpleCalendar.Api.Core.Regions.Authorization
             {
                 IfRegionAdministratorThenSucceed(context, requirement, resource);
             }
-            else if (requirement is CreateMembershipRequirement)
+            else if (requirement is CreateMembershipRequirement createMembershipRequirement)
             {
-                IfRegionAdministratorThenSucceed(context, requirement, resource);
+                if (createMembershipRequirement.Role.HasFlag(RegionMembershipRole.Administrator))
+                {
+                    IfRegionAdministratorThenSucceed(context, requirement, resource.Parent);
+                }
+                else
+                {
+                    IfRegionAdministratorThenSucceed(context, requirement, resource);
+                }
             }
 
             return Task.CompletedTask;

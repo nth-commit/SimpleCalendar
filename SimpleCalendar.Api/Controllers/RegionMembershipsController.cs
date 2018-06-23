@@ -40,7 +40,7 @@ namespace SimpleCalendar.Api.Controllers
                 return BadRequest(ModelState);
             }
 
-            var canCreateMembership = (await _authorizationService.AuthorizeAsync(User, region, new CreateMembershipRequirement())).Succeeded;
+            var canCreateMembership = (await _authorizationService.AuthorizeAsync(User, region, RegionRequirement.CreateMembership(create.Role))).Succeeded;
             if (!canCreateMembership)
             {
                 return Unauthorized();

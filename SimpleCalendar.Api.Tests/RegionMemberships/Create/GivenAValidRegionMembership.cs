@@ -50,8 +50,37 @@ namespace SimpleCalendar.Api.UnitTests.RegionMemberships.Create
             await this.GivenARegionHierarchyAsync();
         }
 
+        private string GetRegionIdByLevel(int regionLevel)
+        {
+            switch (regionLevel)
+            {
+                case 1:
+                    return Level1RegionId;
+                case 2:
+                    return Level2RegionId;
+                case 3:
+                    return Level3RegionId;
+                default:
+                    throw new Exception("Unrecognised region level");
+            }
+        }
+
         protected Task<HttpResponseMessage> GetCreateHttpResponseMessageAsync(RegionMembershipCreate create)
             => Client.CreateRegionMembershipAsync(create);
+
+        protected Task<RegionMembership> CreateUserAndAssertCreatedAsync(int regionLevel)
+            => CreateAndAssertCreatedAsync(RegionMembershipRole.User, regionLevel);
+
+        protected Task<RegionMembership> CreateAdministratorAndAssertCreatedAsync(int regionLevel)
+            => CreateAndAssertCreatedAsync(RegionMembershipRole.Administrator, regionLevel);
+
+        protected Task<RegionMembership> CreateAndAssertCreatedAsync(RegionMembershipRole role, int regionLevel)
+            => CreateAndAssertCreatedAsync(new RegionMembershipCreate()
+            {
+                RegionId = GetRegionIdByLevel(regionLevel),
+                UserId = "user@example.com",
+                Role = role
+            });
 
         protected async Task<RegionMembership> CreateAndAssertCreatedAsync(RegionMembershipCreate create)
         {
@@ -66,6 +95,20 @@ namespace SimpleCalendar.Api.UnitTests.RegionMemberships.Create
             var json = await response.Content.ReadAsStringAsync();
             return JsonConvert.DeserializeObject<Dictionary<string, IEnumerable<string>>>(json);
         }
+
+        protected Task CreateUserAndAssertUnauthorizedAsync(int regionLevel)
+            => CreateAndAssertUnauthorizedAsync(RegionMembershipRole.User, regionLevel);
+
+        protected Task CreateAdministratorAndAssertUnauthorizedAsync(int regionLevel)
+            => CreateAndAssertUnauthorizedAsync(RegionMembershipRole.Administrator, regionLevel);
+
+        protected Task CreateAndAssertUnauthorizedAsync(RegionMembershipRole role, int regionLevel)
+            => CreateAndAssertUnauthorizedAsync(new RegionMembershipCreate()
+            {
+                RegionId = GetRegionIdByLevel(regionLevel),
+                UserId = "user@example.com",
+                Role = role
+            });
 
         protected Task CreateAndAssertUnauthorizedAsync(RegionMembershipCreate create)
             => CreateAndAssertStatusAsync(create, HttpStatusCode.Unauthorized);

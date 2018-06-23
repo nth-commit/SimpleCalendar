@@ -10,7 +10,7 @@ namespace SimpleCalendar.Api.UnitTests
 {
     public static class GivenAnyContextRegionRoleExtensions
     {
-        public static async Task GivenARegionRoleAsync(
+        public static async Task<RegionRoleEntity> GivenARegionRoleAsync(
             this GivenAnyContext context,
             string userId,
             string regionId,
@@ -24,13 +24,15 @@ namespace SimpleCalendar.Api.UnitTests
                 throw new Exception("Region does not exist");
             }
 
-            await coreDbContext.RegionRoles.AddAsync(new RegionRoleEntity()
+            var result = await coreDbContext.RegionRoles.AddAsync(new RegionRoleEntity()
             {
                 UserId = userId,
                 RegionId = region.Id,
                 Role = (Role)role
             });
             await coreDbContext.SaveChangesAsync();
+
+            return result.Entity;
         }
     }
 }

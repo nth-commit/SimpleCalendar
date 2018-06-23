@@ -21,16 +21,28 @@ namespace SimpleCalendar.Api.UnitTests.RegionMemberships.Create.Authorization
         public new class Tests : GivenIAmARootAdministrator
         {
             [Fact]
-            public Task WhenICreateALevel1RegionMembership_ThenItReturns201Created()
-                => CreateAndAssertCreatedAsync(ValidRegionMembershipLevel1);
+            public Task WhenICreateALevel1RegionUser_ThenItReturns201Created()
+                => CreateUserAndAssertCreatedAsync(regionLevel: 1);
 
             [Fact]
-            public Task WhenICreateALevel2RegionMembership_ThenItReturns201Created()
-                => CreateAndAssertCreatedAsync(ValidRegionMembershipLevel2);
+            public Task WhenICreateALevel2RegionUser_ThenItReturns201Created()
+                => CreateUserAndAssertCreatedAsync(regionLevel: 2);
 
             [Fact]
-            public Task WhenICreateALevel3RegionMembership_ThenItReturns201Created()
-                => CreateAndAssertCreatedAsync(ValidRegionMembershipLevel3);
+            public Task WhenICreateALevel3RegionUser_ThenItReturns201Created()
+                => CreateUserAndAssertCreatedAsync(regionLevel: 3);
+
+            [Fact]
+            public Task WhenICreateALevel1RegionAdministrator_ThenItReturns201Created()
+                => CreateAdministratorAndAssertCreatedAsync(regionLevel: 1);
+
+            [Fact]
+            public Task WhenICreateALevel2RegionAdministrator_ThenItReturns201Created()
+                => CreateAdministratorAndAssertCreatedAsync(regionLevel: 2);
+
+            [Fact]
+            public Task WhenICreateALevel3RegionAdministrator_ThenItReturns201Created()
+                => CreateAdministratorAndAssertCreatedAsync(regionLevel: 3);
         }
     }
 }

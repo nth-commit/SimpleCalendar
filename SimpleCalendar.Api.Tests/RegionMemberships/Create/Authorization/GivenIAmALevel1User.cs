@@ -18,16 +18,16 @@ namespace SimpleCalendar.Api.UnitTests.RegionMemberships.Create.Authorization
         public new class Tests : GivenIAmALevel1User
         {
             [Fact]
-            public Task WhenICreateALevel1RegionMembership_ThenItReturns403Unauthorized()
-                => CreateAndAssertUnauthorizedAsync(ValidRegionMembershipLevel1);
+            public Task WhenICreateALevel1RegionUser_ThenItReturns403Unauthorized()
+                => CreateUserAndAssertUnauthorizedAsync(regionLevel: 1);
 
             [Fact]
-            public Task WhenICreateALevel2RegionMembership_ThenItReturns403Unauthorized()
-                => CreateAndAssertUnauthorizedAsync(ValidRegionMembershipLevel2);
+            public Task WhenICreateALevel2RegionUser_ThenItReturns403Unauthorized()
+                => CreateUserAndAssertUnauthorizedAsync(regionLevel: 2);
 
             [Fact]
-            public Task WhenICreateALevel3RegionMembership_ThenItReturns403Unauthorized()
-                => CreateAndAssertUnauthorizedAsync(ValidRegionMembershipLevel3);
+            public Task WhenICreateALevel3RegionUser_ThenItReturns403Unauthorized()
+                => CreateUserAndAssertUnauthorizedAsync(regionLevel: 3);
         }
     }
 }
