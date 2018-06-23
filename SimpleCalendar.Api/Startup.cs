@@ -90,7 +90,7 @@ namespace SimpleCalendar.Api
                 coreDbContext.Database.EnsureCreated();
             }
 
-            if (!env.IsDevelopment())
+            if (!env.IsDevelopment() && !env.IsUnitTest())
             {
                 app.UseRewriter(new RewriteOptions().AddRedirectToHttpsPermanent());
             }
@@ -98,6 +98,10 @@ namespace SimpleCalendar.Api
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+            }
+            else
+            {
+                app.UseCustomExceptionHandler();
             }
 
             app.UseCors(builder => builder

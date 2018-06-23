@@ -34,7 +34,7 @@ namespace SimpleCalendar.Api.UnitTests.Events.Create
         public class Tests : GivenAValidEvent
         {
             [Fact]
-            public async Task WhenICreateAnEvent_ThenItReturns201CreatedAsync()
+            public async Task WhenICreateAnEvent_ThenItReturns201Created()
             {
                 var response = await Client.CreateEventAsync(ValidEvent);
                 Assert.Equal(HttpStatusCode.Created, response.StatusCode);

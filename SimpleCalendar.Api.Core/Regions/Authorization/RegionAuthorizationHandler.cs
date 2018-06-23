@@ -16,20 +16,26 @@ namespace SimpleCalendar.Api.Core.Regions.Authorization
         {
             if (requirement is CreateEventsRequirement)
             {
-                if (resource.IsAdministrator(context.User.GetUserId()))
-                {
-                    context.Succeed(requirement);
-                }
+                IfRegionAdministratorThenSucceed(context, requirement, resource);
             }
             else if (requirement is PublishEventsRequirement)
             {
-                if (resource.IsAdministrator(context.User.GetUserId()))
-                {
-                    context.Succeed(requirement);
-                }
+                IfRegionAdministratorThenSucceed(context, requirement, resource);
+            }
+            else if (requirement is CreateMembershipRequirement)
+            {
+                IfRegionAdministratorThenSucceed(context, requirement, resource);
             }
 
             return Task.CompletedTask;
+        }
+
+        private void IfRegionAdministratorThenSucceed(AuthorizationHandlerContext context, RegionRequirement requirement, RegionEntity resource)
+        {
+            if (resource.IsAdministrator(context.User.GetUserId()))
+            {
+                context.Succeed(requirement);
+            }
         }
     }
 }

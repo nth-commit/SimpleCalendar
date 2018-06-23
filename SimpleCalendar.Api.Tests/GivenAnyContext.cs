@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace SimpleCalendar.Api.UnitTests
 {
@@ -23,10 +24,12 @@ namespace SimpleCalendar.Api.UnitTests
 
         public Mock<IUserIdContainer> UserId => _mocks.UserId;
 
-        public GivenAnyContext()
+        public GivenAnyContext() => InitializeAsync().GetAwaiter().GetResult();
+
+        private async Task InitializeAsync()
         {
             var webHostBuilder = new WebHostBuilder()
-                .UseEnvironment("Development")
+                .UseEnvironment("UnitTests")
                 .ConfigureAppConfiguration((context, builder) => new ConfigurationBuilder().Build())
                 .UseStartup<UnitTestStartup>()
                 .ConfigureServices(services =>
@@ -37,6 +40,8 @@ namespace SimpleCalendar.Api.UnitTests
             var testServer = new TestServer(webHostBuilder);
             Services = testServer.Host.Services;
             Client = testServer.CreateClient();
+
+            await this.GetCoreDbContext().Database.EnsureCreatedAsync();
         }
     }
 }

@@ -32,6 +32,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SimpleCalendar.Api.Core\SimpleCalendar.Api.Core.csproj" />
+    <ProjectReference Include="..\SimpleCalendar.Api.Models\SimpleCalendar.Api.Models.csproj" />
     <ProjectReference Include="..\SimpleCalendar.Framework\SimpleCalendar.Framework.csproj" />
     <ProjectReference Include="..\util\SimpleCalendar.Utility.Authorization\SimpleCalendar.Utility.Authorization.csproj" />
     <ProjectReference Include="..\util\SimpleCalendar.Utility.Configuration\SimpleCalendar.Utility.Configuration.csproj" />
