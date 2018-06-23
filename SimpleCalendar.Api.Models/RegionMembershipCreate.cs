@@ -8,7 +8,7 @@ namespace SimpleCalendar.Api.Models
     public class RegionMembershipCreate
     {
         [Required]
-        public string Email { get; set; }
+        public string UserId { get; set; }
 
         [Required]
         public string RegionId { get; set; }

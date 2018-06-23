@@ -20,38 +20,30 @@ namespace SimpleCalendar.Api.UnitTests.RegionMemberships.Create
         protected const string Level2AdministratorId = "Level2Administrator";
         protected const string Level3AdministratorId = "Level3Administrator";
 
-        protected RegionMembershipCreate ValidRegionMembership => new RegionMembershipCreate()
-        {
-            Email = ".",
-            RegionId = ".",
-            Role = RegionMembershipRole.User
-        };
+        protected RegionMembershipCreate ValidRegionMembership => ValidRegionMembershipLevel1;
 
         protected RegionMembershipCreate ValidRegionMembershipLevel1 => new RegionMembershipCreate()
         {
-            Email = ".",
+            UserId = "user@example.com",
             RegionId = Level1RegionId,
             Role = RegionMembershipRole.User
         };
 
         protected RegionMembershipCreate ValidRegionMembershipLevel2 => new RegionMembershipCreate()
         {
-            Email = ".",
+            UserId = "user@example.com",
             RegionId = Level2RegionId,
             Role = RegionMembershipRole.User
         };
 
         protected RegionMembershipCreate ValidRegionMembershipLevel3 => new RegionMembershipCreate()
         {
-            Email = ".",
+            UserId = "user@example.com",
             RegionId = Level3RegionId,
             Role = RegionMembershipRole.User
         };
 
-        public GivenAValidRegionMembership()
-        {
-            InitializeAsync().GetAwaiter().GetResult();
-        }
+        public GivenAValidRegionMembership() => InitializeAsync().GetAwaiter().GetResult();
 
         private async Task InitializeAsync()
         {
@@ -63,17 +55,26 @@ namespace SimpleCalendar.Api.UnitTests.RegionMemberships.Create
 
         protected async Task<RegionMembership> CreateAndAssertCreatedAsync(RegionMembershipCreate create)
         {
-            var response = await GetCreateHttpResponseMessageAsync(create);
-            response.AssertStatusCode(HttpStatusCode.Created);
-
+            var response = await CreateAndAssertStatusAsync(create, HttpStatusCode.Created);
             var json = await response.Content.ReadAsStringAsync();
             return JsonConvert.DeserializeObject<RegionMembership>(json);
         }
 
-        protected async Task CreateAndAssertUnauthorizedAsync(RegionMembershipCreate create)
+        protected async Task<Dictionary<string, IEnumerable<string>>> CreateAndAssertBadRequestAsync(RegionMembershipCreate create)
+        {
+            var response = await CreateAndAssertStatusAsync(create, HttpStatusCode.BadRequest);
+            var json = await response.Content.ReadAsStringAsync();
+            return JsonConvert.DeserializeObject<Dictionary<string, IEnumerable<string>>>(json);
+        }
+
+        protected Task CreateAndAssertUnauthorizedAsync(RegionMembershipCreate create)
+            => CreateAndAssertStatusAsync(create, HttpStatusCode.Unauthorized);
+
+        protected async Task<HttpResponseMessage> CreateAndAssertStatusAsync(RegionMembershipCreate create, HttpStatusCode httpStatusCode)
         {
             var response = await GetCreateHttpResponseMessageAsync(create);
-            response.AssertStatusCode(HttpStatusCode.Unauthorized);
+            response.AssertStatusCode(httpStatusCode);
+            return response;
         }
 
         public class Tests : GivenAValidRegionMembership

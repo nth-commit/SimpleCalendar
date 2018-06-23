@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using SimpleCalendar.Api.Core.Data;
 using SimpleCalendar.Api.Core.Regions.Authorization;
 using SimpleCalendar.Api.Models;
+using SimpleCalendar.Framework.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -44,8 +46,35 @@ namespace SimpleCalendar.Api.Controllers
                 return Unauthorized();
             }
 
-            await Task.CompletedTask;
-            return Created("", new { });
+            var roleExists = await _coreDbContext.RegionRoles
+                .Where(r => r.RegionId == region.Id)
+                .Where(r => r.UserId == create.UserId)
+                .AnyAsync();
+
+            if (roleExists)
+            {
+                ModelState.AddModelError(
+                    $"{nameof(RegionMembershipCreate.RegionId)}+{nameof(RegionMembershipCreate.UserId)}",
+                    "Region not found");
+                return BadRequest(ModelState);
+            }
+
+            var result = await _coreDbContext.RegionRoles.AddAsync(new RegionRoleEntity()
+            {
+                UserId = create.UserId,
+                RegionId = region.Id,
+                Role = (Role)create.Role
+            });
+
+            return Created(
+                "",
+                new RegionMembership()
+                {
+                    Id = result.Entity.Id,
+                    UserId = result.Entity.UserId,
+                    RegionId = create.RegionId,
+                    Role = create.Role
+                });
         }
     }
 }
