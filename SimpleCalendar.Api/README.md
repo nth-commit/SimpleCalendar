@@ -2,11 +2,11 @@
 
 ## Region Memberships
 
-*GET regionmemberships*
+*GET /regionmemberships*
 
 **Query Parameters**
 
 - regionId
 - userId
 
-*GET regionmemberships/{id}*
+*GET /regionmemberships/{id}*

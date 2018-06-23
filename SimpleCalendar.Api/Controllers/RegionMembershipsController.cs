@@ -29,15 +29,46 @@ namespace SimpleCalendar.Api.Controllers
         }
 
         [HttpGet("")]
-        public async Task<IActionResult> Query()
+        public async Task<IActionResult> Query(
+            [FromQuery] string regionId,
+            [FromQuery] string userId)
         {
             if (!await _coreDbContext.IsAnyAdministratorAsync(User.GetUserId()))
             {
                 return Unauthorized();
             }
 
-            await Task.CompletedTask;
-            return Ok(new object[] { });
+            var query = _coreDbContext.RegionRoles.AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(regionId))
+            {
+                var region = await _coreDbContext.GetRegionByCodesAsync(regionId);
+                query = query.Where(r => r.RegionId == region.Id);
+            }
+
+            if (!string.IsNullOrWhiteSpace(userId))
+            {
+                query = query.Where(r => r.UserId == userId);
+            }
+
+            var entities = await query.ToListAsync();
+
+            return Ok(entities.Select(e => new RegionMembership()
+            {
+                Id = e.Id,
+                RegionId = e.RegionId,
+                UserId = e.UserId,
+                Role = (RegionMembershipRole)e.Role
+            }));
+        }
+
+        [HttpGet("my")]
+        public async Task<IActionResult> QueryMy(
+            [FromQuery] string regionId)
+        {
+            return await Query(
+                regionId: regionId,
+                userId: User.GetUserId());
         }
 
         [HttpPost("")]

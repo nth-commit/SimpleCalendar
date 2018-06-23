@@ -17,7 +17,7 @@ namespace SimpleCalendar.Api.UnitTests.RegionMemberships.Delete.Authorization
             await this.GivenIAmARegionAdministratorAsync("Administrator", Level2RegionId);
         }
 
-        public new class Tests : GivenIAmALevel2Administrator
+        public class Tests : GivenIAmALevel2Administrator
         {
             [Fact]
             public Task WhenIDeleteALevel1RegionUser_ThenItReturns403Unauthorized()

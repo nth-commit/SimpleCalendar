@@ -12,7 +12,7 @@ namespace SimpleCalendar.Api.UnitTests.RegionMemberships.Delete.Authorization
     {
         public GivenIAmARootAdministrator() => this.GivenIAmARootAdministrator();
 
-        public new class Tests : GivenIAmARootAdministrator
+        public class Tests : GivenIAmARootAdministrator
         {
             [Fact]
             public Task WhenIDeleteALevel1RegionUser_ThenItReturns204NoContent()
