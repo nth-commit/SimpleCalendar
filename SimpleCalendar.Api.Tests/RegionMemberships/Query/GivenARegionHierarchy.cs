@@ -8,8 +8,15 @@ using System.Threading.Tasks;
 
 namespace SimpleCalendar.Api.UnitTests.RegionMemberships.Query
 {
-    public class QueryBase : GivenAnyContext
+    public class GivenARegionHierarchy : GivenAnyContext
     {
+        public GivenARegionHierarchy() => InitalizeAsync().GetAwaiter().GetResult();
+
+        private async Task InitalizeAsync()
+        {
+            await this.GivenARegionHierarchyAsync();
+        }
+
         protected Task QueryMembershipsAndAssertUnauthorizedAsync() => QueryMembershipsAndAssertStatusAsync(HttpStatusCode.Unauthorized);
 
         protected Task QueryMembershipsAndAssertOKAsync() => QueryMembershipsAndAssertStatusAsync(HttpStatusCode.OK);

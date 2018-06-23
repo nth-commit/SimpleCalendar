@@ -80,6 +80,12 @@ namespace SimpleCalendar.Api.UnitTests.RegionMemberships.Delete
             }
         }
 
+        protected Task DeleteUserAndAssertNoContentAsync(int regionLevel)
+            => DeleteAndAssertNoContentAsync(GetUserMembershipId(regionLevel));
+
+        protected Task DeleteAdministratorAndAssertNoContentAsync(int regionLevel)
+            => DeleteAndAssertNoContentAsync(GetAdministratorMembershipId(regionLevel));
+
         protected Task DeleteUserAndAssertUnauthorizedAsync(int regionLevel)
             => DeleteAndAssertUnauthorizedAsync(GetUserMembershipId(regionLevel));
 
@@ -94,30 +100,6 @@ namespace SimpleCalendar.Api.UnitTests.RegionMemberships.Delete
         {
             var response = await Client.DeleteAsync($"/regionmemberships/{id}");
             response.AssertStatusCode(httpStatusCode);
-        }
-
-        public class Tests : GivenADataStoreWithExistingRegionMemberships
-        {
-            [Fact]
-            public async Task GivenIAmARootAdministrator_WhenIDeleteRegionRole_ItReturns204NoContent()
-            {
-                this.GivenIAmARootAdministrator();
-                await DeleteAndAssertNoContentAsync(ExistingMembershipId);
-            }
-
-            [Fact]
-            public async Task GivenIAmALevel1Administrator_WhenIDeleteRegionRole_ItReturns204NoContent()
-            {
-                await this.GivenIAmARegionAdministratorAsync("Level1Admin", Level1RegionId);
-                await DeleteAndAssertNoContentAsync(ExistingMembershipId);
-            }
-
-            [Fact]
-            public async Task GivenIAmALevel2Administrator_WhenIDeleteRegionRole_ItReturns403Unauthorized()
-            {
-                await this.GivenIAmARegionAdministratorAsync("Level2Admin", Level2RegionId);
-                await DeleteAndAssertUnauthorizedAsync(ExistingMembershipId);
-            }
         }
     }
 }

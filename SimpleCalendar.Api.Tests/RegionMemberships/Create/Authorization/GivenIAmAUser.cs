@@ -6,16 +6,16 @@ using Xunit;
 
 namespace SimpleCalendar.Api.UnitTests.RegionMemberships.Create.Authorization
 {
-    public class GivenIAmALevel1User : GivenAValidRegionMembership
+    public class GivenIAmAUser : GivenAValidRegionMembership
     {
-        public GivenIAmALevel1User() => InitializeAsync().GetAwaiter().GetResult();
+        public GivenIAmAUser() => InitializeAsync().GetAwaiter().GetResult();
 
         private async Task InitializeAsync()
         {
             await this.GivenIAmARegionUserAsync("Level1User", Level1RegionId);
         }
 
-        public new class Tests : GivenIAmALevel1User
+        public new class Tests : GivenIAmAUser
         {
             [Fact]
             public Task WhenICreateALevel1RegionUser_ThenItReturns403Unauthorized()

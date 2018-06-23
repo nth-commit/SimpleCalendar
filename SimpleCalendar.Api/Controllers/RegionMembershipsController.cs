@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using SimpleCalendar.Api.Core.Data;
 using SimpleCalendar.Api.Core.Regions.Authorization;
 using SimpleCalendar.Api.Models;
+using SimpleCalendar.Framework;
 using SimpleCalendar.Framework.Identity;
 using System;
 using System.Collections.Generic;
@@ -30,6 +31,11 @@ namespace SimpleCalendar.Api.Controllers
         [HttpGet("")]
         public async Task<IActionResult> Query()
         {
+            if (!await _coreDbContext.IsAnyAdministratorAsync(User.GetUserId()))
+            {
+                return Unauthorized();
+            }
+
             await Task.CompletedTask;
             return Ok(new object[] { });
         }
