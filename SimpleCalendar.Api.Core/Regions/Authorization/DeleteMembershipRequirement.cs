@@ -5,7 +5,7 @@ using SimpleCalendar.Api.Models;
 
 namespace SimpleCalendar.Api.Core.Regions.Authorization
 {
-    public class CreateMembershipRequirement : WriteMembershipsRequirement
+    public class DeleteMembershipRequirement : WriteMembershipsRequirement
     {
     }
 }

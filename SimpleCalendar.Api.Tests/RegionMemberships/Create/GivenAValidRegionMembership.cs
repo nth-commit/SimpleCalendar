@@ -29,20 +29,6 @@ namespace SimpleCalendar.Api.UnitTests.RegionMemberships.Create
             Role = RegionMembershipRole.User
         };
 
-        protected RegionMembershipCreate ValidRegionMembershipLevel2 => new RegionMembershipCreate()
-        {
-            UserId = "user@example.com",
-            RegionId = Level2RegionId,
-            Role = RegionMembershipRole.User
-        };
-
-        protected RegionMembershipCreate ValidRegionMembershipLevel3 => new RegionMembershipCreate()
-        {
-            UserId = "user@example.com",
-            RegionId = Level3RegionId,
-            Role = RegionMembershipRole.User
-        };
-
         public GivenAValidRegionMembership() => InitializeAsync().GetAwaiter().GetResult();
 
         private async Task InitializeAsync()

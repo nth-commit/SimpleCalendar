@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace SimpleCalendar.Api.Controllers
 {
+    [Authorize]
     [Route("regionmemberships")]
     public class RegionMembershipsController : Controller
     {
@@ -26,6 +27,14 @@ namespace SimpleCalendar.Api.Controllers
             _coreDbContext = coreDbContext;
         }
 
+        [HttpGet("")]
+        public async Task<IActionResult> Query()
+        {
+            await Task.CompletedTask;
+            return Ok(new object[] { });
+        }
+
+        [HttpPost("")]
         public async Task<IActionResult> Create([FromBody] RegionMembershipCreate create)
         {
             if (!ModelState.IsValid)
@@ -76,5 +85,30 @@ namespace SimpleCalendar.Api.Controllers
                     Role = create.Role
                 });
         }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(string id)
+        {
+            var entity = await _coreDbContext.RegionRoles.FindAsync(id);
+            if (entity == null)
+            {
+                return NotFound();
+            }
+
+            var region = await _coreDbContext.GetRegionByIdAsync(entity.RegionId);
+            var canDeleteMembership = await IsAuthorizedAsync(region, RegionRequirement.DeleteMembership((RegionMembershipRole)entity.Role));
+            if (!canDeleteMembership)
+            {
+                return Unauthorized();
+            }
+
+            _coreDbContext.RegionRoles.Remove(entity);
+            await _coreDbContext.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+        private async Task<bool> IsAuthorizedAsync(RegionEntity region, RegionRequirement requirement)
+            => (await _authorizationService.AuthorizeAsync(User, region, requirement)).Succeeded;
     }
 }

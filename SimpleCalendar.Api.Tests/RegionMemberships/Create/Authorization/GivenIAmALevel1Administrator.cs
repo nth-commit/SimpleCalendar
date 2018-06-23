@@ -32,7 +32,7 @@ namespace SimpleCalendar.Api.UnitTests.RegionMemberships.Create.Authorization
                 => CreateUserAndAssertCreatedAsync(regionLevel: 3);
 
             [Fact]
-            public Task WhenICreateALevel1RegionAdministrator_ThenItReturns201Created()
+            public Task WhenICreateALevel1RegionAdministrator_ThenItReturns403Unauthorized()
                 => CreateAdministratorAndAssertUnauthorizedAsync(regionLevel: 1);
 
             [Fact]

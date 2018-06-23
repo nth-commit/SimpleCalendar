@@ -13,5 +13,11 @@ namespace SimpleCalendar.Api.Core.Regions.Authorization
             {
                 Role = role
             };
+
+        public static RegionRequirement DeleteMembership(RegionMembershipRole role)
+            => new DeleteMembershipRequirement()
+            {
+                Role = role
+            };
     }
 }

@@ -25,17 +25,26 @@ namespace SimpleCalendar.Api.Core.Regions.Authorization
             }
             else if (requirement is CreateMembershipRequirement createMembershipRequirement)
             {
-                if (createMembershipRequirement.Role.HasFlag(RegionMembershipRole.Administrator))
-                {
-                    IfRegionAdministratorThenSucceed(context, requirement, resource.Parent);
-                }
-                else
-                {
-                    IfRegionAdministratorThenSucceed(context, requirement, resource);
-                }
+                IfCanWriteRegionMembershipsThenSucceed(context, createMembershipRequirement, resource);
+            }
+            else if (requirement is DeleteMembershipRequirement deleteMembershipRequirement)
+            {
+                IfCanWriteRegionMembershipsThenSucceed(context, deleteMembershipRequirement, resource);
             }
 
             return Task.CompletedTask;
+        }
+
+        private void IfCanWriteRegionMembershipsThenSucceed(AuthorizationHandlerContext context, WriteMembershipsRequirement requirement, RegionEntity resource)
+        {
+            if (requirement.Role.HasFlag(RegionMembershipRole.Administrator))
+            {
+                IfRegionAdministratorThenSucceed(context, requirement, resource.Parent);
+            }
+            else
+            {
+                IfRegionAdministratorThenSucceed(context, requirement, resource);
+            }
         }
 
         private void IfRegionAdministratorThenSucceed(AuthorizationHandlerContext context, RegionRequirement requirement, RegionEntity resource)
