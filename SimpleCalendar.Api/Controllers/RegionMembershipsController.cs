@@ -43,6 +43,11 @@ namespace SimpleCalendar.Api.Controllers
             if (!string.IsNullOrWhiteSpace(regionId))
             {
                 var region = await _coreDbContext.GetRegionByCodesAsync(regionId);
+                if (region == null)
+                {
+                    ModelState.AddModelError(nameof(regionId), "Region could not be found");
+                    return BadRequest(ModelState);
+                }
                 query = query.Where(r => r.RegionId == region.Id);
             }
 
