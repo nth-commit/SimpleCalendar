@@ -39,7 +39,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleCalendar.Api.Core.Ini
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleCalendar.Tools.Runner", "SimpleCalendar.Tools.Runner\SimpleCalendar.Tools.Runner.csproj", "{B01BDDBB-2353-4A17-8652-B6EC57762B3F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleCalendar.Api.Models", "SimpleCalendar.Api.Models\SimpleCalendar.Api.Models.csproj", "{F5B35FC4-CF98-4C91-B4F6-B48B231751E5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleCalendar.Api.Models", "SimpleCalendar.Api.Models\SimpleCalendar.Api.Models.csproj", "{F5B35FC4-CF98-4C91-B4F6-B48B231751E5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleCalendar.App.Administration", "SimpleCalendar.App.Administration\SimpleCalendar.App.Administration.csproj", "{0CAB9EFD-CA01-42EE-9D53-92DD2CB41D15}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -161,6 +163,14 @@ Global
 		{F5B35FC4-CF98-4C91-B4F6-B48B231751E5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F5B35FC4-CF98-4C91-B4F6-B48B231751E5}.Release|x64.ActiveCfg = Release|Any CPU
 		{F5B35FC4-CF98-4C91-B4F6-B48B231751E5}.Release|x64.Build.0 = Release|Any CPU
+		{0CAB9EFD-CA01-42EE-9D53-92DD2CB41D15}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0CAB9EFD-CA01-42EE-9D53-92DD2CB41D15}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0CAB9EFD-CA01-42EE-9D53-92DD2CB41D15}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{0CAB9EFD-CA01-42EE-9D53-92DD2CB41D15}.Debug|x64.Build.0 = Debug|Any CPU
+		{0CAB9EFD-CA01-42EE-9D53-92DD2CB41D15}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0CAB9EFD-CA01-42EE-9D53-92DD2CB41D15}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0CAB9EFD-CA01-42EE-9D53-92DD2CB41D15}.Release|x64.ActiveCfg = Release|Any CPU
+		{0CAB9EFD-CA01-42EE-9D53-92DD2CB41D15}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
