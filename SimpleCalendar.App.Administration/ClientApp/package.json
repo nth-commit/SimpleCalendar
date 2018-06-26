@@ -1,0 +1,29 @@
+{
+  "name": "simplecalendar-app-administration",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "concurrently": "^3.6.0",
+    "node-sass-chokidar": "^1.3.0",
+    "react": "^16.4.1",
+    "react-dom": "^16.4.1",
+    "react-scripts-ts": "2.16.0"
+  },
+  "scripts": {
+    "build": "TODO",
+    "build-css": "node-sass-chokidar src/ -o src/",
+    "build-react": "react-scripts-ts build",
+    "start": "concurrently \"npm run start-css\"  \"npm run start-react\"",
+    "start-css": "npm run build-css && node-sass-chokidar src/ -o src/ --watch --recursive",
+    "start-react": "react-scripts-ts start",
+    "test": "react-scripts-ts test --env=jsdom",
+    "eject": "react-scripts-ts eject"
+  },
+  "devDependencies": {
+    "@types/jest": "^23.1.2",
+    "@types/node": "^10.3.6",
+    "@types/react": "^16.4.2",
+    "@types/react-dom": "^16.0.6",
+    "typescript": "^2.9.2"
+  }
+}
