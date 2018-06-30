@@ -9,9 +9,9 @@ export class Auth {
     const configuration = getConfiguration();
 
     this.auth0 = new auth0.WebAuth({
-      domain: 'wellingtonveganactions.au.auth0.com',
+      domain: configuration.domain,
       clientID: configuration.clientId,
-      redirectUri: 'http://localhost:5001/callback',
+      redirectUri: configuration.redirectUri,
       audience: 'wellingtonveganactions',
       responseType: 'token id_token',
       scope: 'openid'

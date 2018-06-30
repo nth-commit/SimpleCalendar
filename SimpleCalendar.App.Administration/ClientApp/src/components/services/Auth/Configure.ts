@@ -1,5 +1,7 @@
 export interface IAuthConfiguration {
   clientId: string;
+  domain: string;
+  redirectUri: string;
 }
 
 let config: IAuthConfiguration;

@@ -19,6 +19,8 @@ namespace SimpleCalendar.App.Administration
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
+                .ConfigureAppConfiguration((context, builder)
+                    => builder.AddCommonConfigurationSources(context.HostingEnvironment.EnvironmentName))
                 .UseStartup<Startup>();
     }
 }

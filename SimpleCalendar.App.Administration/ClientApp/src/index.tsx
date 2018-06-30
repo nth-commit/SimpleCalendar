@@ -21,8 +21,13 @@ function renderApp() {
     .then(response => response.json())
     .then(config => {
 
+      const redirectUri = new URL(config.host);
+      redirectUri.pathname = 'callback';
+
       setAuthConfiguration({
-        clientId: 'kE2HXoVFoNsXUW1QumVEE4ruh2h6AccE'
+        domain: config.auth.domain,
+        clientId: config.auth.clientId,
+        redirectUri: redirectUri.toString()
       });
 
       ReactDOM.render(
@@ -40,8 +45,8 @@ renderApp();
 
 // Allow Hot Module Replacement
 if (module.hot) {
-	module.hot.accept('./routes', () => {
-		routes = require<typeof RoutesModule>('./routes').routes;
-		renderApp();
-	});
+  module.hot.accept('./routes', () => {
+    routes = require<typeof RoutesModule>('./routes').routes;
+    renderApp();
+  });
 }
