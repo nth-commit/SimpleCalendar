@@ -8,7 +8,7 @@ import { createBrowserHistory } from 'history';
 import configureStore from './configureStore';
 import { IApplicationState } from './store';
 import * as RoutesModule from './routes';
-import { Auth, setConfiguration as setAuthConfiguration } from './components/services/Auth';
+import { setConfiguration as setAuthConfiguration } from './components/services/Auth';
 
 let routes = RoutesModule.routes;
 
@@ -33,14 +33,6 @@ function renderApp() {
         </AppContainer>,
         document.getElementById('root')
       );
-
-      // TODO: Move this to layout, and add exclusion if path is '/callback'.
-      setTimeout(() => {
-        const auth = new Auth();
-        if (!auth.isAuthenticated()) {
-          auth.login();
-        }
-      }, 5000);
     });
 }
 

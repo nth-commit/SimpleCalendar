@@ -17,7 +17,7 @@ export class AuthCallback extends React.Component {
   public render() {
     const { authSuccessful } = this.state;
     if (authSuccessful === null) {
-      return <div>'Loading...'</div>;
+      return <div>Loading...</div>;
     }
     return <Redirect to={ authSuccessful ? '/' : '/error' } />
   }
