@@ -23,24 +23,29 @@ namespace SimpleCalendar.Api.UnitTests.Regions
             [Fact]
             public async Task WhenRegionEndpointCalledWithParent_ThenReturnChildRegions()
             {
-                await AssertRegionsReturnedAsync("/regions?parentId=new_zealand", new string[] {
-                    "Auckland",
-                    "Wellington"
-                });
+                await AssertRegionsReturnedAsync("new_zealand", new string[] { "Auckland", "Wellington" });
             }
 
             [Fact]
             public async Task WhenRegionEndpointCalledWithLevelTwoParent_ThenReturnChildRegions()
             {
-                await AssertRegionsReturnedAsync("/regions?parentId=new_zealand.wellington", new string[] {
-                    "Mount Victoria"
-                });
+                await AssertRegionsReturnedAsync("new_zealand.wellington", new string[] { "Mount Victoria" });
             }
 
-            private async Task AssertRegionsReturnedAsync(string query, IEnumerable<string> expectedRegions)
+            [Fact]
+            public async Task WhenRegionEndpointCalled_ThenCanGetChildRegion()
             {
-                var response = await Client.GetAsync(query);
-                var regions = await response.DeserializeRegionsAsync();
+                var regions = await Client.GetRegionsAndAssertOKAsync();
+                var parentRegion = regions.FirstOrDefault();
+                Assert.NotNull(parentRegion);
+
+                var childRegions = await Client.GetRegionsAndAssertOKAsync(parentRegion.Id);
+                Assert.NotEmpty(childRegions);
+            }
+
+            private async Task AssertRegionsReturnedAsync(string parentId, IEnumerable<string> expectedRegions)
+            {
+                var regions = await Client.GetRegionsAndAssertOKAsync(parentId);
                 CollectionAssert.SetEqual(expectedRegions, regions.Select(r => r.Name));
             }
         }

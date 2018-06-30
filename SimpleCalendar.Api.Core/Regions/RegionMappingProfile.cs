@@ -30,11 +30,12 @@ namespace SimpleCalendar.Api.Core.Regions
         {
             if (region.ParentId == Constants.RootRegionId)
             {
-                return region.Id;
+                return region.Code;
             }
             else
             {
-                return $"{GetId(region.Parent)}.{region.Id}";
+                var parentId = GetId(region.Parent);
+                return string.IsNullOrEmpty(parentId) ? region.Code : $"{parentId}.{region.Code}";
             }
         }
     }

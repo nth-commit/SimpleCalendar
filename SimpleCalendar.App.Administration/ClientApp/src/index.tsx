@@ -8,6 +8,8 @@ import { createBrowserHistory } from 'history';
 import configureStore from './configureStore';
 import { IApplicationState } from './store';
 import * as RoutesModule from './routes';
+import { default as Auth } from './components/services/Auth';
+
 let routes = RoutesModule.routes;
 
 const history = createBrowserHistory({ basename: '/' });
@@ -15,14 +17,23 @@ const initialState = (window as any).initialReduxState as IApplicationState;
 const store = configureStore(history, initialState);
 
 function renderApp() {
-  ReactDOM.render(
-    <AppContainer>
-      <Provider store={store}>
-        <ConnectedRouter history={history} children={routes} />
-      </Provider>
-    </AppContainer>,
-    document.getElementById('root')
-  );
+  fetch('/config')
+    .then(response => response.json())
+    .then(config => {
+      ReactDOM.render(
+        <AppContainer>
+          <Provider store={store}>
+            <ConnectedRouter history={history} children={routes} />
+          </Provider>
+        </AppContainer>,
+        document.getElementById('root')
+      );
+
+      setTimeout(() => {
+        const auth = new Auth();
+        auth.login();
+      }, 500)
+    });
 }
 
 renderApp();

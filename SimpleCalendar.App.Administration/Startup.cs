@@ -1,10 +1,12 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
+using System.Threading.Tasks;
 
 namespace SimpleCalendar.App.Administration
 {
@@ -40,11 +42,25 @@ namespace SimpleCalendar.App.Administration
             {
                 app.UseExceptionHandler("/Error");
                 app.UseHsts();
+                app.UseHttpsRedirection();
             }
 
-            app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
+
+            app.Map("/config", app2 =>
+            {
+                app2.Run(async context =>
+                {
+                    var config = new
+                    {
+
+                    };
+
+                    var json = JsonConvert.SerializeObject(config);
+                    await context.Response.WriteAsync(json);
+                });
+            });
 
             app.UseMvc(routes =>
             {
