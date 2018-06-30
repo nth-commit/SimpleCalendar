@@ -8,7 +8,7 @@ import { createBrowserHistory } from 'history';
 import configureStore from './configureStore';
 import { IApplicationState } from './store';
 import * as RoutesModule from './routes';
-import { default as Auth } from './components/services/Auth';
+import { Auth, setConfiguration as setAuthConfiguration } from './components/services/Auth';
 
 let routes = RoutesModule.routes;
 
@@ -20,6 +20,11 @@ function renderApp() {
   fetch('/config')
     .then(response => response.json())
     .then(config => {
+
+      setAuthConfiguration({
+        clientId: 'kE2HXoVFoNsXUW1QumVEE4ruh2h6AccE'
+      });
+
       ReactDOM.render(
         <AppContainer>
           <Provider store={store}>
@@ -29,10 +34,13 @@ function renderApp() {
         document.getElementById('root')
       );
 
+      // TODO: Move this to layout, and add exclusion if path is '/callback'.
       setTimeout(() => {
         const auth = new Auth();
-        auth.login();
-      }, 500)
+        if (!auth.isAuthenticated()) {
+          auth.login();
+        }
+      }, 5000);
     });
 }
 
