@@ -59,6 +59,8 @@ export const regionActionCreators = {
 
   getRegion: (regionId: string): IAppThunkActionAsync => async (dispatch, getState) => {
 
+    console.log(getState());
+
     dispatch({ ...new FetchRegionBegin(regionId) });
 
     const region = await new Api().getRegion(regionId);

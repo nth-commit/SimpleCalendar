@@ -8,10 +8,8 @@ import { createBrowserHistory } from 'history';
 import configureStore from './configureStore';
 import { IApplicationState } from './store';
 import * as RoutesModule from './routes';
-import { setConfiguration as setAuthConfiguration } from './components/services/Auth';
-import { setConfiguration as setApiConfiguration } from './components/services/Api';
 
-import { regionActionCreators } from './store/Regions';
+import { IConfigurationState, configurationActionCreators } from './store/Configuration';
 
 let routes = RoutesModule.routes;
 
@@ -22,20 +20,9 @@ const store = configureStore(history, initialState);
 function renderApp() {
   fetch('/config')
     .then(response => response.json())
-    .then(config => {
+    .then((configuration: IConfigurationState) => {
 
-      const redirectUri = new URL(config.host);
-      redirectUri.pathname = 'callback';
-
-      setAuthConfiguration({
-        domain: config.auth.domain,
-        clientId: config.auth.clientId,
-        redirectUri: redirectUri.toString()
-      });
-
-      setApiConfiguration({
-        baseUri: config.api
-      });
+      store.dispatch(configurationActionCreators.update(configuration) as any);
 
       ReactDOM.render(
         <AppContainer>
@@ -45,8 +32,6 @@ function renderApp() {
         </AppContainer>,
         document.getElementById('root')
       );
-
-      store.dispatch(regionActionCreators.getRegion('new-zealand') as any);
     });
 }
 
