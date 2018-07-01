@@ -31,6 +31,19 @@ namespace SimpleCalendar.Api.Core.Data
 
     public static class RegionEntityExtensions
     {
+        public static string GetId(this RegionEntity region)
+        {
+            if (region.ParentId == Constants.RootRegionId)
+            {
+                return region.Code;
+            }
+            else
+            {
+                var parentId = GetId(region.Parent);
+                return string.IsNullOrEmpty(parentId) ? region.Code : $"{parentId}/{region.Code}";
+            }
+        }
+
         public static IEnumerable<RegionEntity> GetRegions(
             this RegionEntity region,
             bool includeRoot = false)

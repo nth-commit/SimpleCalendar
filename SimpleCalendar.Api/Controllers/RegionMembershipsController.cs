@@ -39,10 +39,12 @@ namespace SimpleCalendar.Api.Controllers
             }
 
             var query = _coreDbContext.RegionRoles.AsQueryable();
+            var isRegionQuery = !string.IsNullOrWhiteSpace(regionId);
 
-            if (!string.IsNullOrWhiteSpace(regionId))
+            RegionEntity region = null;
+            if (isRegionQuery)
             {
-                var region = await _coreDbContext.GetRegionByCodesAsync(regionId);
+                region = await _coreDbContext.GetRegionByCodesAsync(regionId);
                 if (region == null)
                 {
                     ModelState.AddModelError(nameof(regionId), "Region could not be found");
@@ -57,11 +59,30 @@ namespace SimpleCalendar.Api.Controllers
             }
 
             var entities = await query.ToListAsync();
+            if (!entities.Any())
+            {
+                return Ok(Enumerable.Empty<RegionMembership>());
+            }
+
+            var regionIds = entities
+                .Select(e => e.RegionId)
+                .Distinct();
+
+            Dictionary<string, RegionEntity> regionsById = null;
+            if (isRegionQuery)
+            {
+                regionsById = regionIds.ToDictionary(r => r, r => region);
+            }
+            else
+            {
+                var regions = await Task.WhenAll(regionIds.Select(r => _coreDbContext.GetRegionByIdAsync(r)));
+                regionsById = regions.ToDictionary(r => r.Id);
+            }
 
             return Ok(entities.Select(e => new RegionMembership()
             {
                 Id = e.Id,
-                RegionId = e.RegionId,
+                RegionId = regionsById[e.RegionId].GetId(),
                 UserId = e.UserId,
                 Role = (RegionMembershipRole)e.Role
             }));

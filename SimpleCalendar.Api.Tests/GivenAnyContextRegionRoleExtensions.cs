@@ -10,6 +10,10 @@ namespace SimpleCalendar.Api.UnitTests
 {
     public static class GivenAnyContextRegionRoleExtensions
     {
+        public static Task<RegionRoleEntity> GivenAnAdministratorAsync(
+            this GivenAnyContext context, string userId, string regionId)
+                => context.GivenARegionRoleAsync(userId, regionId, RegionMembershipRole.Administrator);
+
         public static async Task<RegionRoleEntity> GivenARegionRoleAsync(
             this GivenAnyContext context,
             string userId,

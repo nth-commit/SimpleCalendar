@@ -23,20 +23,7 @@ namespace SimpleCalendar.Api.Core.Regions
 
             CreateMap<RegionEntity, RegionResult>()
                 .ConstructUsing(src => JsonConvert.DeserializeObject<RegionResult>(src.DataJson))
-                .ForMember(dest => dest.Id, opts => opts.ResolveUsing(src => GetId(src)));
-        }
-
-        private string GetId(RegionEntity region)
-        {
-            if (region.ParentId == Constants.RootRegionId)
-            {
-                return region.Code;
-            }
-            else
-            {
-                var parentId = GetId(region.Parent);
-                return string.IsNullOrEmpty(parentId) ? region.Code : $"{parentId}/{region.Code}";
-            }
+                .ForMember(dest => dest.Id, opts => opts.ResolveUsing(src => src.GetId()));
         }
     }
 }
