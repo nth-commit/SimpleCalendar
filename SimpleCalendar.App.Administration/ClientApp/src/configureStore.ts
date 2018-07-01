@@ -1,11 +1,18 @@
-import { createStore, applyMiddleware, compose, combineReducers, Store, StoreEnhancerStoreCreator, ReducersMapObject } from 'redux';
+import {
+  createStore,
+  applyMiddleware,
+  compose,
+  combineReducers,
+  Store,
+  StoreEnhancerStoreCreator,
+  ReducersMapObject
+} from 'redux';
 import thunk from 'redux-thunk';
 import { routerReducer, routerMiddleware } from 'react-router-redux';
 import * as StoreModule from './store';
 import { History } from 'history';
 
 declare type GenericStoreEnhancer = <S>(next: StoreEnhancerStoreCreator<S>) => StoreEnhancerStoreCreator<S>;
-
 
 export default function configureStore(history: History, initialState?: StoreModule.IApplicationState) {
   // Build middleware. These are functions that can process the actions before they reach the store.
@@ -34,5 +41,6 @@ export default function configureStore(history: History, initialState?: StoreMod
 }
 
 function buildRootReducer(allReducers: ReducersMapObject) {
-  return combineReducers<StoreModule.IApplicationState>(Object.assign({}, allReducers, { routing: routerReducer }));
+  const reducers: any = Object.assign({}, allReducers, { routing: routerReducer });
+  return combineReducers<StoreModule.IApplicationState>(reducers);
 }

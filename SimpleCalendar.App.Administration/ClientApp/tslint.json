@@ -6,7 +6,10 @@
     "no-console": false,
     "object-literal-sort-keys": false,
     "member-access": false,
-    "variable-name": false
+    "variable-name": false,
+    "member-ordering": false,
+    "max-classes-per-file": false,
+    "no-empty": false
   },
   "linterOptions": {
     "exclude": [

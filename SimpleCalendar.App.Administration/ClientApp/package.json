@@ -26,6 +26,7 @@
     "eject": "react-scripts-ts eject"
   },
   "devDependencies": {
+    "@types/fetch-mock": "^6.0.3",
     "@types/jest": "^23.1.2",
     "@types/node": "^10.3.6",
     "@types/react": "^16.4.2",
@@ -37,6 +38,7 @@
     "@types/redux": "^3.6.0",
     "@types/webpack": "~3.8.5",
     "@types/webpack-env": "~1.13.5",
+    "fetch-mock": "^6.5.0",
     "typescript": "^2.9.2"
   }
 }

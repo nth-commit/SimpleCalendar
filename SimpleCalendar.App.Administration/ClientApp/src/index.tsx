@@ -9,6 +9,9 @@ import configureStore from './configureStore';
 import { IApplicationState } from './store';
 import * as RoutesModule from './routes';
 import { setConfiguration as setAuthConfiguration } from './components/services/Auth';
+import { setConfiguration as setApiConfiguration } from './components/services/Api';
+
+import { regionActionCreators } from './store/Regions';
 
 let routes = RoutesModule.routes;
 
@@ -30,6 +33,10 @@ function renderApp() {
         redirectUri: redirectUri.toString()
       });
 
+      setApiConfiguration({
+        baseUri: config.api
+      });
+
       ReactDOM.render(
         <AppContainer>
           <Provider store={store}>
@@ -38,6 +45,8 @@ function renderApp() {
         </AppContainer>,
         document.getElementById('root')
       );
+
+      store.dispatch(regionActionCreators.getRegion('new-zealand') as any);
     });
 }
 
