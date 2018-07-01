@@ -17,5 +17,13 @@ namespace SimpleCalendar.Api.UnitTests.Regions
             var json = await response.Content.ReadAsStringAsync();
             return JsonConvert.DeserializeObject<IEnumerable<RegionResult>>(json);
         }
+
+        public static async Task<RegionResult> DeserializeRegionAsync(
+            this HttpResponseMessage response)
+        {
+            response.EnsureSuccessStatusCode();
+            var json = await response.Content.ReadAsStringAsync();
+            return JsonConvert.DeserializeObject<RegionResult>(json);
+        }
     }
 }

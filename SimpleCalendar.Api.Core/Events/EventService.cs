@@ -55,7 +55,7 @@ namespace SimpleCalendar.Api.Core.Events
             Validator.ValidateNotNull(create, nameof(create));
             Validator.Validate(create);
 
-            var region = await _coreDbContext.GetRegionByCodesAsync(create.RegionId.ToLower().Split('.'));
+            var region = await _coreDbContext.GetRegionByCodesAsync(create.RegionId);
             if (region == null)
             {
                 throw new ArgumentNullException(nameof(EventCreate.RegionId));

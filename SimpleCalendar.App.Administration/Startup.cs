@@ -64,6 +64,7 @@ namespace SimpleCalendar.App.Administration
                     var config = new
                     {
                         host = hostsOptions.Value.Administration,
+                        api = hostsOptions.Value.Api,
                         auth = new
                         {
                             domain = auth0AuthOptions.Value.Domain,

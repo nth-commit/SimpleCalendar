@@ -12,7 +12,9 @@ namespace SimpleCalendar.Api.Core.Data
         public static Task<RegionEntity> GetRegionByCodesAsync(
             this CoreDbContext coreDbContext,
             string codesJoined)
-                => coreDbContext.GetRegionByCodesAsync(codesJoined.ToLower().Split('.'));
+                => coreDbContext.GetRegionByCodesAsync(string.IsNullOrEmpty(codesJoined) ?
+                    Enumerable.Empty<string>() :
+                    codesJoined.ToLower().Split('/'));
 
         public static async Task<RegionEntity> GetRegionByCodesAsync(
             this CoreDbContext coreDbContext,

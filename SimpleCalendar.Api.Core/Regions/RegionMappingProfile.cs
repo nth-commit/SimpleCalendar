@@ -12,12 +12,12 @@ namespace SimpleCalendar.Api.Core.Regions
         public RegionMappingProfile()
         {
             CreateMap<RegionCreate, RegionEntity>()
-                .ForMember(dest => dest.Code, opts => opts.ResolveUsing(src => src.Name.Replace(' ', '_').ToLowerInvariant()))
+                .ForMember(dest => dest.Code, opts => opts.ResolveUsing(src => src.Name.Replace(' ', '-').ToLowerInvariant()))
                 .ForMember(dest => dest.DataJson, opts => opts.ResolveUsing(src => JsonConvert.SerializeObject(src)))
                 .ForMember(dest => dest.DataJsonVersion, opts => opts.UseValue(1));
 
             CreateMap<RegionUpdate, RegionEntity>()
-                .ForMember(dest => dest.Code, opts => opts.ResolveUsing(src => src.Name.Replace(' ', '_').ToLowerInvariant()))
+                .ForMember(dest => dest.Code, opts => opts.ResolveUsing(src => src.Name.Replace(' ', '-').ToLowerInvariant()))
                 .ForMember(dest => dest.DataJson, opts => opts.ResolveUsing(src => JsonConvert.SerializeObject(src)))
                 .ForMember(dest => dest.DataJsonVersion, opts => opts.UseValue(1));
 
@@ -35,7 +35,7 @@ namespace SimpleCalendar.Api.Core.Regions
             else
             {
                 var parentId = GetId(region.Parent);
-                return string.IsNullOrEmpty(parentId) ? region.Code : $"{parentId}.{region.Code}";
+                return string.IsNullOrEmpty(parentId) ? region.Code : $"{parentId}/{region.Code}";
             }
         }
     }

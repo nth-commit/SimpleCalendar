@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using SimpleCalendar.Api.Core.Data;
 using SimpleCalendar.Api.Core.Regions;
 using SimpleCalendar.Utiltiy.Validation;
 using System;
@@ -12,14 +14,21 @@ namespace SimpleCalendar.Api.Controllers
     public class RegionsController : Controller
     {
         private readonly RegionService _regionService;
+        private readonly CoreDbContext _coreDbContext;
+        private readonly IMapper _mapper;
 
-        public RegionsController(RegionService regionService)
+        public RegionsController(
+            RegionService regionService,
+            CoreDbContext coreDbContext,
+            IMapper mapper)
         {
             _regionService = regionService;
+            _coreDbContext = coreDbContext;
+            _mapper = mapper;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> ListAsync([FromQuery] string parentId)
+        [HttpGet("")]
+        public async Task<IActionResult> List([FromQuery] string parentId)
         {
             try
             {
@@ -29,6 +38,20 @@ namespace SimpleCalendar.Api.Controllers
             catch (ClientValidationException ex)
             {
                 return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("{*id}")]
+        public async Task<IActionResult> Get([FromRoute] string id)
+        {
+            var region = await _coreDbContext.GetRegionByCodesAsync(id);
+            if (region == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                return Ok(_mapper.Map<RegionResult>(region));
             }
         }
     }

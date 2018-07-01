@@ -12,7 +12,7 @@ namespace SimpleCalendar.Api.UnitTests.Regions
     public static class HttpClientExtensions
     {
         public static async Task<IEnumerable<RegionResult>> GetRegionsAndAssertOKAsync(
-            this HttpClient httpClient,
+            this HttpClient client,
             string parentId = null)
         {
             var queryParams = new Dictionary<string, string>();
@@ -28,10 +28,20 @@ namespace SimpleCalendar.Api.UnitTests.Regions
                 path += "?" + string.Join("&", queryParams.Select(kvp => $"{kvp.Key}={kvp.Value}"));
             }
 
-            var response = await httpClient.GetAsync(path);
+            var response = await client.GetAsync(path);
             response.AssertStatusCodeOK();
 
             return await response.DeserializeRegionsAsync();
+        }
+
+        public static async Task<RegionResult> GetRegionAndAssertOKAsync(
+            this HttpClient client,
+            string id)
+        {
+            var response = await client.GetAsync($"/regions/{id}");
+            response.AssertStatusCodeOK();
+
+            return await response.DeserializeRegionAsync();
         }
     }
 }
