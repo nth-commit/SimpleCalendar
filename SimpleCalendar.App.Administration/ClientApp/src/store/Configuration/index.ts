@@ -1,7 +1,7 @@
 import { Reducer, Action } from 'redux';
-import { IAppThunkAction } from '../';
 import { setConfiguration as setAuthConfiguration } from '../../components/services/Auth';
 import { setConfiguration as setApiConfiguration } from '../../components/services/Api';
+import { ThunkActionCreators } from '../';
 
 export interface IConfigurationState {
   rootRegionId: string;
@@ -35,8 +35,8 @@ export const configurationReducer: Reducer = (
     }
 }
 
-export const configurationActionCreators = {
-  update: (configuration: IConfigurationState): IAppThunkAction => (dispatch, getState): void => {
+export const configurationActionCreators: ThunkActionCreators = {
+  update: (configuration: IConfigurationState) => (dispatch, getState): void => {
     dispatch({ ...new UpdateConfiguration(configuration) });
 
     const redirectUri = new URL(configuration.host);

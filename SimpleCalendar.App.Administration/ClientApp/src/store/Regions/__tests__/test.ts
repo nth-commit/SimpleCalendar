@@ -1,7 +1,7 @@
-import { Store } from 'redux';
 import * as fetchMock from 'fetch-mock';
 import { createBrowserHistory } from 'history';
 import configureStore from '../../../configureStore';
+import { ApplicationStore } from '../../';
 import { IRegionsState, regionActionCreators } from '../';
 import {
   setConfiguration as setApiConfiguration,
@@ -10,7 +10,7 @@ import {
 } from '../../../components/services/Api';
 
 describe('regions', () => {
-  let store: Store;
+  let store: ApplicationStore;
 
   beforeEach(() => {
     store = configureStore(createBrowserHistory());
@@ -32,7 +32,7 @@ describe('regions', () => {
       } as IRegion
     });
 
-    await regionActionCreators.getRegion('new-zealand')(store.dispatch, store.getState);
+    await store.dispatch(regionActionCreators.getRegion('new-zealand'))
 
     const expectedState: IRegionsState = {
       region: {

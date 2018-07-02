@@ -1,5 +1,5 @@
 import { Reducer, Action } from 'redux';
-import { IAppThunkActionAsync } from '../';
+import { ThunkActionCreators } from '../';
 import { Api, IRegion } from '../../components/services/Api';
 
 export interface IRegionState extends IRegion {
@@ -55,11 +55,9 @@ export const regionsReducer: Reducer = (state: IRegionsState = {}, action: Regio
   }
 }
 
-export const regionActionCreators = {
+export const regionActionCreators: ThunkActionCreators = {
 
-  getRegion: (regionId: string): IAppThunkActionAsync => async (dispatch, getState) => {
-
-    console.log(getState());
+  getRegion: (regionId: string) => async (dispatch, getState) => {
 
     dispatch({ ...new FetchRegionBegin(regionId) });
 

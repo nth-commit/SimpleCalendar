@@ -3,7 +3,6 @@ import {
   applyMiddleware,
   compose,
   combineReducers,
-  Store,
   StoreEnhancerStoreCreator,
   ReducersMapObject
 } from 'redux';
@@ -27,7 +26,7 @@ export default function configureStore(history: History, initialState?: StoreMod
 
   // Combine all reducers and instantiate the app-wide store instance
   const allReducers = buildRootReducer(StoreModule.reducers);
-  const store = createStoreWithMiddleware(allReducers, initialState) as Store<StoreModule.IApplicationState>;
+  const store = createStoreWithMiddleware(allReducers, initialState) as StoreModule.ApplicationStore;
 
   // Enable Webpack hot module replacement for reducers
   if (module.hot) {

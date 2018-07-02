@@ -22,7 +22,7 @@ function renderApp() {
     .then(response => response.json())
     .then((configuration: IConfigurationState) => {
 
-      store.dispatch(configurationActionCreators.update(configuration) as any);
+      store.dispatch(configurationActionCreators.update(configuration));
 
       ReactDOM.render(
         <AppContainer>
