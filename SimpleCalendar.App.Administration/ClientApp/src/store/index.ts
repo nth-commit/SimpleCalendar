@@ -13,13 +13,6 @@ export const reducers = {
   regions: regionsReducer
 };
 
-export interface ThunkActionCreators {
-  [key: string]: ThunkActionCreator
-}
+export type ApplicationThunkAction = ThunkAction<void, IApplicationState, {}, AnyAction>;
 
-export interface ThunkActionCreator {
-  // tslint:disable-next-line:callable-types
-  (...args: any[]): ThunkAction<void, IApplicationState, {}, AnyAction>
-}
-
-export type ApplicationStore = Store<IApplicationState, AnyAction> & { dispatch(thunk: ThunkAction<any, any, any, any> )};
+export type ApplicationStore = Store<IApplicationState, AnyAction> & { dispatch(thunk: ApplicationThunkAction )};

@@ -3,22 +3,21 @@ import { createBrowserHistory } from 'history';
 import configureStore from '../../../configureStore';
 import { ApplicationStore } from '../../';
 import { IRegionsState, regionActionCreators } from '../';
-import {
-  setConfiguration as setApiConfiguration,
-  clearConfiguration as clearApiConfiguration,
-  IRegion
-} from '../../../components/services/Api';
+import { IRegion } from '../../../components/services/Api';
+import { configurationActionCreators, IConfigurationState } from '../../Configuration';
 
 describe('regions', () => {
   let store: ApplicationStore;
 
   beforeEach(() => {
     store = configureStore(createBrowserHistory());
-    setApiConfiguration({ 'baseUri': 'http://api' });
-  })
+    store.dispatch(configurationActionCreators.update({
+      rootRegionId: 'ROOT',
+      api: 'http://api'
+    } as IConfigurationState));
+  });
 
   afterEach(() => {
-    clearApiConfiguration();
     fetchMock.reset();
     fetchMock.restore();
   });

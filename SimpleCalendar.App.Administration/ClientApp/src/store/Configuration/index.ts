@@ -1,7 +1,7 @@
 import { Reducer, Action } from 'redux';
 import { setConfiguration as setAuthConfiguration } from '../../components/services/Auth';
 import { setConfiguration as setApiConfiguration } from '../../components/services/Api';
-import { ThunkActionCreators } from '../';
+import { ApplicationThunkAction } from '../';
 
 export interface IConfigurationState {
   rootRegionId: string;
@@ -35,21 +35,29 @@ export const configurationReducer: Reducer = (
     }
 }
 
-export const configurationActionCreators: ThunkActionCreators = {
-  update: (configuration: IConfigurationState) => (dispatch, getState): void => {
-    dispatch({ ...new UpdateConfiguration(configuration) });
+class ConfigurationActionCreators {
 
-    const redirectUri = new URL(configuration.host);
-    redirectUri.pathname = 'callback';
+  update(configuration: IConfigurationState): ApplicationThunkAction {
+    return (dispatch, getState) => {
 
-    setAuthConfiguration({
-      domain: configuration.auth.domain,
-      clientId: configuration.auth.clientId,
-      redirectUri: redirectUri.toString()
-    });
+      dispatch({ ...new UpdateConfiguration(configuration) });
 
-    setApiConfiguration({
-      baseUri: configuration.api
-    });
+      if (configuration.host && configuration.auth) {
+        const redirectUri = new URL(configuration.host);
+        redirectUri.pathname = 'callback';
+
+        setAuthConfiguration({
+          domain: configuration.auth.domain,
+          clientId: configuration.auth.clientId,
+          redirectUri: redirectUri.toString()
+        });
+      }
+
+      setApiConfiguration({
+        baseUri: configuration.api
+      });
+    }
   }
-};
+}
+
+export const configurationActionCreators = new ConfigurationActionCreators();
