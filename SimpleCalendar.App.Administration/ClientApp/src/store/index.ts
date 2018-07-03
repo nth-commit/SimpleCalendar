@@ -1,11 +1,11 @@
 import { AnyAction, Store } from 'redux';
 import { ThunkAction } from 'redux-thunk';
-import { IRegionsState, regionsReducer } from './Regions';
+import { IRegionState, regionsReducer } from './Regions';
 import { IConfigurationState, configurationReducer } from './Configuration';
 
 export interface IApplicationState {
   configuration: IConfigurationState;
-  regions: IRegionsState;
+  regions: IRegionState;
 }
 
 export const reducers = {
@@ -14,5 +14,10 @@ export const reducers = {
 };
 
 export type ApplicationThunkAction = ThunkAction<void, IApplicationState, {}, AnyAction>;
+export type ApplicationThunkActionAsync = ThunkAction<Promise<void>, IApplicationState, {}, AnyAction>;
 
-export type ApplicationStore = Store<IApplicationState, AnyAction> & { dispatch(thunk: ApplicationThunkAction )};
+export type ApplicationStore = Store<IApplicationState, AnyAction> & {
+  dispatch(thunkAsync: ApplicationThunkActionAsync): Promise<void>;
+  dispatch(thunk: ApplicationThunkAction ): void;
+};
+
