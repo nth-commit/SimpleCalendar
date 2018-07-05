@@ -40,5 +40,12 @@
     "@types/webpack-env": "~1.13.5",
     "fetch-mock": "^6.5.0",
     "typescript": "^2.9.2"
+  },
+  "jest": {
+    "moduleNameMapper": {
+      "components(.*)$": "<rootDir>/src/components/$1",
+      "store(.*)$": "<rootDir>/src/store/$1",
+      "test-helpers(.*)$": "<rootDir>/test-helpers/$1"
+    }
   }
 }

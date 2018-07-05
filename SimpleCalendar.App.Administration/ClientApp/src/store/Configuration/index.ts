@@ -4,7 +4,7 @@ import { setConfiguration as setApiConfiguration } from '../../components/servic
 import { ApplicationThunkAction } from '../';
 
 export interface IConfigurationState {
-  rootRegionId: string;
+  baseRegionId: string;
   host: string;
   api: string;
   auth: {

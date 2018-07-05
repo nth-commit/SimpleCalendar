@@ -1,6 +1,11 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "module": "commonjs"
+    "module": "commonjs",
+    "paths": {
+      "components/*": ["./src/components/*"],
+      "store/*": ["./src/store/*"],
+      "test-helpers/*": ["./test-helpers/*"]
+    }
   }
 }

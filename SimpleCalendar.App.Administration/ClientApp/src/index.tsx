@@ -17,22 +17,20 @@ const history = createBrowserHistory({ basename: '/' });
 const initialState = (window as any).initialReduxState as IApplicationState;
 const store = configureStore(history, initialState);
 
-function renderApp() {
-  fetch('/config')
-    .then(response => response.json())
-    .then((configuration: IConfigurationState) => {
+async function renderApp() {
+  const response = await fetch('/config');
+  const configuration: IConfigurationState = await response.json();
 
-      store.dispatch(configurationActionCreators.update(configuration));
+  store.dispatch(configurationActionCreators.update(configuration));
 
-      ReactDOM.render(
-        <AppContainer>
-          <Provider store={store}>
-            <ConnectedRouter history={history} children={routes} />
-          </Provider>
-        </AppContainer>,
-        document.getElementById('root')
-      );
-    });
+  ReactDOM.render(
+    <AppContainer>
+      <Provider store={store}>
+        <ConnectedRouter history={history} children={routes} />
+      </Provider>
+    </AppContainer>,
+    document.getElementById('root')
+  );
 }
 
 renderApp();

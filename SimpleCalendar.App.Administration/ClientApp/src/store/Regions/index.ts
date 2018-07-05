@@ -1,6 +1,6 @@
 import { Reducer, Action } from 'redux';
 import { ApplicationThunkActionAsync } from '../';
-import { Api, IRegion } from '../../components/services/Api';
+import { Api, IRegion } from 'components/services/Api';
 
 export interface IRegionState {
   path: IRegion[];
@@ -32,13 +32,14 @@ export type RegionsAction =
   FetchRegionComplete |
   FetchRegionError;
 
-export const regionsReducer: Reducer = (state = {} as IRegionState, action: RegionsAction): IRegionState => {
+export const regionsReducer: Reducer = (state: IRegionState, action: RegionsAction): IRegionState => {
   switch (action.type) {
 
     case RegionsActionTypes.FETCH_REGION_BEGIN:
       return Object.assign({}, state, {});
 
     case RegionsActionTypes.FETCH_REGION_COMPLETE:
+      debugger;
       return Object.assign({}, state, {
         path: [{
           id: action.region.id,
@@ -47,15 +48,38 @@ export const regionsReducer: Reducer = (state = {} as IRegionState, action: Regi
       } as IRegionState)
 
     default:
-      return state;
+      return state || {
+        path: []
+      };
   }
 }
 
 export const regionActionCreators = {
   getRegion(regionId: string): ApplicationThunkActionAsync {
     return async (dispatch, getState) => {
-      // TODO: throw if root region not requested and this get region is not for the root region.
-      
+      const { configuration, regions } = getState();
+
+      if (regions.path.length === 0 && regionId !== configuration.baseRegionId) {
+        throw new Error(`Base region ${configuration.baseRegionId} was not found`);
+      }
+
+      const regionIdComponents = regionId.split('/');
+      const level = regionIdComponents.length;
+      const baseLevel = configuration.baseRegionId.split('/').length;
+      const relativeLevel = level - baseLevel;
+
+      for (let i = 0; i < relativeLevel; i++) {
+        const expectedAncestorRegionId = regionIdComponents.slice(0, i + 1).join('/');
+        if (!regions.path[i]) {
+          throw new Error(`Expected ancestor region "${expectedAncestorRegionId}" at path[${i}], but it was not found`);
+        }
+
+        const ancestorRegionId = regions.path[i].id;
+        if (ancestorRegionId !== expectedAncestorRegionId) {
+          throw new Error(`Expected ancestor region "${expectedAncestorRegionId}" at path[${i}], but it was not found`);
+        }
+      }
+
       dispatch({ ...new FetchRegionBegin(regionId) });
 
       const region = await new Api().getRegion(regionId);
