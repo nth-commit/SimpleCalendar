@@ -5,18 +5,17 @@ import { ApplicationStore } from '../src/store';
 import { configurationActionCreators, IConfigurationState } from 'store/Configuration';
 import { API_BASE_PATH, ROOT_REGION_ID } from './constants';
 
-interface ApplicationStoreContainer {
-  store: ApplicationStore;
-}
-
 export const bootstrap = (
-  configuration = { baseRegionId: ROOT_REGION_ID, api: API_BASE_PATH } as IConfigurationState) => {
+  configuration = {
+    baseRegionId: ROOT_REGION_ID,
+    api: API_BASE_PATH
+  } as IConfigurationState) => {
 
-  const storeContainer = {} as ApplicationStoreContainer;
+  let store: ApplicationStore;
 
   beforeEach(() => {
-    storeContainer.store = configureStore(createBrowserHistory());
-    storeContainer.store.dispatch(configurationActionCreators.update(configuration));
+    store = configureStore(createBrowserHistory());
+    store.dispatch(configurationActionCreators.update(configuration));
   });
 
   afterEach(() => {
@@ -25,7 +24,7 @@ export const bootstrap = (
   });
 
   return {
-    dispatch: (...args) => (storeContainer.store as any).dispatch(...args),
-    getState: (...args) => (storeContainer.store as any).getState(...args)
-  } as ApplicationStore
+    dispatch: (...args) => (store as any).dispatch(...args),
+    getState: (...args) => (store as any).getState(...args)
+  } as ApplicationStore;
 }

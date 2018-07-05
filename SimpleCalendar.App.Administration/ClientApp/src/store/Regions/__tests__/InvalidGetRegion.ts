@@ -9,7 +9,7 @@ describe('regions', () => {
   it('should throw when root region has not been fetched', async () => {
     fetchMockRegionResponse('new-zealand');
 
-    await expectThrowsAsync(async () => await dispatch(regionActionCreators.getRegion('new-zealand')))
+    await expectThrowsAsync(() => dispatch(regionActionCreators.getRegion('new-zealand')))
   });
 
   it('should throw when region not found', async () => {
@@ -17,7 +17,7 @@ describe('regions', () => {
     fetchMockSuppressNotFound();
 
     await dispatch(regionActionCreators.getRegion('ROOT'));
-    await expectThrowsAsync(async () => await dispatch(regionActionCreators.getRegion('non-existent-region')));
+    await expectThrowsAsync(() => dispatch(regionActionCreators.getRegion('non-existent-region')));
   });
 
   it('should throw when parent region has not been fetched', async () => {
@@ -25,6 +25,6 @@ describe('regions', () => {
     fetchMockRegionResponse('new-zealand/wellington');
 
     await dispatch(regionActionCreators.getRegion('ROOT'));
-    await expectThrowsAsync(async () => await dispatch(regionActionCreators.getRegion('new-zealand/wellington')));
+    await expectThrowsAsync(() => dispatch(regionActionCreators.getRegion('new-zealand/wellington')));
   });
 });
