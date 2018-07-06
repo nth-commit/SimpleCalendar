@@ -1,7 +1,7 @@
 import { ApplicationThunkActionAsync } from '../../';
 import { FetchRegionBegin, FetchRegionComplete } from '../Actions';
-import { Api } from 'components/services/Api';
-import { IRegionState } from 'store/Regions';
+import { Api } from 'src/components/services/Api';
+import { IRegionState } from 'src/store/Regions';
 
 export function fetchRegion(regionId: string): ApplicationThunkActionAsync {
   return async (dispatch, getState) => {

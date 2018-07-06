@@ -1,8 +1,8 @@
 import * as fetchMock from 'fetch-mock';
 import { createBrowserHistory } from 'history';
-import configureStoreReal from '../src/configureStore';
-import { ApplicationStore } from '../src/store';
-import { configurationActionCreators, IConfigurationState } from 'store/Configuration';
+import configureStoreReal from 'src/configureStore';
+import { ApplicationStore } from 'src/store';
+import { configurationActionCreators, IConfigurationState } from 'src/store/Configuration';
 import { API_BASE_PATH, ROOT_REGION_ID } from './constants';
 
 const DEFAULT_CONFIGURATION = {

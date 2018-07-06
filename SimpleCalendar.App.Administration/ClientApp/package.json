@@ -42,8 +42,7 @@
   },
   "jest": {
     "moduleNameMapper": {
-      "components(.*)$": "<rootDir>/src/components/$1",
-      "store(.*)$": "<rootDir>/src/store/$1",
+      "src(.*)$": "<rootDir>/src/$1",
       "test-helpers(.*)$": "<rootDir>/test-helpers/$1"
     }
   }

@@ -1,6 +1,6 @@
 import { Reducer, Action } from 'redux';
-import { setConfiguration as setAuthConfiguration } from '../../components/services/Auth';
-import { setConfiguration as setApiConfiguration } from '../../components/services/Api';
+import { setConfiguration as setAuthConfiguration } from 'src/components/services/Auth';
+import { setConfiguration as setApiConfiguration } from 'src/components/services/Api';
 import { ApplicationThunkAction } from '../';
 
 export interface IConfigurationState {
