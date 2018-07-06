@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Redirect } from 'react-router-dom';
-import { Auth } from 'src/components/services/Auth';
+import { Auth } from 'src/services/Auth';
 
 export class AuthCallback extends React.Component {
 

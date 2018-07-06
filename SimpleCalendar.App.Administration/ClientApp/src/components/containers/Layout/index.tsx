@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { withRouter } from 'react-router-dom';
-import { Auth } from 'src/components/services/Auth';
+import { Auth } from 'src/services/Auth';
 
 const _Layout = ({ children, history }) => {
 

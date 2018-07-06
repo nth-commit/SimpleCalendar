@@ -1,6 +1,6 @@
 import * as _fetchMock from 'fetch-mock';
 import { API_BASE_PATH } from '../../constants';
-import { IRegion } from 'components/services/Api';
+import { IRegion } from 'src/services/Api';
 
 const REGIONS_API = API_BASE_PATH + '/regions';
 

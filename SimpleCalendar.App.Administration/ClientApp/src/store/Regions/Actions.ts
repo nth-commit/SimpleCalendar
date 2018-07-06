@@ -1,5 +1,5 @@
 import { Action } from 'redux';
-import { IRegion } from 'components/services/Api';
+import { IRegion } from 'src/services/Api';
 
 export enum RegionsActionTypes {
   FETCH_REGION_BEGIN = '[Regions] FETCH_REGION_BEGIN',

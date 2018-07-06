@@ -1,5 +1,5 @@
 import { Reducer } from 'redux';
-import { IRegion } from 'src/components/services/Api';
+import { IRegion } from 'src/services/Api';
 import { RegionsActionTypes, RegionsAction } from './Actions';
 export * from './ActionCreators';
 
