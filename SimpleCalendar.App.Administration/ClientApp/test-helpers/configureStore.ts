@@ -14,7 +14,7 @@ export default function configureStore(configuration = DEFAULT_CONFIGURATION) {
   let store: ApplicationStore;
 
   beforeEach(() => {
-    store = configureStoreReal(createBrowserHistory());
+    store = configureStoreReal(createBrowserHistory(), {});
     store.dispatch(configurationActionCreators.update(configuration));
   });
 
