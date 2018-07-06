@@ -1,36 +1,11 @@
-import { Reducer, Action } from 'redux';
-import { ApplicationThunkActionAsync } from '../';
-import { Api, IRegion } from 'components/services/Api';
+import { Reducer } from 'redux';
+import { IRegion } from 'components/services/Api';
+import { RegionsActionTypes, RegionsAction } from './Actions';
+export * from './ActionCreators';
 
 export interface IRegionState {
   path: IRegion[];
 }
-
-export enum RegionsActionTypes {
-  FETCH_REGION_BEGIN = '[Regions] FETCH_REGION_BEGIN',
-  FETCH_REGION_COMPLETE = '[Regions] FETCH_REGION_COMPLETE',
-  FETCH_REGION_ERROR = '[Regions] FETCH_REGION_ERROR'
-}
-
-export class FetchRegionBegin implements Action {
-  readonly type = RegionsActionTypes.FETCH_REGION_BEGIN;
-  constructor(public regionId: string) { }
-}
-
-export class FetchRegionComplete implements Action {
-  readonly type = RegionsActionTypes.FETCH_REGION_COMPLETE;
-  constructor(public region: IRegion) { }
-}
-
-export class FetchRegionError implements Action {
-  readonly type = RegionsActionTypes.FETCH_REGION_ERROR;
-  constructor() { }
-}
-
-export type RegionsAction = 
-  FetchRegionBegin |
-  FetchRegionComplete |
-  FetchRegionError;
 
 export const regionsReducer: Reducer = (state: IRegionState, action: RegionsAction): IRegionState => {
   switch (action.type) {
@@ -39,52 +14,19 @@ export const regionsReducer: Reducer = (state: IRegionState, action: RegionsActi
       return Object.assign({}, state, {});
 
     case RegionsActionTypes.FETCH_REGION_COMPLETE:
-      debugger;
+      const regionId = action.region.id;
+      const index = regionId === 'ROOT' ? 0 : regionId.split('/').length;
+      const level = index + 1;
+      const path = state.path;
       return Object.assign({}, state, {
-        path: [{
-          id: action.region.id,
-          name: action.region.name
-        }]
-      } as IRegionState)
+        path: Array
+          .from({ length: Math.max(path.length, level )})
+          .map((x, i) => index === i ? action.region : path[i])
+      })
 
     default:
       return state || {
         path: []
       };
-  }
-}
-
-export const regionActionCreators = {
-  getRegion(regionId: string): ApplicationThunkActionAsync {
-    return async (dispatch, getState) => {
-      const { configuration, regions } = getState();
-
-      if (regions.path.length === 0 && regionId !== configuration.baseRegionId) {
-        throw new Error(`Base region ${configuration.baseRegionId} was not found`);
-      }
-
-      const regionIdComponents = regionId.split('/');
-      const level = regionIdComponents.length;
-      const baseLevel = configuration.baseRegionId.split('/').length;
-      const relativeLevel = level - baseLevel;
-
-      for (let i = 0; i < relativeLevel; i++) {
-        const expectedAncestorRegionId = regionIdComponents.slice(0, i + 1).join('/');
-        if (!regions.path[i]) {
-          throw new Error(`Expected ancestor region "${expectedAncestorRegionId}" at path[${i}], but it was not found`);
-        }
-
-        const ancestorRegionId = regions.path[i].id;
-        if (ancestorRegionId !== expectedAncestorRegionId) {
-          throw new Error(`Expected ancestor region "${expectedAncestorRegionId}" at path[${i}], but it was not found`);
-        }
-      }
-
-      dispatch({ ...new FetchRegionBegin(regionId) });
-
-      const region = await new Api().getRegion(regionId);
-
-      dispatch({ ...new FetchRegionComplete(region) });
-    }
   }
 }

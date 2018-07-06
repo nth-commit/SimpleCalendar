@@ -29,7 +29,7 @@ export const configurationReducer: Reducer = (
   action: ConfigurationAction): IConfigurationState => {
     switch (action.type) {
       case ConfigurationActionTypes.UPDATE:
-        return action.configuration;
+        return Object.assign({}, state, action.configuration);
       default:
         return state;
     }

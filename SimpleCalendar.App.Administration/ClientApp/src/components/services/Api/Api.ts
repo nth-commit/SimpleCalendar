@@ -7,7 +7,8 @@ export class Api {
 
   async getRegion(id: string): Promise<IRegion> {
     const response = await fetch(this.getUri(`regions/${id}`));
-    return response.json();
+    const region: IRegion = await response.json()
+    return region;
   }
 
   getRegions(parentId: string): Promise<IRegion[]> {
