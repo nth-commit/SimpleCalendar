@@ -1,4 +1,4 @@
-import { configurationActionCreators, IConfigurationState } from '../';
+import { configurationActionCreators } from '../';
 import configureStore from 'test-helpers/configureStore';
 
 describe('configuration.update', () => {
@@ -10,7 +10,7 @@ describe('configuration.update', () => {
 
     dispatch(configurationActionCreators.update({
       baseRegionId: 'new-region-id'
-    } as IConfigurationState));
+    }));
 
     const apiConfiguration = getState().configuration.api;
     expect(apiConfiguration).toBe(initialApiConfiguration);
