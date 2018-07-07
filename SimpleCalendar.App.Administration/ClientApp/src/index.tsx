@@ -8,6 +8,7 @@ import { createBrowserHistory } from 'history';
 import configureStore from './configureStore';
 import { IApplicationState } from './store';
 import * as RoutesModule from './routes';
+import { ROOT_REGION_ID } from './constants';
 
 import { IConfigurationState, configurationActionCreators } from './store/Configuration';
 
@@ -19,7 +20,10 @@ const store = configureStore(history, initialState);
 
 async function renderApp() {
   const response = await fetch('/config');
-  const configuration: IConfigurationState = await response.json();
+  const configuration: IConfigurationState = {
+   ...await response.json(),
+   baseRegionId: ROOT_REGION_ID
+  };
 
   store.dispatch(configurationActionCreators.update(configuration));
 

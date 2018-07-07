@@ -32,4 +32,5 @@ export const regionsReducer: Reducer = (state: IRegionState, action: RegionsActi
         path: []
       };
   }
-}
+};
+

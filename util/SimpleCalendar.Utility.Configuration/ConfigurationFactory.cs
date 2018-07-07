@@ -7,9 +7,9 @@ namespace SimpleCalendar.Utility.Configuration
 {
     public static class ConfigurationFactory
     {
-        public static IConfiguration Create(string environment)
+        public static IConfiguration Create(string environment = "Development")
         {
-            return new ConfigurationBuilder().AddCommonConfigurationSources("Development").Build();
+            return new ConfigurationBuilder().AddCommonConfigurationSources(environment).Build();
         }
     }
 }

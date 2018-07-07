@@ -1,37 +1,59 @@
 import * as React from 'react';
 import { Auth } from 'src/services/Auth';
 import { appConnect } from 'src/store';
+import { regionActionCreators } from 'src/store/Regions';
 import Breadcrumbs from '../Breadcrumbs';
 
-export interface LayoutProps {
+export interface LayoutStateProps {
+  isLoaded: boolean;
   isAuthCallback: boolean;
 }
+
+export interface LayoutDispatchProps {
+  onMounted(): void;
+}
+
+export type LayoutProps = LayoutStateProps & LayoutDispatchProps;
 
 export class UnconnectedLayout extends React.PureComponent<LayoutProps> {
 
   private isAuthenticated: boolean;
 
+  componentWillMount() {
+    this.isAuthenticated = new Auth().isAuthenticated() || this.props.isAuthCallback;
+  }
+
   componentDidMount() {
-    this.isAuthenticated = !(new Auth().isAuthenticated()) && !this.props.isAuthCallback;
+    if (this.isAuthenticated) {
+      this.props.onMounted();
+    }
   }
 
   render() {
-    if (this.isAuthenticated) {
+    if (!this.isAuthenticated) {
       new Auth().login();
       return null;
     }
 
-    return (
-      <div>
-        <Breadcrumbs />
-        {this.props.children}
-      </div>
-    );
+    return this.props.isLoaded ?
+      (
+        <div>
+          <Breadcrumbs />
+          {this.props.children}
+        </div>
+      ) :
+      (
+        <div>loading...</div>
+      );
   }
 }
 
-export default appConnect<LayoutProps>(
+export default appConnect<LayoutStateProps, LayoutDispatchProps>(
   state => ({
     isAuthCallback: state.router.location.pathname === '/callback',
+    isLoaded: true
+  }),
+  dispatch => ({
+    onMounted: () => dispatch(regionActionCreators.fetchBaseRegions())
   })
 )(UnconnectedLayout) as any;

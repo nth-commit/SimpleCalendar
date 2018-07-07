@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { appConnect } from 'src/store';
-import { regionActionCreators } from 'src/store/Regions';
+// import { regionActionCreators } from 'src/store/Regions';
 
 interface RegionStateProps {
   loading: boolean;
@@ -30,6 +30,6 @@ export default appConnect<RegionStateProps, RegionDispatchProps>(
     loading: !state.regions.path.length,
   }),
   dispatch => ({
-    onMounted: () => dispatch(regionActionCreators.fetchRootRegion())
+    onMounted: () => {}
   })
 )(UnconnectedRegion);
