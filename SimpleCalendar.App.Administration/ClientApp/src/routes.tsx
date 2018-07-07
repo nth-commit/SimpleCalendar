@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { Route, Switch, withRouter } from 'react-router-dom';
-import { Layout } from './components/containers/Layout';
-import { Home } from './components/containers/Home';
+import Layout from './components/containers/Layout';
 import { AuthCallback } from './components/containers/AuthCallback';
 
 const _Region = ({ history }) => {
@@ -16,13 +15,17 @@ const Region = withRouter(_Region);
 
 const NotFound = () => <div>Page not found</div>;
 
+// TODO: Better typings for this?
+const LayoutAny = Layout as any;
+
 export const routes = (
-  <Layout>
-    <Switch>
-      <Route exact={true} path='/' component={Home} />
-      <Route exact={true} path='/callback' component={AuthCallback} />
-      <Route exact={true} path='/404' component={NotFound} />
-      <Route path='/:regionCode' component={Region} />
-    </Switch>
-  </Layout>
+  <div>
+    <LayoutAny>
+      <Switch>
+        <Route exact={true} path='/callback' component={AuthCallback} />
+        <Route exact={true} path='/404' component={NotFound} />
+        <Route path='/:regionId' component={Region} />
+      </Switch>
+    </LayoutAny>
+  </div>
 );

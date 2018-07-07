@@ -24,7 +24,8 @@ export type ApplicationStore = Store<IApplicationState, AnyAction> & {
   dispatch(thunk: ApplicationThunkAction ): void;
 };
 
-export const appConnect = <TArgs = {}>(
-  mapStateToProps?: (state: IApplicationState) => TArgs,
-  mapDispatchToProps?
-) => connect(mapStateToProps, mapDispatchToProps);
+// TODO: Better typings here? Especially with dispatch
+export const appConnect = <TStateProps = {}, TDispatchProps = {}>(
+  mapStateToProps?: (state: IApplicationState) => TStateProps,
+  mapDispatchToProps?: (dispatch: (...args: any[]) => void) => TDispatchProps
+) => connect(mapStateToProps, mapDispatchToProps as any);

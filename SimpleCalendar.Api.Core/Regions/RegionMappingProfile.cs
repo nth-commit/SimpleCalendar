@@ -22,7 +22,9 @@ namespace SimpleCalendar.Api.Core.Regions
                 .ForMember(dest => dest.DataJsonVersion, opts => opts.UseValue(1));
 
             CreateMap<RegionEntity, RegionResult>()
-                .ConstructUsing(src => JsonConvert.DeserializeObject<RegionResult>(src.DataJson))
+                .ConstructUsing(src => string.IsNullOrEmpty(src.DataJson) ? 
+                    new RegionResult() { Id = src.Id, Name = src.Id } :
+                    JsonConvert.DeserializeObject<RegionResult>(src.DataJson))
                 .ForMember(dest => dest.Id, opts => opts.ResolveUsing(src => src.GetId()));
         }
     }

@@ -1,9 +1,10 @@
 import * as fetchMock from 'fetch-mock';
 import { createBrowserHistory } from 'history';
+import { ROOT_REGION_ID } from 'src/constants';
 import configureStoreReal from 'src/configureStore';
 import { ApplicationStore } from 'src/store';
 import { configurationActionCreators, IConfigurationState } from 'src/store/Configuration';
-import { API_BASE_PATH, ROOT_REGION_ID } from './constants';
+import { API_BASE_PATH } from './constants';
 
 const DEFAULT_CONFIGURATION = {
   baseRegionId: ROOT_REGION_ID,

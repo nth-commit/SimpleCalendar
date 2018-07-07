@@ -36,7 +36,13 @@ export const UnconnectedBreadcrumbs = ({ pathname, regions, baseRegionId }: Brea
       {
         getBreadcrumbs(regions, baseRegionId)
           .map(b => b.pathname === pathname ?
-            <div key={b.name}>{b.name}</div> : <a key={b.name} href={b.pathname}>{b.name}</a>)
+            <div className="breadcrumb" key={b.name}>
+              {b.name}
+            </div> :
+            <a className="breadcrumb" key={b.name} href={b.pathname}>
+              {b.name}
+            </a>
+          )
           .reduce((prev, curr) => [prev, <div>/</div>, curr] as any)
       }
     </div>
