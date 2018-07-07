@@ -8,18 +8,7 @@ export interface BreadcrumbsProps {
   baseRegionId: string;
 }
 
-export class NoRegionsError {
-  public message = 'Expected regions to render breadcrumbs';
-  constructor() { }
-}
-
 const getBreadcrumbs = (regions: IRegion[], baseRegionId: string) => {
-  if (!regions.length) {
-    // Currently the app only contains region configuration, therefore it makes sense to sit the
-    // regions at the root of the app.
-    throw new NoRegionsError();
-  }
-
   const result: Array<{ name: string, pathname: string }> = [];
 
   result.push({

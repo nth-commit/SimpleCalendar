@@ -2,7 +2,7 @@ import * as React from 'react';
 import { DeepPartial } from 'redux';
 import { shallow } from 'enzyme';
 import { ROOT_REGION_ID } from 'src/constants';
-import { UnconnectedBreadcrumbs, BreadcrumbsProps, NoRegionsError } from '../';
+import { UnconnectedBreadcrumbs, BreadcrumbsProps } from '../';
 
 const renderBreadcrumbs = (props: DeepPartial<BreadcrumbsProps> = {}) => shallow(
   <UnconnectedBreadcrumbs
@@ -11,10 +11,6 @@ const renderBreadcrumbs = (props: DeepPartial<BreadcrumbsProps> = {}) => shallow
     baseRegionId={props.baseRegionId || ROOT_REGION_ID} />);
 
 describe('component: Breadcrumbs', () => {
-  
-  it('should throw NoRegionsError when rendered with no regions', () => {
-    expect(() => renderBreadcrumbs()).toThrowError(NoRegionsError);
-  });
 
   it('should render without throwing', () => {
     const breadcrumbs = renderBreadcrumbs({
