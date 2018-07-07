@@ -1,4 +1,4 @@
-import { Reducer, Action } from 'redux';
+import { Reducer, Action, DeepPartial } from 'redux';
 import { setConfiguration as setAuthConfiguration } from 'src/services/Auth';
 import { setConfiguration as setApiConfiguration } from 'src/services/Api';
 import { ApplicationThunkAction } from '../';
@@ -37,25 +37,34 @@ export const configurationReducer: Reducer = (
 
 class ConfigurationActionCreators {
 
-  update(configuration: IConfigurationState): ApplicationThunkAction {
-    return (dispatch, getState) => {
+  update(configuration: DeepPartial<IConfigurationState>): ApplicationThunkAction {
+    return (dispatch) => {
 
-      dispatch({ ...new UpdateConfiguration(configuration) });
+      const { host, auth, api } = configuration;
 
-      if (configuration.host && configuration.auth) {
-        const redirectUri = new URL(configuration.host);
+      if (host && auth) {
+        const { clientId, domain } = auth;
+        if (!clientId || !domain) {
+          throw new Error('Invalid update of auth');
+        }
+
+        const redirectUri = new URL(host);
         redirectUri.pathname = 'callback';
 
         setAuthConfiguration({
-          domain: configuration.auth.domain,
-          clientId: configuration.auth.clientId,
+          domain,
+          clientId,
           redirectUri: redirectUri.toString()
         });
       }
 
-      setApiConfiguration({
-        baseUri: configuration.api
-      });
+      if (api) {
+        setApiConfiguration({
+          baseUri: api
+        });
+      }
+
+      dispatch({ ...new UpdateConfiguration(configuration as IConfigurationState) });
     }
   }
 }

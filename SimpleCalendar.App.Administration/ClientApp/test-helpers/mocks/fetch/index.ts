@@ -1,4 +1,5 @@
 import * as _fetchMock from 'fetch-mock';
+import { ROOT_REGION_ID } from 'src/constants';
 import { API_BASE_PATH } from '../../constants';
 import { IRegion } from 'src/services/Api';
 
@@ -12,6 +13,8 @@ const createRegionResponse = (regionId: string) => ({
     name: ''
   } as IRegion
 });
+
+export const fetchMockRootRegionResponse = () => fetchMockRegionResponse(ROOT_REGION_ID);
 
 export const fetchMockRegionResponse = (regionId: string) => {
   fetchMock.mock(getRegionLocation(regionId), createRegionResponse(regionId));

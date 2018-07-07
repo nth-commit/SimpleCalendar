@@ -35,16 +35,16 @@ export class UnconnectedLayout extends React.PureComponent<LayoutProps> {
       return null;
     }
 
-    return this.props.isLoaded ?
-      (
-        <div>
-          <Breadcrumbs />
-          {this.props.children}
-        </div>
-      ) :
-      (
-        <div>loading...</div>
-      );
+    if (!this.props.isLoaded) {
+      return null;
+    }
+
+    return (
+      <div>
+        <Breadcrumbs />
+        {this.props.children}
+      </div>
+    );
   }
 }
 
@@ -54,6 +54,6 @@ export default appConnect<LayoutStateProps, LayoutDispatchProps>(
     isLoaded: true
   }),
   dispatch => ({
-    onMounted: () => dispatch(regionActionCreators.fetchBaseRegions())
+    onMounted: () => dispatch(regionActionCreators.fetchRegionsAboveBase())
   })
 )(UnconnectedLayout) as any;
