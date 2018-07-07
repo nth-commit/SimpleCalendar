@@ -55,7 +55,7 @@ namespace SimpleCalendar.Api.Core.Regions
             return region.Children.Select(r => _mapper.Map<RegionResult>(r));
         }
 
-        public async Task<RegionEntity> CreateRegionAsync(RegionCreate create, string id = null)
+        public async Task<RegionCreateResult> CreateRegionAsync(RegionCreate create)
         {
             RegionEntity parentEntity = null;
             if (!string.IsNullOrEmpty(create.ParentId))
@@ -63,19 +63,36 @@ namespace SimpleCalendar.Api.Core.Regions
                 parentEntity = await _coreDbContext.GetRegionByCodesAsync(create.ParentId);
                 if (parentEntity == null)
                 {
-                    throw new ArgumentNullException(nameof(RegionCreate.ParentId));
+                    return RegionCreateResult.ParentRegionNotFound;
                 }
-                // TODO: Ensure max region recursion
+
+                var parentLevel = parentEntity.GetLevel();
+                if (parentLevel >= 5)
+                {
+                    return RegionCreateResult.MaxRegionLevelReached;
+                }
             }
 
             var entity = _mapper.Map<RegionEntity>(create);
-            entity.Id = string.IsNullOrEmpty(id) ? Guid.NewGuid().ToString() : id;
-            entity.ParentId = parentEntity?.Id ?? Data.Constants.RootRegionId;
+            if (parentEntity == null)
+            {
+                entity.ParentId = Data.Constants.RootRegionId;
+            }
+            else
+            {
+                entity.Parent = parentEntity;
+            }
+
+            var existingEntity = await _coreDbContext.GetRegionByCodesAsync(entity.GetId());
+            if (existingEntity != null)
+            {
+                return RegionCreateResult.RegionAlreadyExists;
+            }
 
             await _coreDbContext.Regions.AddAsync(entity);
             await _coreDbContext.SaveChangesAsync();
 
-            return entity;
+            return RegionCreateResult.Success(entity);
         }
 
         public async Task<RegionEntity> UpdateRegionAsync(string id, RegionUpdate update)

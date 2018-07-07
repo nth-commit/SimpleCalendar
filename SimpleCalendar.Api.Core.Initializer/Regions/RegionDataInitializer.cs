@@ -30,58 +30,36 @@ namespace SimpleCalendar.Api.Core.Initializer.Regions
         {
             await _coreDbContext.Database.EnsureCreatedAsync();
 
-            var regionsById = new Dictionary<string, RegionCreate>()
+            var regions = new List<RegionCreate>()
             {
+                new RegionCreate()
                 {
-                    "266fde3e-18da-44b4-9880-d7a3235a4f0f",
-                    new RegionCreate()
-                    {
-                        Name = "New Zealand"
-                    }
+                    Name = "New Zealand"
                 },
+                new RegionCreate()
                 {
-                    "092460d3-d85e-4df8-81b6-07a38c105307",
-                    new RegionCreate()
-                    {
-                        Name = "Wellington",
-                        ParentId = "266fde3e-18da-44b4-9880-d7a3235a4f0f"
-                    }
-                },
-                {
-                    "192460d3-d85e-4df8-81b6-07a38c105307",
-                    new RegionCreate()
-                    {
-                        Name = "Wellington City",
-                        ParentId = "092460d3-d85e-4df8-81b6-07a38c105307"
-                    }
+                    Name = "Wellington",
+                    ParentId = "new-zealand"
                 }
             };
-            var regionIds = regionsById.Keys;
 
-            var existingRegions = await _coreDbContext.Regions.ToListAsync();
-            var existingRegionsById = existingRegions.ToDictionary(r => r.Id);
-            var existingRegionIds = existingRegionsById.Keys;
-
-            var regionIdsToAdd = regionIds.Except(existingRegionIds);
-            var regionIdsToUpdate = regionIds.Intersect(existingRegionIds);
-
-            foreach (var regionId in regionIdsToAdd)
+            var regionsToUpdate = new List<RegionCreate>();
+            foreach (var region in regions)
             {
-                await _regionService.CreateRegionAsync(regionsById[regionId], regionId);
-            }
-
-            foreach (var regionId in regionIdsToUpdate)
-            {
-                var region = regionsById[regionId];
-                var existingRegion = existingRegionsById[regionId];
-                if (existingRegion.ParentId != region.ParentId)
+                var regionCreateResult = await _regionService.CreateRegionAsync(region);
+                switch (regionCreateResult.Status)
                 {
-                    throw new Exception("Cannot update parent region");
+                    case RegionCreateResult.RegionCreateResultStatus.Success:
+                        break;
+                    case RegionCreateResult.RegionCreateResultStatus.RegionAlreadyExists:
+                        regionsToUpdate.Add(region);
+                        break;
+                    default:
+                        throw new Exception($"Failed to create region: {regionCreateResult.Status}");
                 }
-
-                var regionUpdate = _mapper.Map<RegionUpdate>(region);
-                await _regionService.UpdateRegionAsync(regionId, regionUpdate);
             }
+
+            // TODO: Update regions
         }
     }
 }

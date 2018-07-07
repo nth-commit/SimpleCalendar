@@ -31,6 +31,9 @@ namespace SimpleCalendar.Api.Core.Data
 
     public static class RegionEntityExtensions
     {
+        public static int GetLevel(this RegionEntity region)
+            => region.Id == Constants.RootRegionId ? 0 : region.GetId().Split('/').Count();
+
         public static string GetId(this RegionEntity region)
             => region.Id == Constants.RootRegionId ? Constants.RootRegionId : region.GetIdInternal();
 
