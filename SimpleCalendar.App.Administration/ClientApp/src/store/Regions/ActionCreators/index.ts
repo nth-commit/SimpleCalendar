@@ -1,9 +1,9 @@
 import { fetchRegion } from './fetchRegion';
 import { fetchRegions } from './fetchRegions';
-import { fetchRegionsAboveBase } from './fetchRegionsAboveBase';
+import { fetchBaseRegionParents } from './fetchBaseRegionParents';
 
 export const regionActionCreators = {
   fetchRegion,
   fetchRegions,
-  fetchRegionsAboveBase
+  fetchBaseRegionParents
 };

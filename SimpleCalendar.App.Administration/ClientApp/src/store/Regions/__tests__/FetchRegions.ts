@@ -3,7 +3,7 @@ import { ROOT_REGION_ID } from 'src/constants';
 import configureStore from 'test-helpers/configureStore';
 import { fetchMockRegionResponse } from 'test-helpers/mocks/fetch';
 
-describe('regions.fetchRegions', () => {
+describe('store.regions.fetchRegions', () => {
   const { dispatch, getState } = configureStore();
 
   it('should fetch only root when root requested', async () => {

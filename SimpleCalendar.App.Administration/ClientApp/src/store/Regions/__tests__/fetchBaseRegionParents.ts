@@ -10,7 +10,7 @@ describe('store.regions.fetchRegionsAboveBase', () => {
   it('should not fetch any regions when base is root', async () => {
     fetchMockSuppressNotFound();
 
-    await dispatch(regionActionCreators.fetchRegionsAboveBase());
+    await dispatch(regionActionCreators.fetchBaseRegionParents());
 
     const { regions } = getState();
     expect(regions.path.length).toBe(0);
@@ -22,7 +22,7 @@ describe('store.regions.fetchRegionsAboveBase', () => {
       baseRegionId: 'new-zealand'
     }));
 
-    await dispatch(regionActionCreators.fetchRegionsAboveBase());
+    await dispatch(regionActionCreators.fetchBaseRegionParents());
 
     const { regions } = getState();
     expect(regions.path.length).toBe(1);
@@ -36,7 +36,7 @@ describe('store.regions.fetchRegionsAboveBase', () => {
       baseRegionId: 'new-zealand/wellington'
     }));
 
-    await dispatch(regionActionCreators.fetchRegionsAboveBase());
+    await dispatch(regionActionCreators.fetchBaseRegionParents());
 
     const { regions } = getState();
     expect(regions.path.length).toBe(2);

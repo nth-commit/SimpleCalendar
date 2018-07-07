@@ -2,7 +2,7 @@ import { ROOT_REGION_ID } from 'src/constants';
 import { ApplicationThunkActionAsync } from '../../';
 import { fetchRegions } from './fetchRegions';
 
-export function fetchRegionsAboveBase(): ApplicationThunkActionAsync {
+export function fetchBaseRegionParents(): ApplicationThunkActionAsync {
   return async (dispatch, getState) => {
     const { baseRegionId } = getState().configuration;
     if (baseRegionId === ROOT_REGION_ID) {

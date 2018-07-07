@@ -5,7 +5,7 @@ import { expectThrowsAsync } from 'test-helpers/expect-helpers';
 import { fetchMockRegionResponse, fetchMockSuppressNotFound } from 'test-helpers/mocks/fetch';
 import { regionActionCreators } from '../';
 
-describe('invalid fetch region', () => {
+describe('store.regions.fetchRegion', () => {
   const { dispatch } = configureStore();
 
   it('should throw when root region has not been fetched', async () => {

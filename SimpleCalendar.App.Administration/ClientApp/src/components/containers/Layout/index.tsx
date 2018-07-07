@@ -54,6 +54,6 @@ export default appConnect<LayoutStateProps, LayoutDispatchProps>(
     isLoaded: true
   }),
   dispatch => ({
-    onMounted: () => dispatch(regionActionCreators.fetchRegionsAboveBase())
+    onMounted: () => dispatch(regionActionCreators.fetchBaseRegionParents())
   })
 )(UnconnectedLayout) as any;
