@@ -6,7 +6,7 @@ import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'connected-react-router';
 import { createBrowserHistory } from 'history';
 import configureStore from './configureStore';
-import { IApplicationState } from './store';
+import { ApplicationState } from './store';
 import * as RoutesModule from './routes';
 import { ROOT_REGION_ID } from './constants';
 
@@ -15,7 +15,7 @@ import { IConfigurationState, configurationActionCreators } from './store/Config
 let routes = RoutesModule.routes;
 
 const history = createBrowserHistory({ basename: '/' });
-const initialState = (window as any).initialReduxState as IApplicationState;
+const initialState = (window as any).initialReduxState as ApplicationState;
 const store = configureStore(history, initialState);
 
 async function renderApp() {

@@ -11,7 +11,7 @@ import { routerMiddleware, connectRouter } from 'connected-react-router';
 import * as StoreModule from './store';
 import { History } from 'history';
 
-export default function configureStore(history: History, initialState: DeepPartial<StoreModule.IApplicationState>) {
+export default function configureStore(history: History, initialState: DeepPartial<StoreModule.ApplicationState>) {
 
   const rootReducer = getRootReducer(StoreModule.reducers);
 
@@ -37,4 +37,4 @@ export default function configureStore(history: History, initialState: DeepParti
   return store as StoreModule.ApplicationStore;
 }
 
-const getRootReducer = (reducers: ReducersMapObject) => combineReducers<StoreModule.IApplicationState>(reducers as any);
+const getRootReducer = (reducers: ReducersMapObject) => combineReducers<StoreModule.ApplicationState>(reducers as any);

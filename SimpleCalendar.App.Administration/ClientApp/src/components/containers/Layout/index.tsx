@@ -1,6 +1,7 @@
 import * as React from 'react';
+import { connect } from 'react-redux';
 import { Auth } from 'src/services/Auth';
-import { appConnect } from 'src/store';
+import { ApplicationState } from 'src/store';
 import { regionActionCreators } from 'src/store/Regions';
 import Breadcrumbs from '../Breadcrumbs';
 
@@ -48,12 +49,12 @@ export class UnconnectedLayout extends React.PureComponent<LayoutProps> {
   }
 }
 
-export default appConnect<LayoutStateProps, LayoutDispatchProps>(
+export default connect<LayoutStateProps, LayoutDispatchProps, LayoutProps, ApplicationState>(
   state => ({
     isAuthCallback: state.router.location.pathname === '/callback',
     isLoaded: true
   }),
   dispatch => ({
-    onMounted: () => dispatch(regionActionCreators.fetchBaseRegionParents())
+    onMounted: () => dispatch(regionActionCreators.fetchBaseRegionParents() as any)
   })
 )(UnconnectedLayout) as any;

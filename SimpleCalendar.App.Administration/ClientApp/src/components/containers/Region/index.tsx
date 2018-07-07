@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { appConnect } from 'src/store';
+// import { connect } from 'react-redux';
+// import { IApplicationState } from 'src/store';
 // import { regionActionCreators } from 'src/store/Regions';
 
 interface RegionStateProps {
@@ -25,11 +26,22 @@ export class UnconnectedRegion extends React.PureComponent<RegionProps> {
   }
 }
 
-export default appConnect<RegionStateProps, RegionDispatchProps>(
-  state => ({
-    loading: !state.regions.path.length,
-  }),
-  dispatch => ({
-    onMounted: () => {}
-  })
-)(UnconnectedRegion);
+export default UnconnectedRegion;
+
+// export default connect(
+//   state => ({ state }),
+//   dispatch => ({ dispatch }),
+//   (stateProps, dispatchProps) => {
+//     const { state } = stateProps;
+//     const { dispatch } = dispatchProps;
+
+//     return {
+//       loading: false
+//       // onMounted: () => dispatch(regionActionCreators.fetchRegion(''))
+//     } as RegionProps;
+//   }
+
+//   // dispatch => ({
+//   //   onMounted: () => {}
+//   // })
+// )(UnconnectedRegion);
