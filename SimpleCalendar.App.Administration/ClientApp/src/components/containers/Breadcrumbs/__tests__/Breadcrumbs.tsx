@@ -1,29 +1,23 @@
 import * as React from 'react';
-import { shallow, mount, render } from 'enzyme';
+import { DeepPartial } from 'redux';
+import { shallow } from 'enzyme';
 import { ROOT_REGION_ID } from 'src/constants';
 import { UnconnectedBreadcrumbs, BreadcrumbsProps, NoRegionsError } from '../';
 
-
 describe('component: Breadcrumbs', () => {
 
-  const renderBreadcrumbs = (props: BreadcrumbsProps) => shallow(
+  const renderBreadcrumbs = (props: DeepPartial<BreadcrumbsProps> = {}) => shallow(
     <UnconnectedBreadcrumbs
-      pathname={props.pathname}
-      regions={props.regions}
-      baseRegionId={props.baseRegionId} />);
+      pathname={props.pathname || '/'}
+      regions={(props.regions || []) as any}
+      baseRegionId={props.baseRegionId || ROOT_REGION_ID} />);
   
   it('should throw NoRegionsError when rendered with no regions', () => {
-    expect(() => renderBreadcrumbs({
-      pathname: '/',
-      baseRegionId: ROOT_REGION_ID,
-      regions: []
-    })).toThrowError(NoRegionsError);
+    expect(() => renderBreadcrumbs()).toThrowError(NoRegionsError);
   });
 
   it('should render without throwing', () => {
-    const rendered = renderBreadcrumbs({
-      pathname: '/',
-      baseRegionId: ROOT_REGION_ID,
+    const breadcrumbs = renderBreadcrumbs({
       regions: [
         {
           id: ROOT_REGION_ID,
@@ -31,7 +25,7 @@ describe('component: Breadcrumbs', () => {
         }
       ]
     });
-    
-    expect(rendered.find('.breadcrumbs').exists()).toBeTruthy();
+
+    expect(breadcrumbs.find('.breadcrumbs').exists()).toBeTruthy();
   });
 });
