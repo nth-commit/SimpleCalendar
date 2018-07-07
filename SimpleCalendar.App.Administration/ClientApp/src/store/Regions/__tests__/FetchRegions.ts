@@ -1,5 +1,5 @@
 import { regionActionCreators } from '../';
-import { ROOT_REGION_ID } from 'test-helpers/constants';
+import { ROOT_REGION_ID } from 'src/constants';
 import configureStore from 'test-helpers/configureStore';
 import { fetchMockRegionResponse } from 'test-helpers/mocks/fetch';
 
@@ -19,7 +19,7 @@ describe('regions.fetchRegions', () => {
   it('should fetch all regions in hierarchy', async () => {
     const regionIdComponents = ['new-zealand', 'wellington', 'mount-victoria']
     const regionIds = [
-      'ROOT',
+      ROOT_REGION_ID,
       ...Array
         .from({ length: regionIdComponents.length })
         .map((x, i) => regionIdComponents.slice(0, i + 1).join('/'))

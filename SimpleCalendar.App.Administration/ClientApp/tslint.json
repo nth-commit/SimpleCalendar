@@ -10,7 +10,9 @@
     "member-ordering": false,
     "max-classes-per-file": false,
     "no-empty": false,
-    "interface-name": false
+    "interface-name": false,
+    "class-name": false,
+    "jsx-key": false
   },
   "linterOptions": {
     "exclude": [

@@ -5,8 +5,6 @@ import { Home } from './components/containers/Home';
 import { AuthCallback } from './components/containers/AuthCallback';
 
 const _Region = ({ history }) => {
-  debugger;
-
   return (
     <div>
       <h1>Region: {history.location.pathname}</h1>

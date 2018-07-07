@@ -1,3 +1,4 @@
+import { ROOT_REGION_ID } from 'src/constants';
 import { ApplicationThunkActionAsync } from '../../';
 import { fetchRegion } from './fetchRegion';
 
@@ -10,12 +11,12 @@ export function fetchRegions(regionId: string): ApplicationThunkActionAsync {
 }
 
 function getAllRegionIds(regionId: string): string[] {
-  if (regionId === 'ROOT') {
-    return ['ROOT'];
+  if (regionId === ROOT_REGION_ID) {
+    return [ROOT_REGION_ID];
   } else {
     const regionIdComponents = regionId.split('/');
     return [
-      'ROOT',
+      ROOT_REGION_ID,
       ...Array
         .from({ length: regionIdComponents.length })
         .map((x, i) => regionIdComponents.slice(0, i + 1).join('/'))
