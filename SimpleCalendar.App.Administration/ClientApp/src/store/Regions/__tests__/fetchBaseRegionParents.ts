@@ -4,10 +4,10 @@ import { fetchMockRegionResponse, fetchMockRootRegionResponse, fetchMockSuppress
 import { configurationActionCreators } from 'src/store/Configuration';
 import { regionActionCreators } from '../';
 
-describe('store.regions.fetchRegionsAboveBase', () => {
+describe('store.regions.fetchBaseRegionParents', () => {
   const { dispatch, getState } = configureStore();
 
-  it('should not fetch any regions when base is root', async () => {
+  it('SHOULD not fetch any regions WHEN base is root', async () => {
     fetchMockSuppressNotFound();
 
     await dispatch(regionActionCreators.fetchBaseRegionParents());
@@ -16,7 +16,7 @@ describe('store.regions.fetchRegionsAboveBase', () => {
     expect(regions.path.length).toBe(0);
   });
 
-  it('should fetch root region when base is one above root', async () => {
+  it('SHOULD fetch root WHEN base is new-zealand', async () => {
     fetchMockRootRegionResponse();
     dispatch(configurationActionCreators.update({
       baseRegionId: 'new-zealand'
@@ -29,7 +29,7 @@ describe('store.regions.fetchRegionsAboveBase', () => {
     expect(regions.path[0].id).toBe(ROOT_REGION_ID);
   });
 
-  it('should fetch regions when base is two above root', async () => {
+  it('SHOULD fetch root and new-zealand WHEN base is new-zealand/wellington', async () => {
     fetchMockRootRegionResponse();
     fetchMockRegionResponse('new-zealand');
     dispatch(configurationActionCreators.update({

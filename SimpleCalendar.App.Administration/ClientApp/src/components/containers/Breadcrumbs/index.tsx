@@ -39,7 +39,7 @@ export const UnconnectedBreadcrumbs = ({ pathname, regions, baseRegionId }: Brea
 };
 
 export default appConnect<BreadcrumbsProps>(
-  state => ({
+  (state) => ({
     pathname: state.router.location.pathname,
     regions: state.regions.path,
     baseRegionId: state.configuration.baseRegionId

@@ -6,6 +6,6 @@ export const reducers = {
   regions: regionsReducer
 };
 
-export { ApplicationState } from './ApplicationState';
-export { ApplicationStore } from './ApplicationStore';
-export { appConnect } from './appConnect';
+export * from './ApplicationState';
+export * from './ApplicationStore';
+export * from './ApplicationConnect';

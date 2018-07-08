@@ -1,24 +1,29 @@
 import * as React from 'react';
-// import { connect } from 'react-redux';
-// import { IApplicationState } from 'src/store';
-// import { regionActionCreators } from 'src/store/Regions';
+import { appConnect } from 'src/store';
+import { regionActionCreators } from 'src/store/Regions';
 
 interface RegionStateProps {
   loading: boolean;
+  regionId: string;
 }
 
 interface RegionDispatchProps {
-  onMounted(): void;
+  onMount(): void;
+}
+
+interface RegionMergedProps {
+  loading: boolean;
+  onMount(): void;
 }
 
 export type RegionProps = RegionStateProps & RegionDispatchProps;
 
-export class UnconnectedRegion extends React.PureComponent<RegionProps> {
+export class UnconnectedRegion extends React.PureComponent<RegionMergedProps> {
 
   componentDidMount() {
-    this.props.onMounted();
+    this.props.onMount();
   }
-
+  
   render() {
     return (
       <div>Hi from Region!</div>
@@ -26,22 +31,14 @@ export class UnconnectedRegion extends React.PureComponent<RegionProps> {
   }
 }
 
-export default UnconnectedRegion;
-
-// export default connect(
-//   state => ({ state }),
-//   dispatch => ({ dispatch }),
-//   (stateProps, dispatchProps) => {
-//     const { state } = stateProps;
-//     const { dispatch } = dispatchProps;
-
-//     return {
-//       loading: false
-//       // onMounted: () => dispatch(regionActionCreators.fetchRegion(''))
-//     } as RegionProps;
-//   }
-
-//   // dispatch => ({
-//   //   onMounted: () => {}
-//   // })
-// )(UnconnectedRegion);
+export default appConnect<RegionStateProps, {}, RegionMergedProps>(
+  (state) => ({
+    loading: true,
+    regionId: state.router.location.pathname
+  }),
+  undefined,
+  ({ loading, regionId }, { dispatch }) => ({
+    loading,
+    onMount: () => dispatch(regionActionCreators.fetchRegions(regionId))
+  })
+)(UnconnectedRegion);

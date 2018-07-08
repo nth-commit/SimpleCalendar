@@ -2,24 +2,55 @@ import { ROOT_REGION_ID } from 'src/constants';
 import { ApplicationThunkActionAsync } from '../../';
 import { fetchRegion } from './fetchRegion';
 
-export function fetchRegions(regionId: string): ApplicationThunkActionAsync {
+export class InvalidRegionPath {
+  public readonly message: string;
+  constructor(regionPath: string) {
+    this.message = `${regionPath} is not valid`;
+  }
+}
+
+export function fetchRegions(regionPath: string): ApplicationThunkActionAsync {
   return async (dispatch, getState) => {
-    for (const regionIdToFetch of getAllRegionIds(regionId)) {
+    if (!regionPath.startsWith('/')) {
+      throw new InvalidRegionPath(regionPath);
+    }
+
+    for (const regionIdToFetch of getRegionIds(regionPath, getState().configuration.baseRegionId)) {
       await dispatch(fetchRegion(regionIdToFetch));
     }
   };
 }
 
-function getAllRegionIds(regionId: string): string[] {
-  if (regionId === ROOT_REGION_ID) {
+function getRegionIds(regionPath: string, baseRegionId: string): string[] {
+  const requestedRegionId = regionPath.substring(1);
+  if (requestedRegionId) {
+    return [
+      ...enumererateBaseRegionId(baseRegionId),
+      ...splitRegionId(requestedRegionId).map(r => getAbsoluteRegionId(r, baseRegionId))
+    ];
+  } else {
+    return enumererateBaseRegionId(baseRegionId);
+  }
+}
+
+function enumererateBaseRegionId(baseRegionId: string): string[] {
+  if (baseRegionId === ROOT_REGION_ID) {
     return [ROOT_REGION_ID];
   } else {
-    const regionIdComponents = regionId.split('/');
-    return [
-      ROOT_REGION_ID,
-      ...Array
-        .from({ length: regionIdComponents.length })
-        .map((x, i) => regionIdComponents.slice(0, i + 1).join('/'))
-    ];
+    return [ROOT_REGION_ID, ...splitRegionId(baseRegionId)];
   }
+}
+
+function splitRegionId(regionId: string): string[] {
+  const regionIdComponents = regionId.split('/');
+  return Array
+    .from({ length: regionIdComponents.length })
+    .map((x, i) => regionIdComponents.slice(0, i + 1).join('/'));
+}
+
+function getAbsoluteRegionId(relativeRegionId: string, baseRegionId: string): string {
+  if (baseRegionId === ROOT_REGION_ID) {
+    return relativeRegionId;
+  }
+  return `${baseRegionId}/${relativeRegionId}`;
 }
