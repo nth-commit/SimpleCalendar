@@ -33,7 +33,10 @@ namespace SimpleCalendar.Api.Controllers
             [FromQuery] string regionId,
             [FromQuery] string userId)
         {
-            if (!await _coreDbContext.IsAnyAdministratorAsync(User.GetUserId()))
+            // TODO: Tests for this logic
+            var currentUserId = User.GetUserId();
+            var requiredAdministrationAccess = currentUserId != userId || !string.IsNullOrEmpty(regionId);
+            if (requiredAdministrationAccess && !await _coreDbContext.IsAnyAdministratorAsync(User.GetUserId()))
             {
                 return Unauthorized();
             }
@@ -44,7 +47,10 @@ namespace SimpleCalendar.Api.Controllers
             RegionEntity region = null;
             if (isRegionQuery)
             {
-                region = await _coreDbContext.GetRegionByCodesAsync(regionId);
+                region = regionId == Constants.RootRegionId ?
+                    await _coreDbContext.GetRegionByIdAsync(regionId) :
+                    await _coreDbContext.GetRegionByCodesAsync(regionId);
+
                 if (region == null)
                 {
                     ModelState.AddModelError(nameof(regionId), "Region could not be found");

@@ -34,14 +34,14 @@ export const UnconnectedBreadcrumbs = ({ pathname, regions, loading }: Breadcrum
       {
         getBreadcrumbs(regions)
           .map(b => b.pathname === pathname ?
-            <div className="breadcrumb" key={b.name}>
+            <span className="breadcrumb" key={b.name}>
               {b.name}
-            </div> :
+            </span> :
             <a className="breadcrumb" key={b.name} href={b.pathname}>
               {b.name}
             </a>
           )
-          .reduce((prev, curr, i) => [prev, <div key={i}>/</div>, curr] as any)
+          .reduce((prev, curr, i) => [prev, <span key={i}>/</span>, curr] as any)
       }
     </div>
   );

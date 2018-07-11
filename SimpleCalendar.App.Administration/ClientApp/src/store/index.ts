@@ -1,9 +1,11 @@
 import { regionsReducer } from './Regions';
 import { configurationReducer } from './Configuration';
+import { authReducer } from './Auth';
 
 export const reducers = {
   configuration: configurationReducer,
-  regions: regionsReducer
+  regions: regionsReducer,
+  auth: authReducer
 };
 
 export * from './ApplicationState';

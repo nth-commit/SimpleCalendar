@@ -14,7 +14,7 @@ export interface IConfigurationState {
 }
 
 enum ConfigurationActionTypes {
-  UPDATE = '[Configuration] UPATE'
+  UPDATE = '[Configuration] UPDATE'
 }
 
 class UpdateConfiguration implements Action {

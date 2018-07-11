@@ -35,7 +35,7 @@ export class UnconnectedRegion extends React.PureComponent<RegionMergedProps> {
   }
 }
 
-export default appConnect<RegionStateProps, {}, RegionMergedProps>(
+export default appConnect<RegionStateProps, {}, {}, RegionMergedProps>(
   (state) => ({
     loading: isPathLoading(state),
     regionPathComponent: getRegionPathComponent(state),

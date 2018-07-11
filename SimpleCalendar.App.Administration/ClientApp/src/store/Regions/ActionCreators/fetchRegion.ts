@@ -10,9 +10,14 @@ export function fetchRegion(regionId: string): ApplicationThunkActionAsync {
 
     dispatch({ ...new FetchRegionBegin(regionId) });
 
-    const region = await new Api().getRegion(regionId);
+    const api = new Api();
+    const [region, childRegions, regionMemberships] = await Promise.all([
+      api.getRegion(regionId),
+      api.getRegions(regionId),
+      api.getRegionMemberships({ regionId })
+    ]);
 
-    dispatch({ ...new FetchRegionComplete(region) });
+    dispatch({ ...new FetchRegionComplete(region, childRegions, regionMemberships) });
   };
 }
 

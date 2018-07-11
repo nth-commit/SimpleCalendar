@@ -13,3 +13,8 @@ export interface IRegionMembership {
   userId: string;
   role: RegionRole;
 }
+
+export interface IRegionMembershipQuery {
+  regionId?: string;
+  userId?: string;
+}

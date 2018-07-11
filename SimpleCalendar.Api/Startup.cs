@@ -72,8 +72,10 @@ namespace SimpleCalendar.Api
                     var auth0AuthOptions = sp.GetRequiredService<IOptions<Auth0AuthOptions>>().Value;
 
                     options.Authority = auth0AuthOptions.GetAuthority();
-                    options.Audience = auth0AuthOptions.ClientId;
+                    options.Audience = "wellingtonveganactions";
                 });
+
+            services.AddSingleton<IClaimsTransformation, ClaimsTransformation>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

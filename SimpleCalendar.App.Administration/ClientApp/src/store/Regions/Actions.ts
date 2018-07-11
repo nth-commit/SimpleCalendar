@@ -1,5 +1,5 @@
 import { Action } from 'redux';
-import { IRegion } from 'src/services/Api';
+import { IRegion, IRegionMembership } from 'src/services/Api';
 
 export enum RegionsActionTypes {
   SET_REGION = '[Regions] SET_REGION',
@@ -15,7 +15,10 @@ export class FetchRegionBegin implements Action {
 
 export class FetchRegionComplete implements Action {
   readonly type = RegionsActionTypes.FETCH_REGION_COMPLETE;
-  constructor(public region: IRegion) { }
+  constructor(
+    public region: IRegion,
+    public childRegions: IRegion[],
+    public memberships: IRegionMembership[]) { }
 }
 
 export class FetchRegionError implements Action {

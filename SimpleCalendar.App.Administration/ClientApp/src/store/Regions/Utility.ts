@@ -76,3 +76,37 @@ export function isPathLoading(state: ApplicationState | RegionState | RegionPath
 export function getRegionPathComponent(state: ApplicationState): RegionPathComponent | null {
   return state.regions.path.find(p => p.id === state.regions.regionId) || null;
 }
+
+export function getParentRegionIds(regionId: string): string[] {
+  if (regionId === ROOT_REGION_ID) {
+    throw new Error('Region has no parent id');
+  }
+
+  let result = [ROOT_REGION_ID];
+
+  const regionIdComponents = regionId.split('/');
+  if (regionIdComponents.length > 1) {
+    result = [
+      ...result,
+      ...Array
+        .from({ length: regionIdComponents.length - 1 })
+        .map((x, i) => regionIdComponents.slice(0, i + 1).join('/'))
+    ];
+  }
+
+  return result;
+}
+
+export function areSuperBaseRegionsLoaded(state: ApplicationState) {
+  const { baseRegionId } = state.configuration;
+
+  if (baseRegionId === ROOT_REGION_ID) {
+    return true;
+  }
+
+  const superBaseRegionIds = getParentRegionIds(baseRegionId);
+  return superBaseRegionIds.every(id => {
+    const pathEntry = state.regions.path.find(p => p.id === id);
+    return !!pathEntry && !pathEntry.loading;
+  });
+}
