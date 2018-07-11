@@ -1,5 +1,5 @@
 import { ROOT_REGION_ID } from 'src/constants';
-import { configurationActionCreators, IConfigurationState } from '../../Configuration';
+import { configurationActionCreators } from '../../Configuration';
 import configureStore from 'test-helpers/configureStore';
 import { expectThrowsAsync } from 'test-helpers/expect-helpers';
 import { fetchMockRegionResponse, fetchMockSuppressNotFound } from 'test-helpers/mocks/fetch';
@@ -15,10 +15,7 @@ describe('store.regions.fetchRegion', () => {
   });
 
   it('should throw when root region has not been fetched when base is not root', async () => {
-    dispatch(configurationActionCreators.update({
-      baseRegionId: 'new-zealand'
-    } as IConfigurationState));
-
+    dispatch(configurationActionCreators.update({ baseRegionId: 'new-zealand' }));
     fetchMockRegionResponse('new-zealand');
 
     await expectThrowsAsync(() => dispatch(regionActionCreators.fetchRegion('new-zealand')))

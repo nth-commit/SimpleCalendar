@@ -1,27 +1,6 @@
 import { ROOT_REGION_ID } from 'src/constants';
-import { ApplicationThunkActionAsync } from '../../';
-import { fetchRegion } from './fetchRegion';
 
-export class InvalidRegionPath {
-  public readonly message: string;
-  constructor(regionPath: string) {
-    this.message = `${regionPath} is not valid`;
-  }
-}
-
-export function fetchRegions(regionPath: string): ApplicationThunkActionAsync {
-  return async (dispatch, getState) => {
-    if (!regionPath.startsWith('/')) {
-      throw new InvalidRegionPath(regionPath);
-    }
-
-    for (const regionIdToFetch of getRegionIds(regionPath, getState().configuration.baseRegionId)) {
-      await dispatch(fetchRegion(regionIdToFetch));
-    }
-  };
-}
-
-function getRegionIds(regionPath: string, baseRegionId: string): string[] {
+export function getRegionIds(regionPath: string, baseRegionId: string): string[] {
   const requestedRegionId = regionPath.substring(1);
   if (requestedRegionId) {
     return [
@@ -31,6 +10,16 @@ function getRegionIds(regionPath: string, baseRegionId: string): string[] {
   } else {
     return enumererateBaseRegionId(baseRegionId);
   }
+}
+
+export function enumerateRegionId(regionId: string): string[] {
+  let result = [ROOT_REGION_ID];
+
+  if (regionId !== ROOT_REGION_ID) {
+    result = [ROOT_REGION_ID, ...splitRegionId(regionId)];
+  }
+
+  return result;
 }
 
 function enumererateBaseRegionId(baseRegionId: string): string[] {

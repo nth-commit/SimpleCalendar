@@ -7,5 +7,6 @@ export const reducers = {
 };
 
 export * from './ApplicationState';
+export * from './ApplicationStateUtility';
 export * from './ApplicationStore';
 export * from './ApplicationConnect';

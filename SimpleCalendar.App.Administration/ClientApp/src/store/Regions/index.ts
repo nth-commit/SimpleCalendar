@@ -1,36 +1,89 @@
-import { Reducer } from 'redux';
-import { ROOT_REGION_ID } from 'src/constants';
+import { Reducer, DeepPartial } from 'redux';
 import { IRegion } from 'src/services/Api';
-import { RegionsActionTypes, RegionsAction } from './Actions';
+import { RegionsActionTypes, RegionActions } from './Actions';
+import { enumerateRegionId } from './Utility';
 export * from './ActionCreators';
 
-export interface IRegionState {
-  path: IRegion[];
+export interface RegionPathComponentValue {
+  region: IRegion;
 }
 
-export type IRegion = IRegion;
+export interface RegionPathComponent {
+  id: string;
+  value: RegionPathComponentValue | null;
+}
 
-export const regionsReducer: Reducer = (state: IRegionState, action: RegionsAction): IRegionState => {
+declare type RegionPath = RegionPathComponent[];
+
+export interface RegionState {
+  regionId: string;
+  path: RegionPath;
+}
+
+const merge = (prevState: RegionState, newStatePartial: DeepPartial<RegionState>): RegionState =>
+  Object.assign({}, prevState, newStatePartial);
+
+const mergePathComponent = (prevPathComponent: RegionPathComponent, newPathComponentPartial: DeepPartial<RegionPathComponent>): RegionPathComponent =>
+  Object.assign({}, prevPathComponent, newPathComponentPartial);
+
+
+const getSubPath = (path: RegionPath, regionId: string): RegionPath => {
+  if (path.length === 0) {
+    return [];
+  }
+
+  const prevRegionIds = path.map(r => r.id);
+  const newRegionIds = enumerateRegionId(regionId);
+  const firstNonMatchingIndex = prevRegionIds.findIndex((id, index) => id !== newRegionIds[index]);
+
+  const subPathIsCurrentPath = firstNonMatchingIndex < 0;
+  return subPathIsCurrentPath ? path : path.slice(0, firstNonMatchingIndex);
+}
+
+const mergePath = (path: RegionPath, pathComponent: RegionPathComponent): RegionPath => {
+  return [
+    ...getSubPath(path, pathComponent.id),
+    pathComponent
+  ];
+}
+
+const updatePath = (path: RegionPath, region: IRegion): RegionPath => {
+  return path.map(pathComponent => {
+    if (pathComponent.id === region.id) {
+      return mergePathComponent(pathComponent, {
+        value: {
+          region
+        }
+      });
+    }
+    return pathComponent;
+  })
+}
+
+export const regionsReducer: Reducer = (state: RegionState, action: RegionActions): RegionState => {
   switch (action.type) {
 
+    case RegionsActionTypes.SET_REGION:
+      return merge(state, {
+        regionId: action.regionId
+      });
+    
     case RegionsActionTypes.FETCH_REGION_BEGIN:
-      return Object.assign({}, state, {});
+      return merge(state, {
+        path: mergePath(state.path, {
+          id: action.regionId,
+          value: null
+        })
+      });
 
     case RegionsActionTypes.FETCH_REGION_COMPLETE:
-      const regionId = action.region.id;
-      const index = regionId === ROOT_REGION_ID ? 0 : regionId.split('/').length;
-      const level = index + 1;
-      const path = state.path;
-      return Object.assign({}, state, {
-        path: Array
-          .from({ length: Math.max(path.length, level )})
-          .map((x, i) => index === i ? action.region : path[i])
-      })
+      return merge(state, {
+        path: updatePath(state.path, action.region)
+      });
 
     default:
       return state || {
         path: []
       };
   }
-};
-
+}

@@ -1,9 +1,11 @@
 import { fetchRegion } from './fetchRegion';
-import { fetchRegions } from './fetchRegions';
 import { fetchBaseRegionParents } from './fetchBaseRegionParents';
+import { setRegion } from './setRegion';
+import { setRegionByPath } from './setRegionByPath';
 
 export const regionActionCreators = {
   fetchRegion,
-  fetchRegions,
-  fetchBaseRegionParents
+  fetchBaseRegionParents,
+  setRegion,
+  setRegionByPath,
 };

@@ -1,5 +1,5 @@
 import { getConfiguration } from './Configure';
-import { IRegion } from './Models';
+import { IRegion, IRegionMembership } from './Models';
 
 export class Api {
 
@@ -10,8 +10,12 @@ export class Api {
     const region: IRegion = await response.json()
     return region;
   }
+  
+  async getRegions(parentRegionId: string): Promise<IRegion[]> {
+    return Promise.resolve([]);
+  }
 
-  getRegions(parentId: string): Promise<IRegion[]> {
+  async getRegionMemberships(regionId: string): Promise<IRegionMembership[]> {
     return Promise.resolve([]);
   }
 

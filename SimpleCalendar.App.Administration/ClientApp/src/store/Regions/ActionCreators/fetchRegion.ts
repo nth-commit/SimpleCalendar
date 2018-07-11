@@ -1,6 +1,6 @@
 import { ROOT_REGION_ID } from 'src/constants';
 import { Api } from 'src/services/Api';
-import { IRegionState } from 'src/store/Regions';
+import { RegionState } from 'src/store/Regions';
 import { ApplicationThunkActionAsync } from '../../';
 import { FetchRegionBegin, FetchRegionComplete } from '../Actions';
 
@@ -16,7 +16,7 @@ export function fetchRegion(regionId: string): ApplicationThunkActionAsync {
   };
 }
 
-function validateRegionState(regionId: string, regions: IRegionState) {
+function validateRegionState(regionId: string, regions: RegionState) {
   if (regions.path.length === 0 && regionId !== ROOT_REGION_ID) {
     throw new Error('Root region was not found');
   }

@@ -1,14 +1,14 @@
 import * as React from 'react';
 import { appConnect } from 'src/store';
-import { IRegion } from 'src/store/Regions';
+import { RegionPathComponent } from 'src/store/Regions';
 
 export interface BreadcrumbsProps {
   pathname: string;
-  regions: IRegion[];
+  regions: RegionPathComponent[];
   baseRegionId: string;
 }
 
-const getBreadcrumbs = (regions: IRegion[], baseRegionId: string) => {
+const getBreadcrumbs = (regions: RegionPathComponent[], baseRegionId: string) => {
   const result: Array<{ name: string, pathname: string }> = [];
 
   result.push({

@@ -7,17 +7,27 @@ const REGIONS_API = API_BASE_PATH + '/regions';
 
 const getRegionLocation = (regionId: string) => `${REGIONS_API}/${regionId}`;
 
-const createRegionResponse = (regionId: string) => ({
+export const createRegionResponse = (regionId: string) => ({
   body: {
     id: regionId,
     name: ''
   } as IRegion
 });
 
-export const fetchMockRootRegionResponse = () => fetchMockRegionResponse(ROOT_REGION_ID);
+export interface ResponseOptions {
+  delay?: number;
+}
 
-export const fetchMockRegionResponse = (regionId: string) => {
-  fetchMock.mock(getRegionLocation(regionId), createRegionResponse(regionId));
+export const fetchMockRootRegionResponse = () =>
+  fetchMockRegionResponse(ROOT_REGION_ID);
+
+export const fetchMockRegionResponse = (regionId: string, response?: _fetchMock.MockResponse | _fetchMock.MockResponseFunction) => {
+  const location = getRegionLocation(regionId);
+
+  fetchMock.mock(
+    location,
+    response || createRegionResponse(regionId)
+  );
 }
 
 export const fetchMockSuppressNotFound = () => {

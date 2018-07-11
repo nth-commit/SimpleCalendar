@@ -5,24 +5,24 @@ import { fetchMockRegionResponse } from 'test-helpers/mocks/fetch';
 import { regionActionCreators } from '../';
 import { expectThrowsAsync } from 'test-helpers/expect-helpers';
 
-describe('store.regions.fetchRegions', () => {
+describe('store.regions.setRegionByPath', () => {
   const { dispatch, getState } = configureStore();
 
-  const dispatchFetchRegions = (regionPath: string) =>
-    dispatch(regionActionCreators.fetchRegions(regionPath));
+  const dispatchSetRegionByPath = (regionPath: string) =>
+    dispatch(regionActionCreators.setRegionByPath(regionPath));
 
   const expectRegions = async (requestedRegionPath: string, baseRegionId: string, expectedRegionIds: string[]): Promise<void> => {
     expectedRegionIds.forEach(r => fetchMockRegionResponse(r));
     dispatch(configurationActionCreators.update({ baseRegionId }));
 
-    await dispatchFetchRegions(requestedRegionPath);
+    await dispatchSetRegionByPath(requestedRegionPath);
 
     const actualRegionIds = getState().regions.path.map(r => r.id);
     expect(actualRegionIds).toEqual(expectedRegionIds);
   }
 
   it('SHOULD throw InvalidRegionPath WHEN requested regionPath is not valid', async () => {
-    await expectThrowsAsync(() => dispatchFetchRegions('not-a-valid-path'));
+    await expectThrowsAsync(() => dispatchSetRegionByPath('not-a-valid-path'));
   });
 
   it(`SHOULD get root WHEN base is root and / is requested`, async () => {

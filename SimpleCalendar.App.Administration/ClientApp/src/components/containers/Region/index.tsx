@@ -1,22 +1,18 @@
 import * as React from 'react';
 import { appConnect } from 'src/store';
 import { regionActionCreators } from 'src/store/Regions';
+import { IRegion } from 'src/services/Api';
 
 interface RegionStateProps {
   loading: boolean;
-  regionId: string;
-}
-
-interface RegionDispatchProps {
-  onMount(): void;
+  regionPath: string;
+  childRegions: IRegion[];
 }
 
 interface RegionMergedProps {
   loading: boolean;
   onMount(): void;
 }
-
-export type RegionProps = RegionStateProps & RegionDispatchProps;
 
 export class UnconnectedRegion extends React.PureComponent<RegionMergedProps> {
 
@@ -34,11 +30,13 @@ export class UnconnectedRegion extends React.PureComponent<RegionMergedProps> {
 export default appConnect<RegionStateProps, {}, RegionMergedProps>(
   (state) => ({
     loading: true,
-    regionId: state.router.location.pathname
+    regionPath: state.router.location.pathname,
+    childRegions: []
   }),
   undefined,
-  ({ loading, regionId }, { dispatch }) => ({
+  ({ loading, regionPath, childRegions }, { dispatch }) => ({
     loading,
-    onMount: () => dispatch(regionActionCreators.fetchRegions(regionId))
+    childRegions,
+    onMount: () => dispatch(regionActionCreators.setRegionByPath(regionPath))
   })
 )(UnconnectedRegion);
