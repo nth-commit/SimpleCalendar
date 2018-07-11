@@ -1,16 +1,16 @@
 import * as React from 'react';
 import { appConnect } from 'src/store';
-import { regionActionCreators } from 'src/store/Regions';
-import { IRegion } from 'src/services/Api';
+import { regionActionCreators, RegionPathComponent, isPathLoading, RegionPathComponentValue, getRegionPathComponent } from 'src/store/Regions';
 
 interface RegionStateProps {
   loading: boolean;
-  regionPath: string;
-  childRegions: IRegion[];
+  regionPathComponent: RegionPathComponent | null;
+  regionPathname: string;
 }
 
 interface RegionMergedProps {
   loading: boolean;
+  regionPathComponent: RegionPathComponent | null;
   onMount(): void;
 }
 
@@ -21,22 +21,30 @@ export class UnconnectedRegion extends React.PureComponent<RegionMergedProps> {
   }
   
   render() {
+    if (this.props.loading) {
+      return <div>LOADING!</div>;
+    }
+
+    const { regionPathComponent } = this.props;
+    const { value } = (regionPathComponent as RegionPathComponent);
+    const { region } = (value as RegionPathComponentValue);
+
     return (
-      <div>Hi from Region!</div>
+      <div>Hi from {region.name}!</div>
     );
   }
 }
 
 export default appConnect<RegionStateProps, {}, RegionMergedProps>(
   (state) => ({
-    loading: true,
-    regionPath: state.router.location.pathname,
-    childRegions: []
+    loading: isPathLoading(state),
+    regionPathComponent: getRegionPathComponent(state),
+    regionPathname: state.router.location.pathname
   }),
   undefined,
-  ({ loading, regionPath, childRegions }, { dispatch }) => ({
+  ({ loading, regionPathComponent, regionPathname }, { dispatch }) => ({
     loading,
-    childRegions,
-    onMount: () => dispatch(regionActionCreators.setRegionByPath(regionPath))
+    regionPathComponent,
+    onMount: () => dispatch(regionActionCreators.setRegionByPath(regionPathname))
   })
 )(UnconnectedRegion);

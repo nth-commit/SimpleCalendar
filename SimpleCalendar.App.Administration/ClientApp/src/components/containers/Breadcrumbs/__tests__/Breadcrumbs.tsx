@@ -2,26 +2,19 @@ import * as React from 'react';
 import { DeepPartial } from 'redux';
 import configureStore from 'redux-mock-store';
 import { Provider } from 'react-redux';
-import { shallow } from 'enzyme';
-import { ROOT_REGION_ID } from 'src/constants';
+import { mount } from 'enzyme';
 import { ApplicationState } from 'src/store';
-import Breadcrumbs, { UnconnectedBreadcrumbs, BreadcrumbsProps } from '../';
+import Breadcrumbs from '../';
 
 const renderBreadcrumbs = (state: DeepPartial<ApplicationState>) => {
   const mockStore = configureStore();
   const store = mockStore(state);
-  return shallow(
+  return mount(
     <Provider store={store}>
       <Breadcrumbs />
     </Provider>
   );
 };
-
-const renderUnconnectedBreadcrumbs = (props: DeepPartial<BreadcrumbsProps> = {}) => shallow(
-  <UnconnectedBreadcrumbs
-    pathname={props.pathname || '/'}
-    regions={(props.regions || []) as any}
-    baseRegionId={props.baseRegionId || ROOT_REGION_ID} />);
 
 describe('component: Breadcrumbs', () => {
 
@@ -31,8 +24,13 @@ describe('component: Breadcrumbs', () => {
       configuration: {
         baseRegionId: 'ROOT'
       },
+      router: {
+        location: {
+          pathname: '/'
+        }
+      },
       regions: {
-        regionId: 'new-zealand',
+        regionId: 'ROOT',
         path: [
           {
             id: 'ROOT',
@@ -40,15 +38,6 @@ describe('component: Breadcrumbs', () => {
               region: {
                 id: 'ROOT',
                 name: 'ROOT'
-              }
-            }
-          },
-          {
-            id: 'new-zealand',
-            value: {
-              region: {
-                id: 'new-zealand',
-                name: 'New Zealand'
               }
             }
           }

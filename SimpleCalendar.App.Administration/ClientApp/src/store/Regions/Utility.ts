@@ -1,4 +1,6 @@
 import { ROOT_REGION_ID } from 'src/constants';
+import { ApplicationState } from 'src/store/ApplicationState';
+import { RegionState, RegionPath, RegionPathComponent } from 'src/store/Regions';
 
 export function getRegionIds(regionPath: string, baseRegionId: string): string[] {
   const requestedRegionId = regionPath.substring(1);
@@ -42,4 +44,35 @@ function getAbsoluteRegionId(relativeRegionId: string, baseRegionId: string): st
     return relativeRegionId;
   }
   return `${baseRegionId}/${relativeRegionId}`;
+}
+
+export function getRegionPathAboveBase(state: ApplicationState): RegionPath {
+  const { baseRegionId } = state.configuration;
+  const { path } = state.regions;
+  const result = path.filter(r => r.id !== 'ROOT' || r.id.split('/').length > baseRegionId.split('/').length);
+  return result;
+}
+
+function isState(state: ApplicationState | RegionState | RegionPath): state is ApplicationState {
+  return 'regions' in state;
+}
+
+function isRegionsState(state: RegionState | RegionPath): state is RegionState {
+  return 'path' in state;
+}
+
+export function isPathLoading(state: ApplicationState | RegionState | RegionPath): boolean {
+  if (isState(state)) {
+    return isPathLoading(state.regions);
+  }
+
+  if (isRegionsState(state)) {
+    return isPathLoading(state.path);
+  }
+  
+  return state.length === 0 || state.some(r => r.loading);
+}
+
+export function getRegionPathComponent(state: ApplicationState): RegionPathComponent | null {
+  return state.regions.path.find(p => p.id === state.regions.regionId) || null;
 }

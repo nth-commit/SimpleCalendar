@@ -2,6 +2,7 @@ import { Reducer, DeepPartial } from 'redux';
 import { IRegion } from 'src/services/Api';
 import { RegionsActionTypes, RegionActions } from './Actions';
 import { enumerateRegionId } from './Utility';
+export * from './Utility';
 export * from './ActionCreators';
 
 export interface RegionPathComponentValue {
@@ -10,10 +11,11 @@ export interface RegionPathComponentValue {
 
 export interface RegionPathComponent {
   id: string;
+  loading: boolean;
   value: RegionPathComponentValue | null;
 }
 
-declare type RegionPath = RegionPathComponent[];
+export type RegionPath = RegionPathComponent[];
 
 export interface RegionState {
   regionId: string;
@@ -51,6 +53,7 @@ const updatePath = (path: RegionPath, region: IRegion): RegionPath => {
   return path.map(pathComponent => {
     if (pathComponent.id === region.id) {
       return mergePathComponent(pathComponent, {
+        loading: false,
         value: {
           region
         }
@@ -72,6 +75,7 @@ export const regionsReducer: Reducer = (state: RegionState, action: RegionAction
       return merge(state, {
         path: mergePath(state.path, {
           id: action.regionId,
+          loading: true,
           value: null
         })
       });

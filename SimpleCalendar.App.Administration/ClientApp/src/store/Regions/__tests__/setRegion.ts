@@ -1,8 +1,6 @@
 import { ROOT_REGION_ID } from 'src/constants';
-import { configurationActionCreators } from '../../Configuration';
 import configureStore from 'test-helpers/configureStore';
-import { expectThrowsAsync } from 'test-helpers/expect-helpers';
-import { fetchMock, fetchMockRootRegionResponse, fetchMockRegionResponse, createRegionResponse } from 'test-helpers/mocks/fetch';
+import { fetchMockRootRegionResponse, fetchMockRegionResponse, createRegionResponse } from 'test-helpers/mocks/fetch';
 import { regionActionCreators, RegionPathComponentValue } from '../';
 
 describe('store.regions.setRegion', () => {

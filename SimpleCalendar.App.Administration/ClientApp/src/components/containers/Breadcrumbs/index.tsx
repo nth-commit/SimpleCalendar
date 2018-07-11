@@ -1,14 +1,14 @@
 import * as React from 'react';
 import { appConnect } from 'src/store';
-import { RegionPathComponent } from 'src/store/Regions';
+import { RegionPathComponent, getRegionPathAboveBase, isPathLoading, RegionPathComponentValue } from 'src/store/Regions';
 
 export interface BreadcrumbsProps {
   pathname: string;
   regions: RegionPathComponent[];
-  baseRegionId: string;
+  loading: boolean;
 }
 
-const getBreadcrumbs = (regions: RegionPathComponent[], baseRegionId: string) => {
+const getBreadcrumbs = (regions: RegionPathComponent[]) => {
   const result: Array<{ name: string, pathname: string }> = [];
 
   result.push({
@@ -16,14 +16,23 @@ const getBreadcrumbs = (regions: RegionPathComponent[], baseRegionId: string) =>
     pathname: '/'
   });
 
+  result.push(...regions.map(r => ({
+    name: (r.value as RegionPathComponentValue).region.name,
+    pathname: '/' + r.id
+  })));
+
   return result;
 }
 
-export const UnconnectedBreadcrumbs = ({ pathname, regions, baseRegionId }: BreadcrumbsProps) => {
+export const UnconnectedBreadcrumbs = ({ pathname, regions, loading }: BreadcrumbsProps) => {
+  if (loading) {
+    return null;
+  }
+
   return (
     <div className="breadcrumbs">
       {
-        getBreadcrumbs(regions, baseRegionId)
+        getBreadcrumbs(regions)
           .map(b => b.pathname === pathname ?
             <div className="breadcrumb" key={b.name}>
               {b.name}
@@ -32,7 +41,7 @@ export const UnconnectedBreadcrumbs = ({ pathname, regions, baseRegionId }: Brea
               {b.name}
             </a>
           )
-          .reduce((prev, curr) => [prev, <div>/</div>, curr] as any)
+          .reduce((prev, curr, i) => [prev, <div key={i}>/</div>, curr] as any)
       }
     </div>
   );
@@ -41,7 +50,7 @@ export const UnconnectedBreadcrumbs = ({ pathname, regions, baseRegionId }: Brea
 export default appConnect<BreadcrumbsProps>(
   (state) => ({
     pathname: state.router.location.pathname,
-    regions: state.regions.path,
-    baseRegionId: state.configuration.baseRegionId
+    regions: getRegionPathAboveBase(state),
+    loading: isPathLoading(state)
   })
 )(UnconnectedBreadcrumbs);
