@@ -4,7 +4,9 @@ import { FetchRegionMembershipsBegin, FetchRegionMembershipsComplete } from '../
 
 export default function fetchRegionMemberships(): ApplicationThunkActionAsync {
   return async (dispatch, getState) => {
-    validateRegionMemberships(getState());
+    if (hasRegionMemberships(getState())) {
+      return;
+    }
 
     dispatch({ ...new FetchRegionMembershipsBegin() });
 
@@ -14,9 +16,7 @@ export default function fetchRegionMemberships(): ApplicationThunkActionAsync {
   };
 }
 
-function validateRegionMemberships(state: ApplicationState) {
+function hasRegionMemberships(state: ApplicationState) {
   const { regionMemberships, regionMembershipsLoading } = state.auth;
-  if (regionMembershipsLoading || regionMemberships) {
-    throw new Error('Refreshing region memberships is not supported');
-  }
+  return regionMembershipsLoading || regionMemberships;
 }

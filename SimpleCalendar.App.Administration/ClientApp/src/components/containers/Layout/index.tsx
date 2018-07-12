@@ -3,7 +3,7 @@ import { Auth } from 'src/services/Auth';
 import { appConnect } from 'src/store';
 import { AuthState, authActionCreators, isAdministrator } from 'src/store/Auth';
 import { regionActionCreators, areSuperBaseRegionsLoaded } from 'src/store/Regions';
-import Breadcrumbs from '../Breadcrumbs';
+import Navbar from '../Navbar';
 
 enum AuthorizationStatus {
   Undetermined,
@@ -28,16 +28,20 @@ export class UnconnectedLayout extends React.PureComponent<LayoutProps> {
   private isAuthenticated: boolean;
 
   componentWillMount() {
-    this.isAuthenticated = new Auth().isAuthenticated() || this.props.isAuthenticationCallback;
+    this.isAuthenticated = new Auth().isAuthenticated();
   }
 
   componentDidMount() {
-    if (this.isAuthenticated) {
+    if (this.isAuthenticated && !this.props.isAuthenticationCallback) {
       this.props.onMounted();
     }
   }
 
   render() {
+    if (this.props.isAuthenticationCallback) {
+      return <div>{this.props.children}</div>
+    }
+
     if (!this.isAuthenticated) {
       new Auth().login();
       return null;
@@ -53,7 +57,7 @@ export class UnconnectedLayout extends React.PureComponent<LayoutProps> {
 
     return (
       <div>
-        <Breadcrumbs />
+        <Navbar />
         {this.props.children}
       </div>
     );
