@@ -9,7 +9,7 @@ import configureStore from './configureStore';
 import { ApplicationState } from './store';
 import * as RoutesModule from './routes';
 import './extensions';
-import { ROOT_REGION_ID } from './constants';
+// import { ROOT_REGION_ID } from './constants';
 
 import { IConfigurationState, configurationActionCreators } from './store/Configuration';
 
@@ -23,7 +23,7 @@ async function renderApp() {
   const response = await fetch('/config');
   const configuration: IConfigurationState = {
    ...await response.json(),
-   baseRegionId: ROOT_REGION_ID
+   baseRegionId: 'new-zealand/wellington'
   };
 
   store.dispatch(configurationActionCreators.update(configuration));
