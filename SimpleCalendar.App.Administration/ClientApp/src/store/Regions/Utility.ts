@@ -49,7 +49,7 @@ function getAbsoluteRegionId(relativeRegionId: string, baseRegionId: string): st
 export function getRegionPathAboveBase(state: ApplicationState): RegionPath {
   const { baseRegionId } = state.configuration;
   const { path } = state.regions;
-  const result = path.filter(r => r.id !== 'ROOT' || r.id.split('/').length > baseRegionId.split('/').length);
+  const result = path.filter(r => r.id !== 'ROOT' && r.id.split('/').length > baseRegionId.split('/').length);
   return result;
 }
 
@@ -71,6 +71,10 @@ export function isPathLoading(state: ApplicationState | RegionState | RegionPath
   }
   
   return state.length === 0 || state.some(r => r.loading);
+}
+
+export function pathContainsRegion(state: ApplicationState, regionId: string): boolean {
+  return state.regions.path.some(r => r.id === regionId);
 }
 
 export function getRegionPathComponent(state: ApplicationState): RegionPathComponent | null {
