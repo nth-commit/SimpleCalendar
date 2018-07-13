@@ -17,16 +17,14 @@ const AuthenticationGuard = ({ children }) => {
 };
 
 export const routes = (
-  <div>
-      <Switch>
-        <Route exact={true} path='/callback' component={AuthCallback} />
-        <AuthenticationGuard>
-          <Layout>
-            <Route exact={true} path='/404' component={NotFound} />
-            <Route exact={true} path='/' component={Region} />
-            <Route path='/:regionId' component={Region} />
-          </Layout>
-        </AuthenticationGuard>
-      </Switch>
-  </div>
+  <Switch>
+    <Route exact={true} path='/callback' component={AuthCallback} />
+    <AuthenticationGuard>
+      <Layout>
+        <Route exact={true} path='/404' component={NotFound} />
+        <Route exact={true} path='/' component={Region} />
+        <Route path='/:regionId' component={Region} />
+      </Layout>
+    </AuthenticationGuard>
+  </Switch>
 );

@@ -1,17 +1,20 @@
 import * as React from 'react';
 import { ROOT_REGION_ID } from 'src/constants';
 import { appConnect, ApplicationState } from 'src/store';
-import { regionActionCreators, RegionPathComponent, isPathLoading, pathContainsRegion, RegionPathComponentValue, getRegionPathComponent } from 'src/store/Regions';
+import { regionActionCreators, RegionPathComponent, RegionPathComponentValue, isPathLoading, pathContainsRegion, getRegionPathComponent } from 'src/store/Regions';
+import RegionManagementTabs from '../../presentational/RegionManagementTabs';
 
 interface RegionStateProps {
   loading: boolean;
   regionPathComponent: RegionPathComponent | null;
   regionId: string;
+  baseRegionId: string;
 }
 
 interface RegionMergedProps {
   loading: boolean;
   regionPathComponent: RegionPathComponent | null;
+  baseRegionId: string;
   onMount(): void;
 }
 
@@ -23,15 +26,17 @@ export class UnconnectedRegion extends React.PureComponent<RegionMergedProps> {
   
   render() {
     if (this.props.loading) {
-      return <div>LOADING!</div>;
+      return null;
     }
 
-    const { regionPathComponent } = this.props;
+    const { regionPathComponent, baseRegionId } = this.props;
     const { value } = (regionPathComponent as RegionPathComponent);
-    const { region } = (value as RegionPathComponentValue);
+    const { childRegions } = (value as RegionPathComponentValue);
 
     return (
-      <div>Hi from {region.name}!</div>
+      <div>
+        <RegionManagementTabs childRegions={childRegions} baseRegionId={baseRegionId} />
+      </div>
     );
   }
 }
@@ -54,15 +59,17 @@ export default appConnect<RegionStateProps, {}, {}, RegionMergedProps>(
   (state) => {
     const regionId = getRegionId(state);
     return {
+      regionId,
       loading: isPathLoading(state) || !pathContainsRegion(state, regionId),
       regionPathComponent: getRegionPathComponent(state),
-      regionId
+      baseRegionId: state.configuration.baseRegionId
     };
   },
   undefined,
-  ({ loading, regionPathComponent, regionId }, { dispatch }) => ({
+  ({ loading, regionPathComponent, regionId, baseRegionId }, { dispatch }) => ({
     loading,
     regionPathComponent,
+    baseRegionId,
     onMount: () => dispatch(regionActionCreators.setRegion(regionId))
   })
 )(UnconnectedRegion);
