@@ -6,9 +6,10 @@ import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import { IRegion } from 'src/services/Api';
 import RegionList from '../RegionList';
+import { RegionHrefResolver } from '../../utility/RegionHrefResolver';
 
 const RegionManagementTabContainer = (props) => (
-  <Typography component="div" style={{ padding: 8 * 3 }}>
+  <Typography component="div">
     {props.children}
   </Typography>
 );
@@ -25,7 +26,7 @@ const styles = theme => ({
 
 export interface RegionManagementTabsProps {
   childRegions: IRegion[];
-  baseRegionId: string;
+  regionHrefResolver: RegionHrefResolver;
   classes: any;
 }
 
@@ -39,15 +40,15 @@ class RegionManagementTabs extends React.Component<RegionManagementTabsProps> {
   }
 
   renderTab() {
-    const { childRegions, baseRegionId } = this.props;
+    const { childRegions, regionHrefResolver } = this.props;
     const { value } = this.state;
 
     if (value === 0 && childRegions.length) {
       return (
-        <RegionManagementTabContainer>
-          <RegionList regions={childRegions} baseRegionId={baseRegionId} />
-        </RegionManagementTabContainer>
-      );
+        <RegionList
+          regions={childRegions}
+          regionHrefResolver={regionHrefResolver} />
+        );
     } else if (value === 1) {
       return (
         <RegionManagementTabContainer>

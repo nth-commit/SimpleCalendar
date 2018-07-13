@@ -3,6 +3,7 @@ import { ROOT_REGION_ID } from 'src/constants';
 import { appConnect, ApplicationState } from 'src/store';
 import { regionActionCreators, RegionPathComponent, RegionPathComponentValue, isPathLoading, pathContainsRegion, getRegionPathComponent } from 'src/store/Regions';
 import RegionManagementTabs from '../../presentational/RegionManagementTabs';
+import createRegionHrefResolver from '../../utility/RegionHrefResolver';
 
 interface RegionStateProps {
   loading: boolean;
@@ -35,7 +36,9 @@ export class UnconnectedRegion extends React.PureComponent<RegionMergedProps> {
 
     return (
       <div>
-        <RegionManagementTabs childRegions={childRegions} baseRegionId={baseRegionId} />
+        <RegionManagementTabs
+          childRegions={childRegions}
+          regionHrefResolver={createRegionHrefResolver(baseRegionId)} />
       </div>
     );
   }
@@ -49,8 +52,8 @@ const getRegionId = (state: ApplicationState): string => {
   const { pathname } = state.router.location;
 
   const regionId = baseRegionId === ROOT_REGION_ID ?
-      (pathname === '/' ? ROOT_REGION_ID : pathname) :
-      baseRegionId + pathname;
+    (pathname === '/' ? ROOT_REGION_ID : pathname) :
+    baseRegionId + pathname;
   
   return stripLeadingSlash(stripTrailingSlash(regionId));
 }

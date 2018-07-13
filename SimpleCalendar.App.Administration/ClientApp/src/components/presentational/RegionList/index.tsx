@@ -1,37 +1,25 @@
 import * as React from 'react';
-import { ROOT_REGION_ID } from 'src/constants';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
 import { IRegion } from 'src/services/Api';
+import { RegionHrefResolver } from '../../utility/RegionHrefResolver';
 
 export interface RegionListProps {
   regions: IRegion[];
-  baseRegionId: string;
+  regionHrefResolver: RegionHrefResolver;
 }
 
-class RegionNotOfBaseError {
-  public message = 'Region is not related to baseRegionId';
-}
-
-const getRegionPath = (regionId: string, baseRegionId: string): string => {
-  if (baseRegionId === ROOT_REGION_ID) {
-    if (regionId === ROOT_REGION_ID) {
-      return '/';
-    } else {
-      return '/' + regionId;
-    }
-  }
-
-  if (!regionId.startsWith(baseRegionId)) {
-    throw new RegionNotOfBaseError();
-  }
-
-  return '/' + regionId.substring(baseRegionId.length + 1);
-};
-
-// TODO: Get working when root not base
-const RegionList = ({ regions, baseRegionId }: RegionListProps) => (
-  <div>
-    {regions.map(r => <div key={r.id}><a href={getRegionPath(r.id, baseRegionId)}>{r.name}</a></div>)}
-  </div>
+const RegionList = ({ regions, regionHrefResolver }: RegionListProps) => (
+  <List component="nav">
+    {regions.map(r => (
+      <a key={r.id} href={regionHrefResolver.resolve(r)} style={{ textDecoration: 'none' }}>
+        <ListItem button={true}>
+          <ListItemText primary={r.name} />
+        </ListItem>
+      </a>
+    ))}
+  </List>
 );
 
 export default RegionList;
