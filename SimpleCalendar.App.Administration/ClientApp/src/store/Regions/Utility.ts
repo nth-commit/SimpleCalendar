@@ -49,7 +49,10 @@ function getAbsoluteRegionId(relativeRegionId: string, baseRegionId: string): st
 export function getRegionPathAboveBase(state: ApplicationState): RegionPath {
   const { baseRegionId } = state.configuration;
   const { path } = state.regions;
-  const result = path.filter(r => r.id !== 'ROOT' && r.id.split('/').length >= baseRegionId.split('/').length);
+  const isBaseRegionRoot = ROOT_REGION_ID === baseRegionId;
+  const result = path
+    .slice(1)
+    .filter(r => isBaseRegionRoot || r.id.split('/').length > baseRegionId.split('/').length);
   return result;
 }
 

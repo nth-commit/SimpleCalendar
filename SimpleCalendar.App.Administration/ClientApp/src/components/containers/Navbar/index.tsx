@@ -1,20 +1,23 @@
 import * as React from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import Breadcrumbs, { BreadcrumbsProps } from '../../presentational/Breadcrumbs';
 import { appConnect } from 'src/store/appConnect'
-import { getRegionPathAboveBase, isPathLoading } from 'src/store/Regions';
+import { getRegionPathAboveBase, isPathLoading, RegionPath } from 'src/store/Regions';
+import Breadcrumbs from '../../presentational/Breadcrumbs';
+import createRegionHrefResolver from '../../utility/RegionHrefResolver';
 
-export interface NavbarProps extends BreadcrumbsProps {
+export interface NavbarProps {
+  regions: RegionPath;
   isLoading: boolean;
+  baseRegionId: string;
 }
 
-const Navbar = ({ isLoading, regions }: NavbarProps) => (
+const Navbar = ({ isLoading, regions, baseRegionId }: NavbarProps) => (
   isLoading ? null :
     <div style={{ flexGrow: 1 }}>
       <AppBar position="static" color="default">
         <Toolbar>
-          <Breadcrumbs regions={regions} />
+          <Breadcrumbs regions={regions} regionHrefResolver={createRegionHrefResolver(baseRegionId)} />
         </Toolbar>
       </AppBar>
     </div>
@@ -23,6 +26,7 @@ const Navbar = ({ isLoading, regions }: NavbarProps) => (
 export default appConnect<NavbarProps>(
   (state) => ({
     regions: getRegionPathAboveBase(state),
-    isLoading: isPathLoading(state)
+    isLoading: isPathLoading(state),
+    baseRegionId: state.configuration.baseRegionId
   })
 )(Navbar);

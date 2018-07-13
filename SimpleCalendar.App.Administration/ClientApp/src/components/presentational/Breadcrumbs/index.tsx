@@ -1,12 +1,14 @@
 import * as React from 'react';
 import Typography from '@material-ui/core/Typography'
 import { RegionPath, RegionPathComponentValue } from 'src/store/Regions';
+import { RegionHrefResolver } from '../../utility/RegionHrefResolver';
 
 export interface BreadcrumbsProps {
   regions: RegionPath;
+  regionHrefResolver: RegionHrefResolver;
 }
 
-const Breadcrumbs = ({ regions }: BreadcrumbsProps) => (
+const Breadcrumbs = ({ regions, regionHrefResolver }: BreadcrumbsProps) => (
   <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
     <a href='/' style={{ textDecoration: 'none', color: 'initial' }}>
       <Typography variant='title' color='inherit'>
@@ -20,7 +22,7 @@ const Breadcrumbs = ({ regions }: BreadcrumbsProps) => (
           .map(r => (
             <span key={r.id}>
               <span style={{ marginLeft: '0.3rem' }}>></span>
-              <a style={{ marginLeft: '0.3rem' }} href={'/' + r.id}>{r.name}</a>
+              <a style={{ marginLeft: '0.3rem' }} href={regionHrefResolver.resolve(r)}>{r.name}</a>
             </span>
           ))
       }
