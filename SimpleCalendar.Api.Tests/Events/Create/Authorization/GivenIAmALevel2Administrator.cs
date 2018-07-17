@@ -22,16 +22,16 @@ namespace SimpleCalendar.Api.UnitTests.Events.Create.Authorization
         {
             var dbContext = this.GetRequiredService<CoreDbContext>();
 
-            await dbContext.RegionRoles.AddAsync(new RegionRoleEntity()
+            await dbContext.RegionMemberships.AddAsync(new RegionMembershipEntity()
             {
                 RegionId = Level2RegionId,
-                Role = Role.Administrator,
-                UserId = Level2AdministratorId
+                RegionRoleId = Constants.RegionRoles.SuperAdministrator,
+                UserEmail = Level2AdministratorId
             });
 
             await dbContext.SaveChangesAsync();
 
-            this.GivenIHaveAUserId(Level2AdministratorId);
+            this.GivenIHaveAnEmail(Level2AdministratorId);
         }
 
         public new class Tests : GivenIAmALevel2Administrator

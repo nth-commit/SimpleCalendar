@@ -7,6 +7,6 @@ namespace SimpleCalendar.Api.UnitTests.Utililty
 {
     public class MockCollection
     {
-        public Mock<IUserIdContainer> UserId { get; set; } = new Mock<IUserIdContainer>();
+        public Mock<IUserEmailContainer> UserEmail { get; set; } = new Mock<IUserEmailContainer>();
     }
 }

@@ -13,7 +13,7 @@ namespace SimpleCalendar.Api.UnitTests.RegionMemberships.Query.Validation
     {
         public ValidationBase()
         {
-            this.GivenIAmARootAdministrator();
+            this.GivenIAmARootSuperAdministrator();
         }
 
         public async Task AssertInvalidQueryAsync(

@@ -20,7 +20,7 @@ namespace SimpleCalendar.Api.UnitTests.Events.Get
         {
             public Tests()
             {
-                this.GivenIAmARootAdministrator();
+                this.GivenIAmARootSuperAdministrator();
             }
 
             [Fact]

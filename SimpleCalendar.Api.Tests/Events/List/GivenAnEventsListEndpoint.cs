@@ -63,7 +63,7 @@ namespace SimpleCalendar.Api.UnitTests.Events.List
                     IsDeleted = eventDefinition.IsDeleted,
                     IsPublished = eventDefinition.IsPublished,
                     IsPublic = eventDefinition.IsPublic,
-                    CreatedById = eventDefinition.CreatedById,
+                    CreatedByEmail = eventDefinition.CreatedById,
                     DataJson = JsonConvert.SerializeObject(new
                     {
                         Name = eventDefinition.Name

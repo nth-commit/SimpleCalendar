@@ -2,10 +2,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SimpleCalendar.Api.Core.Data;
-using SimpleCalendar.Api.Core.Regions.Authorization;
 using SimpleCalendar.Api.Models;
 using SimpleCalendar.Framework;
 using SimpleCalendar.Framework.Identity;
+using SimpleCalendar.Utility.Authorization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,11 +17,11 @@ namespace SimpleCalendar.Api.Controllers
     [Route("regionmemberships")]
     public class RegionMembershipsController : Controller
     {
-        protected readonly IAuthorizationService _authorizationService;
+        protected readonly IUserAuthorizationService _authorizationService;
         protected readonly CoreDbContext _coreDbContext;
 
         public RegionMembershipsController(
-            IAuthorizationService authorizationService,
+            IUserAuthorizationService authorizationService,
             CoreDbContext coreDbContext)
         {
             _authorizationService = authorizationService;
@@ -31,17 +31,15 @@ namespace SimpleCalendar.Api.Controllers
         [HttpGet("")]
         public async Task<IActionResult> Query(
             [FromQuery] string regionId,
-            [FromQuery] string userId)
+            [FromQuery] string userEmail)
         {
-            // TODO: Tests for this logic
-            var currentUserId = User.GetUserId();
-            var requiredAdministrationAccess = currentUserId != userId || !string.IsNullOrEmpty(regionId);
-            if (requiredAdministrationAccess && !await _coreDbContext.IsAnyAdministratorAsync(User.GetUserId()))
+            var canQuery = await _authorizationService.CanQueryMembershipsAsync(regionId, userEmail);
+            if (!canQuery)
             {
                 return Unauthorized();
             }
 
-            var query = _coreDbContext.RegionRoles.AsQueryable();
+            var query = _coreDbContext.RegionMemberships.AsQueryable();
             var isRegionQuery = !string.IsNullOrWhiteSpace(regionId);
 
             RegionEntity region = null;
@@ -59,9 +57,9 @@ namespace SimpleCalendar.Api.Controllers
                 query = query.Where(r => r.RegionId == region.Id);
             }
 
-            if (!string.IsNullOrWhiteSpace(userId))
+            if (!string.IsNullOrWhiteSpace(userEmail))
             {
-                query = query.Where(r => r.UserId == userId);
+                query = query.Where(r => r.UserEmail == userEmail);
             }
 
             var entities = await query.ToListAsync();
@@ -89,8 +87,8 @@ namespace SimpleCalendar.Api.Controllers
             {
                 Id = e.Id,
                 RegionId = regionsById[e.RegionId].GetId(),
-                UserId = e.UserId,
-                Role = (RegionMembershipRole)e.Role
+                UserId = e.UserEmail,
+                RegionRoleId = e.RegionRoleId
             }));
         }
 
@@ -100,7 +98,7 @@ namespace SimpleCalendar.Api.Controllers
         {
             return await Query(
                 regionId: regionId,
-                userId: User.GetUserId());
+                userEmail: User.GetUserEmail());
         }
 
         [HttpPost("")]
@@ -118,30 +116,32 @@ namespace SimpleCalendar.Api.Controllers
                 return BadRequest(ModelState);
             }
 
-            var canCreateMembership = (await _authorizationService.AuthorizeAsync(User, region, RegionRequirement.CreateMembership(create.Role))).Succeeded;
-            if (!canCreateMembership)
+            var canCreate = await _authorizationService.CanCreateMembershipAsync(region, create.RegionRoleId);
+            if (!canCreate)
             {
                 return Unauthorized();
             }
 
-            var roleExists = await _coreDbContext.RegionRoles
+            var roleExists = await _coreDbContext.RegionMemberships
                 .Where(r => r.RegionId == region.Id)
-                .Where(r => r.UserId == create.UserId)
+                .Where(r => r.UserEmail == create.UserEmail)
                 .AnyAsync();
 
             if (roleExists)
             {
                 ModelState.AddModelError(
-                    $"{nameof(RegionMembershipCreate.RegionId)}+{nameof(RegionMembershipCreate.UserId)}",
+                    $"{nameof(RegionMembershipCreate.RegionId)}+{nameof(RegionMembershipCreate.UserEmail)}",
                     "Region not found");
                 return BadRequest(ModelState);
             }
 
-            var result = await _coreDbContext.RegionRoles.AddAsync(new RegionRoleEntity()
+            // TODO: Validate region role exists
+
+            var result = await _coreDbContext.RegionMemberships.AddAsync(new RegionMembershipEntity()
             {
-                UserId = create.UserId,
+                UserEmail = create.UserEmail,
                 RegionId = region.Id,
-                Role = (Role)create.Role
+                RegionRoleId = create.RegionRoleId 
             });
 
             return Created(
@@ -149,35 +149,32 @@ namespace SimpleCalendar.Api.Controllers
                 new RegionMembership()
                 {
                     Id = result.Entity.Id,
-                    UserId = result.Entity.UserId,
+                    UserId = result.Entity.UserEmail,
                     RegionId = create.RegionId,
-                    Role = create.Role
+                    RegionRoleId = create.RegionRoleId
                 });
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(string id)
         {
-            var entity = await _coreDbContext.RegionRoles.FindAsync(id);
+            var entity = await _coreDbContext.RegionMemberships.FindAsync(id);
             if (entity == null)
             {
                 return NotFound();
             }
 
             var region = await _coreDbContext.GetRegionByIdAsync(entity.RegionId);
-            var canDeleteMembership = await IsAuthorizedAsync(region, RegionRequirement.DeleteMembership((RegionMembershipRole)entity.Role));
-            if (!canDeleteMembership)
+            var canDelete = await _authorizationService.CanDeleteMembershipsAsync(region);
+            if (!canDelete)
             {
                 return Unauthorized();
             }
 
-            _coreDbContext.RegionRoles.Remove(entity);
+            _coreDbContext.RegionMemberships.Remove(entity);
             await _coreDbContext.SaveChangesAsync();
 
             return NoContent();
         }
-
-        private async Task<bool> IsAuthorizedAsync(RegionEntity region, RegionRequirement requirement)
-            => (await _authorizationService.AuthorizeAsync(User, region, requirement)).Succeeded;
     }
 }

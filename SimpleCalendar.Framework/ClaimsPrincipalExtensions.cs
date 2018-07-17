@@ -14,5 +14,11 @@ namespace SimpleCalendar.Framework
         {
             return claimsPrincipal.Claims.Where(c => c.Type == "sub").Select(c => c.Value).FirstOrDefault();
         }
+
+        public static string GetUserEmail(
+            this ClaimsPrincipal claimsPrincipal)
+        {
+            return claimsPrincipal.Claims.Where(c => c.Type == "email").Select(c => c.Value).FirstOrDefault();
+        }
     }
 }

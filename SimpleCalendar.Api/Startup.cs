@@ -20,6 +20,7 @@ using SimpleCalendar.Framework.Identity;
 using SimpleCalendar.Utility.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Authentication;
+using SimpleCalendar.Api.Core.Authorization;
 
 namespace SimpleCalendar.Api
 {
@@ -46,6 +47,7 @@ namespace SimpleCalendar.Api
             services.AddApiCoreServices();
             services.AddApiCoreDataServices(_configuration);
             services.AddAuthorizationUtilityServices();
+            services.AddApiCoreAuthorizationServices();
 
             services.AddAutoMapper(conf =>
             {
@@ -73,6 +75,22 @@ namespace SimpleCalendar.Api
 
                     options.Authority = auth0AuthOptions.GetAuthority();
                     options.Audience = "wellingtonveganactions";
+
+                    options.Events = new JwtBearerEvents()
+                    {
+                        OnTokenValidated = async (context) =>
+                        {
+                            // TODO: Slow!
+                            var discoveryClient = new DiscoveryClient(auth0AuthOptions.GetAuthority(), null);
+                            var discoveryResponse = await discoveryClient.GetAsync();
+
+                            var userInfoClient = new UserInfoClient(discoveryResponse.UserInfoEndpoint);
+                            var token = (context.SecurityToken as JwtSecurityToken)?.RawData;
+                            var userInfo = await userInfoClient.GetAsync(token);
+
+                            await Task.CompletedTask;
+                        }
+                    };
                 });
 
             services.AddSingleton<IClaimsTransformation, ClaimsTransformation>();

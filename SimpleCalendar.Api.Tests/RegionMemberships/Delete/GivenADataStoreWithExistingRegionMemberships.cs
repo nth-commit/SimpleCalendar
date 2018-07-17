@@ -36,18 +36,18 @@ namespace SimpleCalendar.Api.UnitTests.RegionMemberships.Delete
         {
             await this.GivenARegionHierarchyAsync();
 
-            ExistingLevel1UserMembershipId = await CreateMembershipAsync(Level1RegionId, RegionMembershipRole.User);
-            ExistingLevel2UserMembershipId = await CreateMembershipAsync(Level2RegionId, RegionMembershipRole.User);
-            ExistingLevel3UserMembershipId = await CreateMembershipAsync(Level3RegionId, RegionMembershipRole.User);
+            ExistingLevel1UserMembershipId = await CreateMembershipAsync(Level1RegionId, Core.Data.Constants.RegionRoles.User);
+            ExistingLevel2UserMembershipId = await CreateMembershipAsync(Level2RegionId, Core.Data.Constants.RegionRoles.User);
+            ExistingLevel3UserMembershipId = await CreateMembershipAsync(Level3RegionId, Core.Data.Constants.RegionRoles.User);
 
-            ExistingLevel1AdministratorMembershipId = await CreateMembershipAsync(Level1RegionId, RegionMembershipRole.Administrator);
-            ExistingLevel2AdministratorMembershipId = await CreateMembershipAsync(Level2RegionId, RegionMembershipRole.Administrator);
-            ExistingLevel3AdministratorMembershipId = await CreateMembershipAsync(Level3RegionId, RegionMembershipRole.Administrator);
+            ExistingLevel1AdministratorMembershipId = await CreateMembershipAsync(Level1RegionId, Core.Data.Constants.RegionRoles.Administrator);
+            ExistingLevel2AdministratorMembershipId = await CreateMembershipAsync(Level2RegionId, Core.Data.Constants.RegionRoles.Administrator);
+            ExistingLevel3AdministratorMembershipId = await CreateMembershipAsync(Level3RegionId, Core.Data.Constants.RegionRoles.Administrator);
         }
 
-        private async Task<string> CreateMembershipAsync(string regionId, RegionMembershipRole role)
+        private async Task<string> CreateMembershipAsync(string regionId, string regionRoleId)
         {
-            return (await this.GivenARegionRoleAsync($"{regionId}_{role}", regionId, role)).Id;
+            return (await this.GivenARegionMembershipAsync($"{regionId}_{regionRoleId}", regionId, regionRoleId)).Id;
         }
 
         private string GetUserMembershipId(int regionLevel)

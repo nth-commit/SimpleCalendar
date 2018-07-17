@@ -10,34 +10,35 @@ using System.Threading.Tasks;
 
 namespace SimpleCalendar.Api.UnitTests.Utililty
 {
-    public class FromUserIdAuthenticationHandler : AuthenticationHandler<AuthenticationSchemeOptions>
+    public class UserEmailAuthenticationHandler : AuthenticationHandler<AuthenticationSchemeOptions>
     {
-        private readonly IUserIdContainer _userIdContainer;
+        private readonly IUserEmailContainer _userEmailContainer;
 
-        public FromUserIdAuthenticationHandler(
+        public UserEmailAuthenticationHandler(
             IOptionsMonitor<AuthenticationSchemeOptions> options,
             ILoggerFactory logger,
             UrlEncoder encoder,
             ISystemClock clock,
-            IUserIdContainer userIdContainer)
+            IUserEmailContainer userEmailContainer)
             : base(options, logger, encoder, clock)
         {
-            _userIdContainer = userIdContainer;
+            _userEmailContainer = userEmailContainer;
         }
 
         protected override Task<AuthenticateResult> HandleAuthenticateAsync()
         {
             AuthenticateResult result = null;
 
-            var userId = _userIdContainer.Value;
-            if (string.IsNullOrEmpty(userId))
+            var userEmail = _userEmailContainer.Value;
+            if (string.IsNullOrEmpty(userEmail))
             {
                 result = AuthenticateResult.Fail("No user ID was set");
             }
             else
             {
                 var identity = new ClaimsIdentity("TestAuthenticationType");
-                identity.AddClaim(new Claim("sub", userId));
+                identity.AddClaim(new Claim("sub", Guid.NewGuid().ToString()));
+                identity.AddClaim(new Claim("email", userEmail));
                 var principal = new ClaimsPrincipal(identity);
                 result = AuthenticateResult.Success(new AuthenticationTicket(principal, "TestScheme"));
             }

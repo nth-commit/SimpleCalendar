@@ -25,8 +25,8 @@ namespace SimpleCalendar.Api.Core.Data
         [InverseProperty(nameof(Parent))]
         public List<RegionEntity> Children { get; set; }
 
-        [InverseProperty(nameof(RegionRoleEntity.Region))]
-        public List<RegionRoleEntity> Roles { get; set; }
+        [InverseProperty(nameof(RegionMembershipEntity.Region))]
+        public List<RegionMembershipEntity> Memberships { get; set; }
     }
 
     public static class RegionEntityExtensions
@@ -75,22 +75,24 @@ namespace SimpleCalendar.Api.Core.Data
             return result;
         }
 
-        public static bool IsAdministrator(this RegionEntity region, string userId) => region.IsInRole(userId, Role.Administrator);
+        public static bool IsSuperAdministrator(this RegionEntity region, string userId) => region.IsInRole(userId, Constants.RegionRoles.SuperAdministrator);
 
-        public static bool IsUser(this RegionEntity region, string userId) => region.IsInRole(userId, Role.User);
+        public static bool IsUser(this RegionEntity region, string userId) => region.IsInRole(userId, Constants.RegionRoles.User);
 
         private static bool IsInRole(
             this RegionEntity region,
             string userId,
-            Role role)
+            string regionRoleId)
         {
-            if (region.Roles == null)
+            if (region.Memberships == null)
             {
                 throw new InvalidOperationException("Roles cannot be null to determine if user is in role");
             }
 
-            return region.Roles.Where(r => r.UserId == userId).Any(r => r.Role.HasFlag(role)) ||
-                (region.Id != Constants.RootRegionId && IsInRole(region.Parent, userId, role));
+            return false;
+
+            //return region.Memberships.Where(r => r.UserEmail == userId).Any(r => r.Role.HasFlag(role)) ||
+            //    (region.Id != Constants.RootRegionId && IsInRole(region.Parent, userId, role));
         }
     }
 }

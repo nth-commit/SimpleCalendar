@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace>SimpleCalendar.Api.Core.Authorization</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="2.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SimpleCalendar.Api.Core.Data\SimpleCalendar.Api.Core.Data.csproj" />
+    <ProjectReference Include="..\util\SimpleCalendar.Utility.Authorization\SimpleCalendar.Utility.Authorization.csproj" />
+  </ItemGroup>
+
+</Project>

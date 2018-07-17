@@ -6,20 +6,20 @@ using Xunit;
 
 namespace SimpleCalendar.Api.UnitTests.RegionMemberships.Create.Validation
 {
-    public class GivenADuplicatedRegionRole : ValidationBase
+    public class GivenADuplicatedRegionMembership : ValidationBase
     {
-        public GivenADuplicatedRegionRole() => InitializeAsync().GetAwaiter().GetResult();
+        public GivenADuplicatedRegionMembership() => InitializeAsync().GetAwaiter().GetResult();
 
         private async Task InitializeAsync()
         {
-            await this.GivenARegionRoleAsync(
-                ValidRegionMembership.UserId,
+            await this.GivenARegionMembershipAsync(
+                ValidRegionMembership.UserEmail,
                 ValidRegionMembership.RegionId,
-                ValidRegionMembership.Role);
+                ValidRegionMembership.RegionRoleId);
         }
 
         [Fact]
         public Task WhenICreateTheMembership_ThenItReturns400BadRequestAndValidError()
-            => AssertInvalidMembershipAsync("RegionId+UserId", ValidRegionMembership);
+            => AssertInvalidMembershipAsync("RegionId+UserEmail", ValidRegionMembership);
     }
 }

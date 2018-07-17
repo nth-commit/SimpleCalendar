@@ -14,7 +14,7 @@ export class Auth {
       redirectUri: configuration.redirectUri,
       audience: 'wellingtonveganactions',
       responseType: 'token id_token',
-      scope: 'openid'
+      scope: 'openid profile email'
     });
   }
 

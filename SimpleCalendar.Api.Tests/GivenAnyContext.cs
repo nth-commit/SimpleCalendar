@@ -22,7 +22,7 @@ namespace SimpleCalendar.Api.UnitTests
 
         public IServiceProvider Services { get; private set; }
 
-        public Mock<IUserIdContainer> UserId => _mocks.UserId;
+        public Mock<IUserEmailContainer> UserEmail => _mocks.UserEmail;
 
         public GivenAnyContext() => InitializeAsync().GetAwaiter().GetResult();
 

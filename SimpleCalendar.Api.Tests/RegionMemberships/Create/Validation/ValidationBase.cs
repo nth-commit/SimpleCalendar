@@ -11,7 +11,7 @@ namespace SimpleCalendar.Api.UnitTests.RegionMemberships.Create.Validation
     {
         public ValidationBase()
         {
-            this.GivenIAmARootAdministrator();
+            this.GivenIAmARootSuperAdministrator();
         }
         public async Task AssertInvalidMembershipAsync(string expectedInvalidProperty, RegionMembershipCreate create)
         {

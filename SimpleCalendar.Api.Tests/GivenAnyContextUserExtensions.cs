@@ -10,26 +10,29 @@ namespace SimpleCalendar.Api.UnitTests
 {
     public static class GivenAnyContextUserExtensions
     {
-        public static void GivenIAmARootAdministrator(this GivenAnyContext context)
-            => context.GivenIHaveAUserId("google-oauth2|103074202427969604113");
+        public static void GivenIAmARootSuperAdministrator(this GivenAnyContext context)
+            => context.GivenIHaveAnEmail("michaelfry2002@gmail.com");
 
-        public static Task GivenIAmARegionUserAsync(this GivenAnyContext context, string userId, string regionId)
-            => context.GivenIHaveARoleInARegion(userId, regionId, RegionMembershipRole.User);
+        public static Task GivenIAmARegionUserAsync(this GivenAnyContext context, string email, string regionId)
+            => context.GivenIHaveARoleInARegion(email, regionId, Constants.RegionRoles.User);
 
-        public static Task GivenIAmARegionAdministratorAsync(this GivenAnyContext context, string userId, string regionId)
-            => context.GivenIHaveARoleInARegion(userId, regionId, RegionMembershipRole.Administrator);
+        public static Task GivenIAmARegionAdministratorAsync(this GivenAnyContext context, string email, string regionId)
+            => context.GivenIHaveARoleInARegion(email, regionId, Constants.RegionRoles.Administrator);
 
-        public static void GivenIHaveAUserId(this GivenAnyContext context, string userId)
-            => context.UserId.Setup(x => x.Value).Returns(userId);
+        public static Task GivenIAmARegionSuperAdministratorAsync(this GivenAnyContext context, string email, string regionId)
+            => context.GivenIHaveARoleInARegion(email, regionId, Constants.RegionRoles.SuperAdministrator);
+
+        public static void GivenIHaveAnEmail(this GivenAnyContext context, string email)
+            => context.UserEmail.Setup(x => x.Value).Returns(email);
 
         private static async Task GivenIHaveARoleInARegion(
             this GivenAnyContext context,
-            string userId,
+            string email,
             string regionId,
-            RegionMembershipRole role)
+            string regionRoleId)
         {
-            await context.GivenARegionRoleAsync(userId, regionId, role);
-            context.GivenIHaveAUserId(userId);
+            await context.GivenARegionMembershipAsync(email, regionId, regionRoleId);
+            context.GivenIHaveAnEmail(email);
         }
     }
 }

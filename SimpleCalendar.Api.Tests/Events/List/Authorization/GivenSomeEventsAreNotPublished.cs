@@ -13,7 +13,7 @@ namespace SimpleCalendar.Api.UnitTests.Events.List.Authorization
     {
         private const string _nonPublishedEventName = "Non-Published Event";
         private const string _publishedEventName = "Published Event";
-        private const string _creatorId = "TheCreator";
+        private const string _creatorEmail = "TheCreator@Example.com";
 
         protected override IEnumerable<EventDefinition> EventDefinitions => new List<EventDefinition>()
         {
@@ -21,13 +21,14 @@ namespace SimpleCalendar.Api.UnitTests.Events.List.Authorization
             {
                 RegionId = Level2RegionId,
                 IsPublished = false,
-                CreatedById = _creatorId,
+                CreatedById = _creatorEmail,
                 Name = _nonPublishedEventName
             },
             new EventDefinition()
             {
                 RegionId = Level2RegionId,
                 IsPublished = true,
+                CreatedById = _creatorEmail,
                 Name = _publishedEventName
             }
         };
@@ -59,7 +60,7 @@ namespace SimpleCalendar.Api.UnitTests.Events.List.Authorization
         [Fact]
         public async Task WhenIAmAChildAdministrator_ReturnThePublishedEvent()
         {
-            await this.GivenIAmARegionAdministratorAsync("Level3RegionAdministrator", Level3RegionId);
+            await this.GivenIAmARegionSuperAdministratorAsync("Level3RegionAdministrator", Level3RegionId);
 
             var response = await Client.ListEventsAsync();
             response.AssertStatusCode(HttpStatusCode.OK);
@@ -72,7 +73,7 @@ namespace SimpleCalendar.Api.UnitTests.Events.List.Authorization
         [Fact]
         public async Task WhenIAmTheCreator_ReturnAllEvents()
         {
-            await this.GivenIAmARegionUserAsync(_creatorId, Level2RegionId);
+            await this.GivenIAmARegionUserAsync(_creatorEmail, Level2RegionId);
 
             var response = await Client.ListEventsAsync();
             response.AssertStatusCode(HttpStatusCode.OK);
@@ -84,7 +85,7 @@ namespace SimpleCalendar.Api.UnitTests.Events.List.Authorization
         [Fact]
         public async Task WhenIAmAnAdministrator_ReturnAllEvents()
         {
-            await this.GivenIAmARegionAdministratorAsync(_creatorId, Level2RegionId);
+            await this.GivenIAmARegionSuperAdministratorAsync(_creatorEmail, Level2RegionId);
 
             var response = await Client.ListEventsAsync();
             response.AssertStatusCode(HttpStatusCode.OK);

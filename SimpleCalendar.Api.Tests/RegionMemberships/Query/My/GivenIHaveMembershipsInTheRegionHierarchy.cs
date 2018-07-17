@@ -17,11 +17,11 @@ namespace SimpleCalendar.Api.UnitTests.RegionMemberships.Query.My
 
         private async Task InitializeAsync()
         {
-            await this.GivenIAmARegionAdministratorAsync(UserId, Level3RegionId);
-            await this.GivenARegionRoleAsync(UserId, Level2ARegionId, RegionMembershipRole.User);
-            await this.GivenARegionRoleAsync(UserId, Level2BRegionId, RegionMembershipRole.User);
+            await this.GivenIAmARegionSuperAdministratorAsync(UserId, Level3RegionId);
+            await this.GivenARegionMembershipAsync(UserId, Level2ARegionId, Core.Data.Constants.RegionRoles.User);
+            await this.GivenARegionMembershipAsync(UserId, Level2BRegionId, Core.Data.Constants.RegionRoles.User);
 
-            await this.GivenARegionRoleAsync("SomeOtherUser", Level1RegionId, RegionMembershipRole.User);
+            await this.GivenARegionMembershipAsync("SomeOtherUser", Level1RegionId, Core.Data.Constants.RegionRoles.User);
         }
 
         [Fact]

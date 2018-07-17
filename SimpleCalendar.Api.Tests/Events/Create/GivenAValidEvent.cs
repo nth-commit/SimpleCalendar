@@ -9,7 +9,7 @@ using Xunit;
 
 namespace SimpleCalendar.Api.UnitTests.Events.Create
 {
-    public class GivenAValidEvent : GivenIAmARootAdministrator
+    public class GivenAValidEvent : GivenIAmARootSuperAdministrator
     {
         protected const string Level1RegionId = GivenAnyContextRegionExtensions.Level1RegionId;
         protected const string Level2RegionId = GivenAnyContextRegionExtensions.Level2RegionId;

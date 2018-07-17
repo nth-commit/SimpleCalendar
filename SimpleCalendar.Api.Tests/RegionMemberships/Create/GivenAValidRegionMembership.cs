@@ -24,9 +24,9 @@ namespace SimpleCalendar.Api.UnitTests.RegionMemberships.Create
 
         protected RegionMembershipCreate ValidRegionMembershipLevel1 => new RegionMembershipCreate()
         {
-            UserId = "user@example.com",
+            UserEmail = "user@example.com",
             RegionId = Level1RegionId,
-            Role = RegionMembershipRole.User
+            RegionRoleId = Core.Data.Constants.RegionRoles.User
         };
 
         public GivenAValidRegionMembership() => InitializeAsync().GetAwaiter().GetResult();
@@ -55,17 +55,20 @@ namespace SimpleCalendar.Api.UnitTests.RegionMemberships.Create
             => Client.CreateRegionMembershipAsync(create);
 
         protected Task<RegionMembership> CreateUserAndAssertCreatedAsync(int regionLevel)
-            => CreateAndAssertCreatedAsync(RegionMembershipRole.User, regionLevel);
+            => CreateAndAssertCreatedAsync(Core.Data.Constants.RegionRoles.User, regionLevel);
 
         protected Task<RegionMembership> CreateAdministratorAndAssertCreatedAsync(int regionLevel)
-            => CreateAndAssertCreatedAsync(RegionMembershipRole.Administrator, regionLevel);
+            => CreateAndAssertCreatedAsync(Core.Data.Constants.RegionRoles.Administrator, regionLevel);
 
-        protected Task<RegionMembership> CreateAndAssertCreatedAsync(RegionMembershipRole role, int regionLevel)
+        protected Task<RegionMembership> CreateSuperAdministratorAndAssertCreatedAsync(int regionLevel)
+            => CreateAndAssertCreatedAsync(Core.Data.Constants.RegionRoles.SuperAdministrator, regionLevel);
+
+        protected Task<RegionMembership> CreateAndAssertCreatedAsync(string regionRoleId, int regionLevel)
             => CreateAndAssertCreatedAsync(new RegionMembershipCreate()
             {
                 RegionId = GetRegionIdByLevel(regionLevel),
-                UserId = "user@example.com",
-                Role = role
+                UserEmail = "user@example.com",
+                RegionRoleId = regionRoleId
             });
 
         protected async Task<RegionMembership> CreateAndAssertCreatedAsync(RegionMembershipCreate create)
@@ -83,17 +86,20 @@ namespace SimpleCalendar.Api.UnitTests.RegionMemberships.Create
         }
 
         protected Task CreateUserAndAssertUnauthorizedAsync(int regionLevel)
-            => CreateAndAssertUnauthorizedAsync(RegionMembershipRole.User, regionLevel);
+            => CreateAndAssertUnauthorizedAsync(Core.Data.Constants.RegionRoles.User, regionLevel);
 
         protected Task CreateAdministratorAndAssertUnauthorizedAsync(int regionLevel)
-            => CreateAndAssertUnauthorizedAsync(RegionMembershipRole.Administrator, regionLevel);
+            => CreateAndAssertUnauthorizedAsync(Core.Data.Constants.RegionRoles.Administrator, regionLevel);
 
-        protected Task CreateAndAssertUnauthorizedAsync(RegionMembershipRole role, int regionLevel)
+        protected Task CreateSuperAdministratorAndAssertUnauthorizedAsync(int regionLevel)
+            => CreateAndAssertUnauthorizedAsync(Core.Data.Constants.RegionRoles.SuperAdministrator, regionLevel);
+
+        protected Task CreateAndAssertUnauthorizedAsync(string regionRoleId, int regionLevel)
             => CreateAndAssertUnauthorizedAsync(new RegionMembershipCreate()
             {
                 RegionId = GetRegionIdByLevel(regionLevel),
-                UserId = "user@example.com",
-                Role = role
+                UserEmail = "user@example.com",
+                RegionRoleId = regionRoleId
             });
 
         protected Task CreateAndAssertUnauthorizedAsync(RegionMembershipCreate create)
@@ -110,7 +116,7 @@ namespace SimpleCalendar.Api.UnitTests.RegionMemberships.Create
         {
             public Tests()
             {
-                this.GivenIAmARootAdministrator();
+                this.GivenIAmARootSuperAdministrator();
             }
 
             [Fact]

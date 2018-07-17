@@ -12,6 +12,6 @@ namespace SimpleCalendar.Api.Models
 
         public string RegionId { get; set; }
 
-        public RegionMembershipRole Role { get; set; }
+        public string RegionRoleId { get; set; }
     }
 }

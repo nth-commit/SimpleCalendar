@@ -26,6 +26,11 @@ namespace SimpleCalendar.Utility.Authorization
             IAuthorizationRequirement requirement)
                 => (await userAuthorizationService.AuthorizeAsync(resource, new IAuthorizationRequirement[] { requirement })).Succeeded;
 
+        public static async Task<bool> IsAuthorizedAsync(
+            this IUserAuthorizationService userAuthorizationService,
+            IAuthorizationRequirement requirement)
+                => (await userAuthorizationService.AuthorizeAsync(null, new IAuthorizationRequirement[] { requirement })).Succeeded;
+
         public static Task<AuthorizationResult> AuthorizeAsync(
             this IUserAuthorizationService userAuthorizationService,
             object resource,

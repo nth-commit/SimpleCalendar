@@ -1,20 +1,25 @@
 import * as React from 'react';
 import { ROOT_REGION_ID } from 'src/constants';
 import { appConnect, ApplicationState } from 'src/store';
-import { regionActionCreators, RegionPathComponent, RegionPathComponentValue, isPathLoading, pathContainsRegion, getRegionPathComponent } from 'src/store/Regions';
+import {
+  regionActionCreators,
+  RegionPath, RegionPathComponentValue,
+  isPathLoading, pathContainsRegion
+} from 'src/store/Regions';
 import RegionManagementTabs from '../../presentational/RegionManagementTabs';
 import createRegionHrefResolver from '../../utility/RegionHrefResolver';
 
 interface RegionStateProps {
   loading: boolean;
-  regionPathComponent: RegionPathComponent | null;
   regionId: string;
+  regionPath: RegionPath;
   baseRegionId: string;
 }
 
 interface RegionMergedProps {
   loading: boolean;
-  regionPathComponent: RegionPathComponent | null;
+  regionId: string;
+  regionPath: RegionPath;
   baseRegionId: string;
   onMount(): void;
 }
@@ -30,15 +35,20 @@ export class UnconnectedRegion extends React.PureComponent<RegionMergedProps> {
       return null;
     }
 
-    const { regionPathComponent, baseRegionId } = this.props;
-    const { value } = (regionPathComponent as RegionPathComponent);
-    const { childRegions } = (value as RegionPathComponentValue);
+    const { regionPath, regionId, baseRegionId } = this.props;
+    const regionIndex = regionPath.findIndex(r => r.id === regionId);
+
+    const regionPathComponentValues = regionPath.map(r => r.value as RegionPathComponentValue);
+    const regionPathComponentValue = regionPathComponentValues[regionIndex];
+    const parentRegionPathComponentValues = regionPathComponentValues.slice(0, regionIndex);
 
     return (
       <div>
         <RegionManagementTabs
-          childRegions={childRegions}
-          regionHrefResolver={createRegionHrefResolver(baseRegionId)} />
+          childRegions={regionPathComponentValue.childRegions}
+          regionHrefResolver={createRegionHrefResolver(baseRegionId)}
+          memberships={regionPathComponentValue.memberships}
+          inheritedMemberships={parentRegionPathComponentValues.selectMany(r => r.memberships)} />
       </div>
     );
   }
@@ -64,14 +74,15 @@ export default appConnect<RegionStateProps, {}, {}, RegionMergedProps>(
     return {
       regionId,
       loading: isPathLoading(state) || !pathContainsRegion(state, regionId),
-      regionPathComponent: getRegionPathComponent(state),
+      regionPath: state.regions.path,
       baseRegionId: state.configuration.baseRegionId
     };
   },
   undefined,
-  ({ loading, regionPathComponent, regionId, baseRegionId }, { dispatch }) => ({
+  ({ loading, regionPath, regionId, baseRegionId }, { dispatch }) => ({
     loading,
-    regionPathComponent,
+    regionId,
+    regionPath,
     baseRegionId,
     onMount: () => dispatch(regionActionCreators.setRegion(regionId))
   })

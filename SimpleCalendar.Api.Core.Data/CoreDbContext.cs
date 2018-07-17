@@ -1,5 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
+using SimpleCalendar.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,21 +40,56 @@ namespace SimpleCalendar.Api.Core.Data
                 Id = Constants.RootRegionId
             });
 
-            modelBuilder.Entity<RegionRoleEntity>().HasAlternateKey(nameof(RegionRoleEntity.RegionId), nameof(RegionRoleEntity.UserId));
-            modelBuilder.Entity<RegionRoleEntity>().HasData(new RegionRoleEntity()
+            modelBuilder.Entity<RegionRoleEntity>().HasData(
+                new RegionRoleEntity()
+                {
+                    Id = Constants.RegionRoles.SuperAdministrator,
+                    Name = "Super Administrators",
+                    Permissions = RegionPermission.All
+                },
+                new RegionRoleEntity()
+                {
+                    Id = Constants.RegionRoles.Administrator,
+                    Name = "Administrators",
+                    Permissions = RegionPermission.Events_All | RegionPermission.Memberships_WriteReader,
+                    ChildPermissions = RegionPermission.Memberships_WriteWriter,
+                    ParentPermissions = RegionPermission.Memberships_Read
+                },
+                new RegionRoleEntity()
+                {
+                    Id = Constants.RegionRoles.User,
+                    Name = "Users",
+                    Permissions =
+                        RegionPermission.Events_Read |
+                        RegionPermission.Events_WriteDraft
+                });
+
+            modelBuilder.Entity<UserEntity>().HasData(new UserEntity()
             {
-                Id = "ROOT_ADMIN",
+                Email = "michaelfry2002@gmail.com",
+                ClaimsByAuthorityJson = JsonConvert.SerializeObject(new Dictionary<string, Dictionary<string, string>>()),
+                ClaimsByAuthorityVersion = 1
+            });
+
+            modelBuilder.Entity<RegionMembershipEntity>().HasAlternateKey(nameof(RegionMembershipEntity.RegionId), nameof(RegionMembershipEntity.UserEmail));
+            modelBuilder.Entity<RegionMembershipEntity>().HasData(new RegionMembershipEntity()
+            {
+                Id = Guid.NewGuid().ToString(),
                 RegionId = Constants.RootRegionId,
-                UserId = "google-oauth2|103074202427969604113",
-                Role = Framework.Identity.Role.Administrator | Framework.Identity.Role.User
+                UserEmail = "michaelfry2002@gmail.com",
+                RegionRoleId = Constants.RegionRoles.SuperAdministrator
             });
 
             base.OnModelCreating(modelBuilder);
         }
 
+        public DbSet<UserEntity> Users { get; set; }
+
         public DbSet<RegionEntity> Regions { get; set; }
 
         public DbSet<RegionRoleEntity> RegionRoles { get; set; }
+
+        public DbSet<RegionMembershipEntity> RegionMemberships { get; set; }
 
         public DbSet<EventEntity> Events { get; set; }
     }

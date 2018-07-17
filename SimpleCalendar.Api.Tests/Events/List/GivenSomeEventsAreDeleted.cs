@@ -40,7 +40,7 @@ namespace SimpleCalendar.Api.UnitTests.Events.List
             [Fact]
             public async Task WhenIAmARootAdministrator_ThenReturnAllNonDeletedEvents()
             {
-                this.GivenIAmARootAdministrator();
+                this.GivenIAmARootSuperAdministrator();
 
                 var response = await Client.ListEventsAsync();
                 var events = await response.DeserializeEventsAsync();

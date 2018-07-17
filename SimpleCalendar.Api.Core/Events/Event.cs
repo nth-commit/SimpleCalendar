@@ -18,7 +18,7 @@ namespace SimpleCalendar.Api.Core.Events
 
         public DateTime Created { get; set; }
 
-        public string CreatedById { get; set; }
+        public string CreatedByEmail { get; set; }
 
         public DateTime? Published { get; set; }
 

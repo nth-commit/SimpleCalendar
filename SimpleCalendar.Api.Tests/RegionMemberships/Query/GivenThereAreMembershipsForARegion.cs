@@ -18,24 +18,24 @@ namespace SimpleCalendar.Api.UnitTests.RegionMemberships.Query
 
         private async Task InitializeAsync()
         {
-            this.GivenIAmARootAdministrator();
+            this.GivenIAmARootSuperAdministrator();
 
             for (var id = 0; id < RegionUserCount; id++)
             {
-                await CreateMembershipAsync(id, RegionMembershipRole.User);
+                await CreateMembershipAsync(id, Core.Data.Constants.RegionRoles.User);
             }
 
             for (var id = 0; id < RegionUserCount; id++)
             {
-                await CreateMembershipAsync(id, RegionMembershipRole.Administrator);
+                await CreateMembershipAsync(id, Core.Data.Constants.RegionRoles.SuperAdministrator);
             }
 
-            await this.GivenARegionRoleAsync("SomeOtherUser", Level3RegionId, RegionMembershipRole.User);
+            await this.GivenARegionMembershipAsync("SomeOtherUser", Level3RegionId, Core.Data.Constants.RegionRoles.User);
         }
 
-        private async Task CreateMembershipAsync(int id, RegionMembershipRole role)
+        private async Task CreateMembershipAsync(int id, string regionRoleId)
         {
-            await this.GivenARegionRoleAsync($"{role.ToString()}{id}", RegionId, role);
+            await this.GivenARegionMembershipAsync($"{regionRoleId}_{id}", RegionId, regionRoleId);
         }
 
         [Fact]

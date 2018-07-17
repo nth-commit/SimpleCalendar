@@ -30,25 +30,25 @@ namespace SimpleCalendar.Api.Core.Data
             // HACK!
             return events
                 .Include(e => e.Region)
-                    .ThenInclude(r => r.Roles)
+                    .ThenInclude(r => r.Memberships)
                 .Include(e => e.Region)
                     .ThenInclude(r => r.Parent)
-                    .ThenInclude(r => r.Roles)
-                .Include(e => e.Region)
-                    .ThenInclude(r => r.Parent)
-                    .ThenInclude(r => r.Parent)
-                    .ThenInclude(r => r.Roles)
+                    .ThenInclude(r => r.Memberships)
                 .Include(e => e.Region)
                     .ThenInclude(r => r.Parent)
                     .ThenInclude(r => r.Parent)
-                    .ThenInclude(r => r.Parent)
-                    .ThenInclude(r => r.Roles)
+                    .ThenInclude(r => r.Memberships)
                 .Include(e => e.Region)
                     .ThenInclude(r => r.Parent)
                     .ThenInclude(r => r.Parent)
                     .ThenInclude(r => r.Parent)
+                    .ThenInclude(r => r.Memberships)
+                .Include(e => e.Region)
                     .ThenInclude(r => r.Parent)
-                    .ThenInclude(r => r.Roles);
+                    .ThenInclude(r => r.Parent)
+                    .ThenInclude(r => r.Parent)
+                    .ThenInclude(r => r.Parent)
+                    .ThenInclude(r => r.Memberships);
         }
     }
 }

@@ -59,7 +59,7 @@ namespace SimpleCalendar.Api.UnitTests
                     options.DefaultAuthenticateScheme = "TestScheme";
                     options.DefaultChallengeScheme = "TestScheme";
                 })
-                .AddScheme<AuthenticationSchemeOptions, FromUserIdAuthenticationHandler>("TestScheme", options => { });
+                .AddScheme<AuthenticationSchemeOptions, UserEmailAuthenticationHandler>("TestScheme", options => { });
         }
     }
 }

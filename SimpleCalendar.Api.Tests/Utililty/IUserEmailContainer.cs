@@ -4,7 +4,7 @@ using System.Text;
 
 namespace SimpleCalendar.Api.UnitTests.Utililty
 {
-    public interface IUserIdContainer : IValueContainer<string>
+    public interface IUserEmailContainer : IValueContainer<string>
     {
     }
 }

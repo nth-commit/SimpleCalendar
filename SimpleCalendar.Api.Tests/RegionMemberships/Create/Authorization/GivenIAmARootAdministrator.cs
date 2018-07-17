@@ -14,8 +14,7 @@ namespace SimpleCalendar.Api.UnitTests.RegionMemberships.Create.Authorization
 
         private async Task InitializeAsync()
         {
-            this.GivenIAmARootAdministrator();
-            await Task.CompletedTask;
+            await this.GivenIAmARegionAdministratorAsync("root-admin@example.com", Constants.RootRegionId);
         }
 
         public new class Tests : GivenIAmARootAdministrator

@@ -10,7 +10,7 @@ namespace SimpleCalendar.Api.UnitTests.RegionMemberships.Delete.Authorization
 {
     public class GivenIAmARootAdministrator : GivenADataStoreWithExistingRegionMemberships
     {
-        public GivenIAmARootAdministrator() => this.GivenIAmARootAdministrator();
+        public GivenIAmARootAdministrator() => this.GivenIAmARootSuperAdministrator();
 
         public class Tests : GivenIAmARootAdministrator
         {

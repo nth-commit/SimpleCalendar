@@ -13,9 +13,9 @@ namespace SimpleCalendar.Api.UnitTests.RegionMemberships.Query.My
 
         private async Task InitializeAsync()
         {
-            await this.GivenAnAdministratorAsync("Administrator", Level3RegionId);
-            await this.GivenAnAdministratorAsync("Administrator", Level2BRegionId);
-            this.GivenIHaveAUserId("Administrator");
+            await this.GivenASuperAdministratorAsync("Administrator", Level3RegionId);
+            await this.GivenASuperAdministratorAsync("Administrator", Level2BRegionId);
+            this.GivenIHaveAnEmail("Administrator");
         }
 
         public class Tests : GivenIAmALevel2BAndLevel3AAdministrator

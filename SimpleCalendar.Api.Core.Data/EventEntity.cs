@@ -24,7 +24,7 @@ namespace SimpleCalendar.Api.Core.Data
 
         public bool IsPublished { get; set; }
 
-        public string CreatedById { get; set; }
+        public string CreatedByEmail { get; set; }
 
         public string DataJson { get; set; }
 

@@ -10,15 +10,15 @@ namespace SimpleCalendar.Api.UnitTests
 {
     public static class GivenAnyContextRegionRoleExtensions
     {
-        public static Task<RegionRoleEntity> GivenAnAdministratorAsync(
+        public static Task<RegionMembershipEntity> GivenASuperAdministratorAsync(
             this GivenAnyContext context, string userId, string regionId)
-                => context.GivenARegionRoleAsync(userId, regionId, RegionMembershipRole.Administrator);
+                => context.GivenARegionMembershipAsync(userId, regionId, Constants.RegionRoles.SuperAdministrator);
 
-        public static async Task<RegionRoleEntity> GivenARegionRoleAsync(
+        public static async Task<RegionMembershipEntity> GivenARegionMembershipAsync(
             this GivenAnyContext context,
-            string userId,
+            string email,
             string regionId,
-            RegionMembershipRole role)
+            string regionRoleId)
         {
             var coreDbContext = context.GetCoreDbContext();
 
@@ -28,11 +28,17 @@ namespace SimpleCalendar.Api.UnitTests
                 throw new Exception("Region does not exist");
             }
 
-            var result = await coreDbContext.RegionRoles.AddAsync(new RegionRoleEntity()
+            var regionRole = await coreDbContext.RegionRoles.FindAsync(regionRoleId);
+            if (regionRole == null)
             {
-                UserId = userId,
+                throw new Exception("Region role does not exist");
+            }
+
+            var result = await coreDbContext.RegionMemberships.AddAsync(new RegionMembershipEntity()
+            {
+                UserEmail = email,
                 RegionId = region.Id,
-                Role = (Role)role
+                RegionRoleId = regionRoleId
             });
             await coreDbContext.SaveChangesAsync();
 

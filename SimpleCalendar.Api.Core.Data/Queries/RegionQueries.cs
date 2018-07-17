@@ -11,17 +11,24 @@ namespace SimpleCalendar.Api.Core.Data
     {
         public static Task<RegionEntity> GetRegionByCodesAsync(
             this CoreDbContext coreDbContext,
-            string codesJoined)
-                => coreDbContext.GetRegionByCodesAsync(string.IsNullOrEmpty(codesJoined) ?
-                    Enumerable.Empty<string>() :
-                    codesJoined.ToLower().Split('/'));
+            string codes)
+        {
+            if (codes == Constants.RootRegionId)
+            {
+                return coreDbContext.GetRegionByIdAsync(Constants.RootRegionId);
+            }
+
+            return coreDbContext.GetRegionByCodesAsync(string.IsNullOrEmpty(codes) ?
+                Enumerable.Empty<string>() :
+                codes.ToLower().Split('/'));
+        }
 
         public static async Task<RegionEntity> GetRegionByCodesAsync(
             this CoreDbContext coreDbContext,
             IEnumerable<string> codes)
         {
             var query = coreDbContext.Regions
-                .Include(r => r.Roles)
+                .Include(r => r.Memberships)
                 .Where(r => r.Id == Constants.RootRegionId);
 
             // Force the root region to be loaded.
@@ -35,9 +42,9 @@ namespace SimpleCalendar.Api.Core.Data
                         a => a.Id,
                         b => b.ParentId,
                         (a, b) => b)
-                    .Include(r => r.Roles)
-                    .Include(r => r.Parent).ThenInclude(r => r.Roles)
-                    .Include(r => r.Parent).ThenInclude(r => r.Parent).ThenInclude(r => r.Roles)
+                    .Include(r => r.Memberships)
+                    .Include(r => r.Parent).ThenInclude(r => r.Memberships)
+                    .Include(r => r.Parent).ThenInclude(r => r.Parent).ThenInclude(r => r.Memberships)
                     .Where(r => r.Code == code);
             }
 
@@ -53,7 +60,7 @@ namespace SimpleCalendar.Api.Core.Data
         {
             var region = await coreDbContext.Regions
                 .Where(r => r.Id == id)
-                .Include(r => r.Roles)
+                .Include(r => r.Memberships)
                 .SingleOrDefaultAsync();
 
             if (!string.IsNullOrEmpty(region.ParentId))

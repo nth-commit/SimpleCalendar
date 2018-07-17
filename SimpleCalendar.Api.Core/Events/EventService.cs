@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using AutoMapper;
+﻿using AutoMapper;
 using SimpleCalendar.Framework;
 using SimpleCalendar.Utility.Authorization;
 using SimpleCalendar.Utiltiy.Validation;
@@ -8,9 +7,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using SimpleCalendar.Api.Core.Data;
-using SimpleCalendar.Api.Core.Regions.Authorization;
 using SimpleCalendar.Framework.Identity;
-using SimpleCalendar.Api.Core.Events.Authorization;
 
 namespace SimpleCalendar.Api.Core.Events
 {
@@ -41,7 +38,7 @@ namespace SimpleCalendar.Api.Core.Events
                 return EventGetResult.NotFound;
             }
 
-            var canView = (await _userAuthorizationService.AuthorizeAsync(entity, new ViewEventRequirement())).Succeeded;
+            var canView = await _userAuthorizationService.CanViewEventAsync(entity);
             if (!canView)
             {
                 return EventGetResult.Unauthorized;
@@ -61,7 +58,7 @@ namespace SimpleCalendar.Api.Core.Events
                 throw new ArgumentNullException(nameof(EventCreate.RegionId));
             }
 
-            var canCreate = await _userAuthorizationService.IsAuthorizedAsync(region, new CreateEventsRequirement());
+            var canCreate = await _userAuthorizationService.CanCreateEventsAsync(region);
             if (!canCreate)
             {
                 return EventCreateResult.Unauthorized;
@@ -69,13 +66,13 @@ namespace SimpleCalendar.Api.Core.Events
 
             var ev = _mapper.Map<Event>(create);
             ev.Created = DateTime.UtcNow;
-            ev.CreatedById = _userAccessor.User.GetUserId();
+            ev.CreatedByEmail = _userAccessor.User.GetUserEmail();
 
-            var canPublish = await _userAuthorizationService.IsAuthorizedAsync(region, new PublishEventsRequirement());
+            var canPublish = await _userAuthorizationService.CanPublishEventsAsync(region);
             if (canPublish)
             {
                 ev.Published = ev.Created;
-                ev.PublishedById = ev.CreatedById;
+                ev.PublishedById = ev.CreatedByEmail;
             }
 
             if (dryRun)

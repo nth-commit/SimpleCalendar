@@ -22,15 +22,16 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="IdentityModel" Version="3.7.0" />
-    <PackageReference Include="Microsoft.AspNetCore" Version="2.1.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="2.1.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.1.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Rewrite" Version="2.1.0" />
+    <PackageReference Include="IdentityModel" Version="3.8.0" />
+    <PackageReference Include="Microsoft.AspNetCore" Version="2.1.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="2.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Rewrite" Version="2.1.1" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="5.2.2" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\SimpleCalendar.Api.Core.Authorization\SimpleCalendar.Api.Core.Authorization.csproj" />
     <ProjectReference Include="..\SimpleCalendar.Api.Core\SimpleCalendar.Api.Core.csproj" />
     <ProjectReference Include="..\SimpleCalendar.Api.Models\SimpleCalendar.Api.Models.csproj" />
     <ProjectReference Include="..\SimpleCalendar.Framework\SimpleCalendar.Framework.csproj" />

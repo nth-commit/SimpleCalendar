@@ -1,18 +1,13 @@
+// tslint:disable:no-bitwise
 import * as React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import Typography from '@material-ui/core/Typography';
-import { IRegion } from 'src/services/Api';
-import RegionList from '../RegionList';
+import { IRegion, IRegionMembership, RegionRole } from 'src/services/Api';
 import { RegionHrefResolver } from '../../utility/RegionHrefResolver';
-
-const RegionManagementTabContainer = (props) => (
-  <Typography component="div">
-    {props.children}
-  </Typography>
-);
+import RegionList from '../RegionList';
+import RegionMemberships from '../RegionMemberships';
 
 const styles = theme => ({
   root: {
@@ -26,6 +21,8 @@ const styles = theme => ({
 
 export interface RegionManagementTabsProps {
   childRegions: IRegion[];
+  memberships: IRegionMembership[];
+  inheritedMemberships: IRegionMembership[];
   regionHrefResolver: RegionHrefResolver;
   classes: any;
 }
@@ -40,7 +37,7 @@ class RegionManagementTabs extends React.Component<RegionManagementTabsProps> {
   }
 
   renderTab() {
-    const { childRegions, regionHrefResolver } = this.props;
+    const { childRegions, memberships, inheritedMemberships, regionHrefResolver } = this.props;
     const { value } = this.state;
 
     if (value === 0 && childRegions.length) {
@@ -51,15 +48,19 @@ class RegionManagementTabs extends React.Component<RegionManagementTabsProps> {
         );
     } else if (value === 1) {
       return (
-        <RegionManagementTabContainer>
-          Item Two
-        </RegionManagementTabContainer>
+        <RegionMemberships
+          memberships={[
+            ...inheritedMemberships.filter(m => m.role & RegionRole.User),
+            ...memberships.filter(m => m.role & RegionRole.User)
+          ]} />
       );
     } else {
       return (
-        <RegionManagementTabContainer>
-          Item Three
-        </RegionManagementTabContainer>
+        <RegionMemberships
+          memberships={[
+            ...inheritedMemberships.filter(m => m.role & RegionRole.Administrator),
+            ...memberships.filter(m => m.role & RegionRole.Administrator)
+          ]} />
       );
     }
   }

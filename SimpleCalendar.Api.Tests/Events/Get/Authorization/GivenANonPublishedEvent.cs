@@ -40,7 +40,7 @@ namespace SimpleCalendar.Api.UnitTests.Events.Get.Authorization
                 IsPublic = true,
                 DataJson = "{}",
                 DataJsonVersion = 1,
-                CreatedById = CreatorUserId
+                CreatedByEmail = CreatorUserId
             });
         }
 
@@ -65,7 +65,7 @@ namespace SimpleCalendar.Api.UnitTests.Events.Get.Authorization
             [Fact]
             public async Task WhenIAmAnAdministratorAndGetTheEvent_ItReturns200OK()
             {
-                await this.GivenIAmARegionAdministratorAsync("UserId", RegionId);
+                await this.GivenIAmARegionSuperAdministratorAsync("UserId", RegionId);
 
                 var response = await Client.GetEventAsync(EventId);
                 response.AssertStatusCode(HttpStatusCode.OK);

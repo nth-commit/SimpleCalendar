@@ -11,77 +11,79 @@ namespace SimpleCalendar.Api.Core.Regions
 {
     public class RegionRoleService
     {
-        private readonly CoreDbContext _coreDbContext;
+        //private readonly CoreDbContext _coreDbContext;
 
-        public RegionRoleService(
-            CoreDbContext coreDbContext)
-        {
-            _coreDbContext = coreDbContext;
-        }
+        //public RegionRoleService(
+        //    CoreDbContext coreDbContext)
+        //{
+        //    _coreDbContext = coreDbContext;
+        //}
 
-        public async Task AddRegionRole(string regionId, string userId, Role role)
-        {
-            var regionRole = await _coreDbContext.RegionRoles
-                .Include(r => r.Region)
-                .Where(r => r.RegionId == regionId)
-                .Where(r => r.UserId == userId)
-                .FirstOrDefaultAsync();
+        //public async Task AddRegionRole(string regionId, string userEmail, string roleId)
+        //{
+        //    var regionRole = await _coreDbContext.RegionMemberships
+        //        .Include(r => r.Region)
+        //        .Where(r => r.RegionId == regionId)
+        //        .Where(r => r.UserEmail == userEmail)
+        //        .FirstOrDefaultAsync();
 
-            if (regionRole == null)
-            {
-                var region = await _coreDbContext.Regions.FindAsync(regionId);
-                if (region == null)
-                {
-                    throw new ArgumentNullException(nameof(regionId));
-                }
+        //    if (regionRole != null)
+        //    {
+        //        throw new Exception("Cannot add a region role that has already been added");
+        //    }
 
-                regionRole = new RegionRoleEntity()
-                {
-                    RegionId = regionId,
-                    UserId = userId,
-                    Role = Role.Unknown
-                };
-                await _coreDbContext.RegionRoles.AddAsync(regionRole);
-            }
+        //    var region = await _coreDbContext.Regions.FindAsync(regionId);
+        //    if (region == null)
+        //    {
+        //        throw new ArgumentNullException(nameof(regionId));
+        //    }
 
-            regionRole.Role &= role;
-            await _coreDbContext.SaveChangesAsync();
-        }
+        //    regionRole = new RegionMembershipEntity()
+        //    {
+        //        RegionId = regionId,
+        //        UserEmail = userEmail,
+        //        RegionRoleId = roleId
+        //    };
+        //    await _coreDbContext.RegionMemberships.AddAsync(regionRole);
 
-        public async Task RemoveRegionRole(string regionId, string userId, Role role)
-        {
-            var regionRole = await _coreDbContext.RegionRoles
-                .Include(r => r.Region)
-                .Where(r => r.RegionId == regionId)
-                .Where(r => r.UserId == userId)
-                .FirstOrDefaultAsync();
+        //    regionRole.Role &= role;
+        //    await _coreDbContext.SaveChangesAsync();
+        //}
 
-            if (regionRole == null)
-            {
-                throw new Exception("Entity not found");
-            }
+        //public async Task RemoveRegionRole(string regionId, string userId, Role role)
+        //{
+        //    var regionRole = await _coreDbContext.RegionMemberships
+        //        .Include(r => r.Region)
+        //        .Where(r => r.RegionId == regionId)
+        //        .Where(r => r.UserEmail == userId)
+        //        .FirstOrDefaultAsync();
 
-            if (regionRole.Role.HasFlag(role))
-            {
-                regionRole.Role -= role;
-            }
+        //    if (regionRole == null)
+        //    {
+        //        throw new Exception("Entity not found");
+        //    }
 
-            if (regionRole.Role == Role.Unknown)
-            {
-                _coreDbContext.RegionRoles.Remove(regionRole);
-            }
+        //    if (regionRole.Role.HasFlag(role))
+        //    {
+        //        regionRole.Role -= role;
+        //    }
 
-            await _coreDbContext.SaveChangesAsync();
-        }
+        //    if (regionRole.Role == Role.Unknown)
+        //    {
+        //        _coreDbContext.RegionMemberships.Remove(regionRole);
+        //    }
 
-        public async Task GetRegionAdministrators(string regionId)
-        {
-            await Task.FromResult(0);
-        }
+        //    await _coreDbContext.SaveChangesAsync();
+        //}
 
-        public async Task GetRegionUsers(string regionId)
-        {
-            await Task.FromResult(0);
-        }
+        //public async Task GetRegionAdministrators(string regionId)
+        //{
+        //    await Task.FromResult(0);
+        //}
+
+        //public async Task GetRegionUsers(string regionId)
+        //{
+        //    await Task.FromResult(0);
+        //}
     }
 }
