@@ -60,19 +60,12 @@ namespace SimpleCalendar.Api.Core.Events
                 async () => await _dbContext.RegionRoles.ToListAsync(),
                 isThreadSafe: true);
 
-            var lazyRegionMembershipsTask = new Lazy<Task<IEnumerable<RegionMembershipEntity>>>(
-                async () => await _dbContext.RegionMemberships
-                    .Where(rm => rm.UserEmail == _userAccessor.User.GetUserEmail())
-                    .ToListAsync(),
-                isThreadSafe: true);
-
             return events
                 .Where(e => _eventPermissionResolver.HasPermissionAsync(
-                    EventPermissions.View,
-                    e,
                     _userAccessor.User,
-                    lazyRegionRolesTask,
-                    lazyRegionMembershipsTask).Result)
+                    e,
+                    EventPermissions.View,
+                    lazyRegionRolesTask).Result)
                 .Select(e => _mapper.MapEntityToResult(e, e.Region));
         }
     }

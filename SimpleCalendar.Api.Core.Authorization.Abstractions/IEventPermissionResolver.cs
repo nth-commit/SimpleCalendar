@@ -10,10 +10,9 @@ namespace SimpleCalendar.Api.Core.Authorization
     public interface IEventPermissionResolver
     {
         Task<bool> HasPermissionAsync(
-            EventPermissions permission,
-            EventEntity ev,
             ClaimsPrincipal user,
-            Lazy<Task<IEnumerable<RegionRoleEntity>>> lazyRegionRolesTask,
-            Lazy<Task<IEnumerable<RegionMembershipEntity>>> lazyRegionMembershipsTask);
+            EventEntity ev,
+            EventPermissions permission,
+            Lazy<Task<IEnumerable<RegionRoleEntity>>> lazyRegionRolesTask);
     }
 }

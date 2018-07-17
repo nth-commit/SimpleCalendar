@@ -24,7 +24,6 @@ namespace SimpleCalendar.Utility.DependencyInjection
 
             services.AddTransient<IRegionCache, RegionCache>();
             services.AddTransient<IRegionRoleCache, RegionRoleCache>();
-            services.AddTransient<IRegionMembershipCache, RegionMembershipCache>();
 
             services.AddRequirement<IAuthorizationService>();
             // services.AddRequirement<IMemoryCache>();

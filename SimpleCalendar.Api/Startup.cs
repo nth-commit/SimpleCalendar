@@ -57,6 +57,9 @@ namespace SimpleCalendar.Api
             services.ConfigureAuth0();
             services.ConfigureHosts();
 
+            services.AddRegionMembershipCommands();
+            services.AddTransient<IClaimsTransformation, AddRolesClaimTransformation>();
+
             services.ValidateRequirements();
         }
 

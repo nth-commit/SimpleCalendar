@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
 using SimpleCalendar.Api.Core.Events;
 using System;
 using System.Collections.Generic;
@@ -16,7 +17,8 @@ namespace SimpleCalendar.Api.Controllers
 
         public EventsController(
             EventService eventService,
-            IEventQueryService eventQueryService)
+            IEventQueryService eventQueryService,
+            IServiceProvider serviceProvider)
         {
             _eventService = eventService;
             _eventQueryService = eventQueryService;

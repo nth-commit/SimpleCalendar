@@ -13,16 +13,13 @@ namespace SimpleCalendar.Api.Core.Authorization
     {
         private readonly IRegionPermissionResolver _regionPermissionResolver;
         private readonly IRegionRoleCache _regionRoleCache;
-        private readonly IRegionMembershipCache _regionMembershipCache;
 
         public RegionOperationAuthorizationHandler(
             IRegionPermissionResolver regionPermissionResolver,
-            IRegionRoleCache regionRoleCache,
-            IRegionMembershipCache regionMembershipCache)
+            IRegionRoleCache regionRoleCache)
         {
             _regionPermissionResolver = regionPermissionResolver;
             _regionRoleCache = regionRoleCache;
-            _regionMembershipCache = regionMembershipCache;
         }
 
         protected override async Task HandleRequirementAsync(
@@ -42,13 +39,11 @@ namespace SimpleCalendar.Api.Core.Authorization
                     RegionPermission.Memberships_WriteReader;
 
                 if (await _regionPermissionResolver.HasPermissionAsync(
+                    context.User,
                     resource,
                     requiredPermission,
-                    context.User,
                     new Lazy<Task<IEnumerable<RegionRoleEntity>>>(
-                        () => Task.FromResult(regionRoles)),
-                    new Lazy<Task<IEnumerable<RegionMembershipEntity>>>(
-                        () => _regionMembershipCache.ListRegionMembershipsAsync(context.User.GetUserEmail()))))
+                        () => Task.FromResult(regionRoles))))
                 {
                     context.Succeed(requirement);
                 }
@@ -62,24 +57,14 @@ namespace SimpleCalendar.Api.Core.Authorization
             }
         }
 
-        private Task<bool> HasPermissionAsync(RegionEntity resource, RegionPermission permission, AuthorizationHandlerContext context)
-            => _regionPermissionResolver.HasPermissionAsync(
-                resource,
-                permission,
-                context.User,
-                _regionRoleCache,
-                _regionMembershipCache);
-
-        private bool TryGetUserEmail(AuthorizationHandlerContext context, out string userEmail)
-        {
-            if (context.User.Identity.IsAuthenticated)
-            {
-                userEmail = context.User.GetUserEmail();
-                return true;
-            }
-
-            userEmail = null;
-            return false;
-        }
+        private Task<bool> HasPermissionAsync(
+            RegionEntity resource,
+            RegionPermission permission,
+            AuthorizationHandlerContext context)  =>
+                _regionPermissionResolver.HasPermissionAsync(
+                    context.User,
+                    resource,
+                    permission,
+                    _regionRoleCache);
     }
 }

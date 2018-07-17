@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Authorization;
 using SimpleCalendar.Api.Core.Data;
 using SimpleCalendar.Api.Core.Events;
-using SimpleCalendar.Api.Core.Organisation;
 using SimpleCalendar.Api.Core.Regions;
 using SimpleCalendar.Framework.Identity;
 using SimpleCalendar.Utility.Authorization;
@@ -20,8 +19,6 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             services.AddTransient<EventService>();
             services.AddTransient<IEventQueryService, EventQueryService>();
-
-            services.AddTransient<OrganisationService>();
 
             services.AddTransient<RegionService>();
             services.AddTransient<RegionRoleService>();

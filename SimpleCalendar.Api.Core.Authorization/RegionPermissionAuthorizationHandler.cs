@@ -11,25 +11,20 @@ namespace SimpleCalendar.Api.Core.Authorization
     public class RegionPermissionAuthorizationHandler : AuthorizationHandler<RegionPermissionRequirement, RegionEntity>
     {
         private readonly IRegionRoleCache _regionRoleCache;
-        private readonly IRegionMembershipCache _regionMembershipCache;
         private readonly IRegionPermissionResolver _regionPermissionResolver;
 
         public RegionPermissionAuthorizationHandler(
             IRegionRoleCache regionRoleCache,
-            IRegionMembershipCache regionMembershipCache,
             IRegionPermissionResolver regionPermissionResolver)
         {
             _regionRoleCache = regionRoleCache;
-            _regionMembershipCache = regionMembershipCache;
             _regionPermissionResolver = regionPermissionResolver;
         }
 
         protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context, RegionPermissionRequirement requirement, RegionEntity resource)
         {
             var roles = await _regionRoleCache.ListAsync();
-            var memberships = await _regionMembershipCache.ListRegionMembershipsAsync(context.User.GetUserEmail());
-
-            if (_regionPermissionResolver.HasPermission(requirement.Permission, resource, roles, memberships))
+            if (_regionPermissionResolver.HasPermission(context.User, resource, requirement.Permission, roles))
             {
                 context.Succeed(requirement);
             }

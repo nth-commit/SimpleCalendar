@@ -12,41 +12,34 @@ namespace SimpleCalendar.Api.Core.Authorization
     {
         public static Task<bool> HasPermissionAsync(
             this IRegionPermissionResolver regionPermissionResolver,
+            ClaimsPrincipal user,
             RegionEntity region,
             RegionPermission permission,
-            ClaimsPrincipal user,
-            IRegionRoleCache regionRoleCache,
-            IRegionMembershipCache regionMembershipCache)
+            IRegionRoleCache regionRoleCache)
                 => regionPermissionResolver.HasPermissionAsync(
+                    user,
                     region,
                     permission,
-                    user,
                     new Lazy<Task<IEnumerable<RegionRoleEntity>>>(
-                        () => regionRoleCache.ListAsync()),
-                    new Lazy<Task<IEnumerable<RegionMembershipEntity>>>(
-                        () => regionMembershipCache.ListRegionMembershipsAsync(user.GetUserEmail())));
+                        () => regionRoleCache.ListAsync()));
 
         public static async Task<bool> HasPermissionAsync(
             this IRegionPermissionResolver regionPermissionResolver,
+            ClaimsPrincipal user,
             RegionEntity region,
             RegionPermission permission,
-            ClaimsPrincipal user,
-            Lazy<Task<IEnumerable<RegionRoleEntity>>> lazyRegionRolesTask,
-            Lazy<Task<IEnumerable<RegionMembershipEntity>>> lazyRegionMembershipsTask)
+            Lazy<Task<IEnumerable<RegionRoleEntity>>> lazyRegionRolesTask)
         {
             if (!TryGetUserEmail(user, out string userEmail))
             {
                 return false;
             }
 
-            var regionRolesTask = lazyRegionRolesTask.Value;
-            var regionMembershipsTask = lazyRegionMembershipsTask.Value;
-            await Task.WhenAll(regionRolesTask, regionMembershipsTask);
-
             return regionPermissionResolver.HasPermission(
+                user,
                 region,
                 permission,
-                new RegionPermissionResolutionContext(user, regionRolesTask.Result, regionMembershipsTask.Result));
+                await lazyRegionRolesTask.Value);
         }
 
         private static bool TryGetUserEmail(ClaimsPrincipal user, out string userEmail)

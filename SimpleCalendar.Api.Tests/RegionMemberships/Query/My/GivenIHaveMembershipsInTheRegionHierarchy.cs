@@ -11,7 +11,7 @@ namespace SimpleCalendar.Api.UnitTests.RegionMemberships.Query.My
 {
     public class GivenIHaveMembershipsInTheRegionHierarchy : GivenARegionHierarchy
     {
-        private new const string UserId = "TheCurrentUser";
+        private const string UserId = "TheCurrentUser";
 
         public GivenIHaveMembershipsInTheRegionHierarchy() => InitializeAsync().GetAwaiter().GetResult();
 

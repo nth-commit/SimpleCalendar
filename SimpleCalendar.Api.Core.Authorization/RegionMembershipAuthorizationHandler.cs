@@ -12,18 +12,15 @@ namespace SimpleCalendar.Api.Core.Authorization
     {
         private readonly IRegionCache _regionCache;
         private readonly IRegionRoleCache _regionRoleCache;
-        private readonly IRegionMembershipCache _regionMembershipCache;
         private readonly IRegionPermissionResolver _regionPermissionResolver;
 
         public RegionMembershipAuthorizationHandler(
             IRegionCache regionCache,
             IRegionRoleCache regionRoleCache,
-            IRegionMembershipCache regionMembershipCache,
             IRegionPermissionResolver regionPermissionResolver)
         {
             _regionCache = regionCache;
             _regionRoleCache = regionRoleCache;
-            _regionMembershipCache = regionMembershipCache;
             _regionPermissionResolver = regionPermissionResolver;
         }
 
@@ -54,8 +51,7 @@ namespace SimpleCalendar.Api.Core.Authorization
 
             var regionTask = _regionCache.GetRegionByCodesAsync(queryRequirement.RegionId);
             var regionRolesTask = _regionRoleCache.ListAsync();
-            var regionMembershipsTask = _regionMembershipCache.ListRegionMembershipsAsync(context.User.GetUserEmail());
-            await Task.WhenAll(regionTask, regionRolesTask, regionMembershipsTask);
+            await Task.WhenAll(regionTask, regionRolesTask);
 
             var region = regionTask.Result;
             if (region == null)
@@ -64,10 +60,10 @@ namespace SimpleCalendar.Api.Core.Authorization
             }
 
             return _regionPermissionResolver.HasPermission(
-                RegionPermission.Memberships_Read,
+                context.User,
                 region,
-                regionRolesTask.Result,
-                regionMembershipsTask.Result);
+                RegionPermission.Memberships_Read,
+                regionRolesTask.Result);
         }
     }
 }

@@ -11,16 +11,13 @@ namespace SimpleCalendar.Api.Core.Authorization
     public class EventPermissionAuthorizationHandler : AuthorizationHandler<EventPermissionRequirement, EventEntity>
     {
         private readonly IRegionRoleCache _regionRoleCache;
-        private readonly IRegionMembershipCache _regionMembershipCache;
         private readonly IEventPermissionResolver _eventPermissionResolver;
 
         public EventPermissionAuthorizationHandler(
             IRegionRoleCache regionRoleCache,
-            IRegionMembershipCache regionMembershipCache,
             IEventPermissionResolver eventPermissionResolver)
         {
             _regionRoleCache = regionRoleCache;
-            _regionMembershipCache = regionMembershipCache;
             _eventPermissionResolver = eventPermissionResolver;
         }
 
@@ -34,14 +31,11 @@ namespace SimpleCalendar.Api.Core.Authorization
 
         private Task<bool> IsSuccessfulAsync(AuthorizationHandlerContext context, EventPermissionRequirement requirement, EventEntity resource) =>
             _eventPermissionResolver.HasPermissionAsync(
-                requirement.Permission,
-                resource,
                 context.User,
+                resource,
+                requirement.Permission,
                 new Lazy<Task<IEnumerable<RegionRoleEntity>>>(
                     () => _regionRoleCache.ListAsync(),
-                    isThreadSafe: true),
-                new Lazy<Task<IEnumerable<RegionMembershipEntity>>>(
-                    () => _regionMembershipCache.ListRegionMembershipsAsync(context.User.GetUserEmail()),
                     isThreadSafe: true));
     }
 }

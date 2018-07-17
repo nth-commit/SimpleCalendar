@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using SimpleCalendar.Api.Core.Data;
+using SimpleCalendar.Framework;
 using System;
 using System.Collections.Generic;
 using System.Security.Claims;
@@ -17,9 +18,8 @@ namespace SimpleCalendar.Api.Core.Authorization.UnitTests
 
         private readonly IAuthorizationService _authorizationService;
         private readonly Mock<IRegionRoleCache> _regionRoleCache = new Mock<IRegionRoleCache>();
-        private readonly Mock<IRegionMembershipCache> _regionMembershipCache = new Mock<IRegionMembershipCache>();
         private readonly List<RegionRoleEntity> _regionRoleEntities = new List<RegionRoleEntity>();
-        private readonly List<RegionMembershipEntity> _regionMembershipEntities = new List<RegionMembershipEntity>();
+        private readonly List<ClaimsExtensions.RegionMembershipRoleClaimValue> _regionMembershipRoleClaimValues = new List<ClaimsExtensions.RegionMembershipRoleClaimValue>();
 
         public GivenAnAuthorizationService()
         {
@@ -30,12 +30,10 @@ namespace SimpleCalendar.Api.Core.Authorization.UnitTests
             services.AddTransient<IAuthorizationHandler, RegionPermissionAuthorizationHandler>();
             services.AddTransient<IRegionPermissionResolver, RegionPermissionResolver>();
             services.AddSingleton(_regionRoleCache.Object);
-            services.AddSingleton(_regionMembershipCache.Object);
 
             _authorizationService = services.BuildServiceProvider().GetRequiredService<IAuthorizationService>();
 
             _regionRoleCache.Setup(x => x.ListAsync()).ReturnsAsync(_regionRoleEntities);
-            _regionMembershipCache.Setup(x => x.ListRegionMembershipsAsync(It.IsAny<string>())).ReturnsAsync(_regionMembershipEntities);
         }
 
         protected async Task<bool> IsAuthorizedAsync(RegionEntity region, IAuthorizationRequirement requirement)
@@ -43,6 +41,8 @@ namespace SimpleCalendar.Api.Core.Authorization.UnitTests
             var identity = new ClaimsIdentity();
             identity.AddClaim(new Claim("sub", Guid.NewGuid().ToString()));
             identity.AddClaim(new Claim("email", Email));
+            _regionMembershipRoleClaimValues.ForEach(rm => identity.AddRegionMembershipRole(rm));
+
             var principal = new ClaimsPrincipal(identity);
             return (await _authorizationService.AuthorizeAsync(principal, region, requirement)).Succeeded;
         }
@@ -70,11 +70,10 @@ namespace SimpleCalendar.Api.Core.Authorization.UnitTests
 
         protected void AddRegionMembership(string regionId, string roleId)
         {
-            _regionMembershipEntities.Add(new RegionMembershipEntity()
+            _regionMembershipRoleClaimValues.Add(new ClaimsExtensions.RegionMembershipRoleClaimValue()
             {
                 RegionId = regionId,
-                RegionRoleId = roleId,
-                UserEmail = Email
+                RegionRoleId = roleId
             });
         }
     }

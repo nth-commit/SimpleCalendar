@@ -124,6 +124,13 @@ namespace SimpleCalendar.Api.UnitTests.RegionMemberships.Create
             {
                 await CreateAndAssertCreatedAsync(ValidRegionMembership);
             }
+
+            [Fact]
+            public async Task WhenICreateTheMembership_ICanDeleteIt()
+            {
+                var regionMembership = await CreateAndAssertCreatedAsync(ValidRegionMembership);
+                Assert.True(regionMembership.Permissions.CanDelete);
+            }
         }
     }
 }
