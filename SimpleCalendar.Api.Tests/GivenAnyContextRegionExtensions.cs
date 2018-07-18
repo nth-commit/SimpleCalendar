@@ -9,11 +9,11 @@ namespace SimpleCalendar.Api.UnitTests
 {
     public static class GivenAnyContextRegionExtensions
     {
-        public const string Level1RegionId = "new-zealand";
-        public const string Level2RegionId = "new-zealand/wellington";
-        public const string Level2ARegionId = "new-zealand/wellington";
-        public const string Level2BRegionId = "new-zealand/auckland";
-        public const string Level3RegionId = "new-zealand/wellington/mount-victoria";
+        public const string Level1RegionId = Constants.Level1RegionId;
+        public const string Level2RegionId = Constants.Level2RegionId;
+        public const string Level2ARegionId = Constants.Level2ARegionId;
+        public const string Level2BRegionId = Constants.Level2BRegionId;
+        public const string Level3RegionId = Constants.Level3RegionId;
 
         private readonly static IReadOnlyList<RegionCreate> _regions = new List<RegionCreate>()
         {

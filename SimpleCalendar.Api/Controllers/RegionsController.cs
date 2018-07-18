@@ -44,17 +44,14 @@ namespace SimpleCalendar.Api.Controllers
         [HttpGet("{*id}")]
         public async Task<IActionResult> Get([FromRoute] string id)
         {
-            var region = id == "ROOT" ?
-                await _coreDbContext.GetRegionByIdAsync(id) :
-                await _coreDbContext.GetRegionByCodesAsync(id);
-
+            var region = await _regionService.GetRegionAsync(id);
             if (region == null)
             {
                 return NotFound();
             }
             else
             {
-                return Ok(_mapper.Map<RegionResult>(region));
+                return Ok(region);
             }
         }
     }

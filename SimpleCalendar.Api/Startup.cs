@@ -52,12 +52,14 @@ namespace SimpleCalendar.Api
             services.AddAutoMapper(conf =>
             {
                 conf.AddApiCoreMappers();
+                conf.AddRegionRoleMappers();
             });
 
             services.ConfigureAuth0();
             services.ConfigureHosts();
 
-            services.AddRegionMembershipCommands();
+            services.AddRegionMembershipServices();
+            services.AddRegionRoleServices();
             services.AddTransient<IClaimsTransformation, AddRolesClaimTransformation>();
 
             services.ValidateRequirements();

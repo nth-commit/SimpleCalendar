@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using SimpleCalendar.Api.Core.Data;
 using SimpleCalendar.Utility.Authorization;
 
-namespace SimpleCalendar.Api.Commands.RegionMemberships.Impl
+namespace SimpleCalendar.Api.Commands.RegionMemberships.Impl.Delete
 {
     public class DeleteRegionMembershipCommand : IDeleteRegionMembershipCommand
     {

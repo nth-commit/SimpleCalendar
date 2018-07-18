@@ -27,5 +27,8 @@ namespace SimpleCalendar.Utility.Authorization
 
         public static Task<bool> CanDeleteMembershipsAsync(this IUserAuthorizationService userAuthorizationService, RegionEntity regionEntity)
             => userAuthorizationService.IsAuthorizedAsync(regionEntity, RegionOperationRequirement.DeleteMemberships);
+
+        public static Task<bool> CanQueryRolesAsync(this IUserAuthorizationService userAuthorizationService)
+            => userAuthorizationService.IsAuthorizedAsync(RegionRoleAuthorizationRequirement.Query());
     }
 }

@@ -4,12 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using SimpleCalendar.Api.Core.Authorization;
 using SimpleCalendar.Api.Core.Data;
 using SimpleCalendar.Api.Models;
 using SimpleCalendar.Utility.Authorization;
 
-namespace SimpleCalendar.Api.Commands.RegionMemberships.Impl
+namespace SimpleCalendar.Api.Commands.RegionMemberships.Impl.Create
 {
     public class CreateRegionMembershipCommand : ICreateRegionMembershipCommand
     {

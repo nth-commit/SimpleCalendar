@@ -12,7 +12,7 @@ namespace SimpleCalendar.Api.UnitTests
     {
         public static Task<RegionMembershipEntity> GivenASuperAdministratorAsync(
             this GivenAnyContext context, string userId, string regionId)
-                => context.GivenARegionMembershipAsync(userId, regionId, Constants.RegionRoles.SuperAdministrator);
+                => context.GivenARegionMembershipAsync(userId, regionId, Core.Data.Constants.RegionRoles.SuperAdministrator);
 
         public static async Task<RegionMembershipEntity> GivenARegionMembershipAsync(
             this GivenAnyContext context,

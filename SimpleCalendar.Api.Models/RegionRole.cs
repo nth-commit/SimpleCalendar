@@ -2,14 +2,12 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace SimpleCalendar.Api.Core.Regions
+namespace SimpleCalendar.Api.Models
 {
-    public class RegionResult
+    public class RegionRole
     {
         public string Id { get; set; }
 
         public string Name { get; set; }
-
-        public RegionAuthorization Permissions { get; set; }
     }
 }

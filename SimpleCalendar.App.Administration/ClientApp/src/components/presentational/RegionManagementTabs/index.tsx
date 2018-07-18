@@ -4,7 +4,7 @@ import { withStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import { IRegion, IRegionMembership, RegionRole } from 'src/services/Api';
+import { IRegion, IRegionMembership, SUPER_ADMINISTRATOR, ADMINISTRATOR, USER } from 'src/services/Api';
 import { RegionHrefResolver } from '../../utility/RegionHrefResolver';
 import RegionList from '../RegionList';
 import RegionMemberships from '../RegionMemberships';
@@ -32,37 +32,14 @@ class RegionManagementTabs extends React.Component<RegionManagementTabsProps> {
     value: 0,
   };
 
-  handleChange = (event, value) => {
-    this.setState({ value });
+  componentWillMount() {
+    if (!this.props.childRegions.length && this.state.value === 0) {
+      this.setState({ value: 1 });
+    }
   }
 
-  renderTab() {
-    const { childRegions, memberships, inheritedMemberships, regionHrefResolver } = this.props;
-    const { value } = this.state;
-
-    if (value === 0 && childRegions.length) {
-      return (
-        <RegionList
-          regions={childRegions}
-          regionHrefResolver={regionHrefResolver} />
-        );
-    } else if (value === 1) {
-      return (
-        <RegionMemberships
-          memberships={[
-            ...inheritedMemberships.filter(m => m.role & RegionRole.User),
-            ...memberships.filter(m => m.role & RegionRole.User)
-          ]} />
-      );
-    } else {
-      return (
-        <RegionMemberships
-          memberships={[
-            ...inheritedMemberships.filter(m => m.role & RegionRole.Administrator),
-            ...memberships.filter(m => m.role & RegionRole.Administrator)
-          ]} />
-      );
-    }
+  handleChange = (event, value) => {
+    this.setState({ value });
   }
 
   render() {
@@ -73,14 +50,48 @@ class RegionManagementTabs extends React.Component<RegionManagementTabsProps> {
       <div className={classes.root}>
         <AppBar position="static">
           <Tabs value={value} onChange={this.handleChange}>
-            {childRegions.length && <Tab className={classes.tab} label="Sub-Regions" />}
-            <Tab className={classes.tab} label="Users" />
-            <Tab className={classes.tab} label="Admins" />
+            {childRegions.length && <Tab className={classes.tab} value={0} label="Sub-Regions" />}
+            <Tab className={classes.tab} value={1} label="Super Admins" />
+            <Tab className={classes.tab} value={2} label="Admins" />
+            <Tab className={classes.tab} value={3} label="Users" />
           </Tabs>
         </AppBar>
         {this.renderTab()}
       </div>
     );
+  }
+
+  private renderTab() {
+    const { childRegions, regionHrefResolver } = this.props;
+    const { value } = this.state;
+
+    if (value === 0) {
+      return (
+        <RegionList
+          regions={childRegions}
+          regionHrefResolver={regionHrefResolver} />
+        );
+    } else if (value === 1) {
+      return (
+        <RegionMemberships memberships={this.getMemberships(SUPER_ADMINISTRATOR)} />
+      );
+    } else if (value === 2) {
+      return (
+        <RegionMemberships memberships={this.getMemberships(ADMINISTRATOR)} />        
+      );
+    } else {
+      return (
+        <RegionMemberships memberships={this.getMemberships(USER)} />
+      );
+    }
+  }
+
+  private getMemberships(regionRoleId: string, includeInherited = true) {
+    const { memberships, inheritedMemberships } = this.props;
+    return [
+      ...(includeInherited ? inheritedMemberships.filter(m => m.regionRoleId === regionRoleId) : []),
+      ...memberships.filter(m => m.regionRoleId === regionRoleId)
+    ]
   }
 }
 

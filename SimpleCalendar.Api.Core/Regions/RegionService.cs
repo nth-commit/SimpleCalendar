@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using SimpleCalendar.Api.Core.Data;
+using SimpleCalendar.Utility.Authorization;
 using SimpleCalendar.Utiltiy.Validation;
 using System;
 using System.Collections.Generic;
@@ -12,13 +13,16 @@ namespace SimpleCalendar.Api.Core.Regions
 {
     public class RegionService
     {
+        private readonly IUserAuthorizationService _authorizationService;
         private readonly CoreDbContext _coreDbContext;
         private readonly IMapper _mapper;
 
         public RegionService(
+            IUserAuthorizationService authorizationService,
             CoreDbContext coreDbContext,
             IMapper mapper)
         {
+            _authorizationService = authorizationService;
             _coreDbContext = coreDbContext;
             _mapper = mapper;
         }
@@ -30,19 +34,22 @@ namespace SimpleCalendar.Api.Core.Regions
                 throw new ArgumentNullException(nameof(id));
             }
 
-            var codesJoinedLower = id.ToLower();
-            var codes = codesJoinedLower.Split('.');
-
-            var region = await _coreDbContext.GetRegionByCodesAsync(codes);
+            var region = await _coreDbContext.GetRegionByCodesAsync(id);
             if (region == null)
             {
-                throw new Exception("Entity not found");
+                return null;
             }
 
-            return new RegionResult()
+            var roles = await _coreDbContext.RegionRoles.ToListAsync();
+            var result = _mapper.Map<RegionResult>(region);
+            result.Permissions = new RegionAuthorization()
             {
-                Id = codesJoinedLower
+                CanAddMemberships = roles.ToDictionary(
+                    r => r.Id,
+                    r => _authorizationService.CanCreateMembershipAsync(region, r.Id).Result)
             };
+
+            return result;
         }
 
         public async Task<IEnumerable<RegionResult>> ListRegionsAsync(string parentId)
@@ -52,7 +59,19 @@ namespace SimpleCalendar.Api.Core.Regions
             {
                 Validator.ThrowInvalid(nameof(parentId), $"Could not find region with {nameof(parentId)} \"{parentId}\"");
             }
-            return region.Children.Select(r => _mapper.Map<RegionResult>(r));
+
+            var roles = await _coreDbContext.RegionRoles.ToListAsync();
+            return region.Children.Select(r =>
+            {
+                var result = _mapper.Map<RegionResult>(r);
+                result.Permissions = new RegionAuthorization()
+                {
+                    CanAddMemberships = roles.ToDictionary(
+                        rr => rr.Id,
+                        rr => _authorizationService.CanCreateMembershipAsync(region, rr.Id).Result)
+                };
+                return result;
+            });
         }
 
         public async Task<RegionCreateResult> CreateRegionAsync(RegionCreate create)

@@ -25,7 +25,7 @@ namespace SimpleCalendar.Api.UnitTests.Events.Create.Authorization
             await dbContext.RegionMemberships.AddAsync(new RegionMembershipEntity()
             {
                 RegionId = Level2RegionId,
-                RegionRoleId = Constants.RegionRoles.SuperAdministrator,
+                RegionRoleId = Core.Data.Constants.RegionRoles.SuperAdministrator,
                 UserEmail = Level2AdministratorId
             });
 

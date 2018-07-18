@@ -14,13 +14,13 @@ namespace SimpleCalendar.Api.UnitTests
             => context.GivenIHaveAnEmail("michaelfry2002@gmail.com");
 
         public static Task GivenIAmARegionUserAsync(this GivenAnyContext context, string email, string regionId)
-            => context.GivenIHaveARoleInARegion(email, regionId, Constants.RegionRoles.User);
+            => context.GivenIHaveARoleInARegion(email, regionId, Core.Data.Constants.RegionRoles.User);
 
         public static Task GivenIAmARegionAdministratorAsync(this GivenAnyContext context, string email, string regionId)
-            => context.GivenIHaveARoleInARegion(email, regionId, Constants.RegionRoles.Administrator);
+            => context.GivenIHaveARoleInARegion(email, regionId, Core.Data.Constants.RegionRoles.Administrator);
 
         public static Task GivenIAmARegionSuperAdministratorAsync(this GivenAnyContext context, string email, string regionId)
-            => context.GivenIHaveARoleInARegion(email, regionId, Constants.RegionRoles.SuperAdministrator);
+            => context.GivenIHaveARoleInARegion(email, regionId, Core.Data.Constants.RegionRoles.SuperAdministrator);
 
         public static void GivenIHaveAnEmail(this GivenAnyContext context, string email)
             => context.UserEmail.Setup(x => x.Value).Returns(email);
