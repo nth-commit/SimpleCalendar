@@ -1,66 +1,45 @@
 import * as React from 'react';
 import { appConnect } from 'src/store';
-import { AuthState, authActionCreators, isAdministrator } from 'src/store/Auth';
+import { authActionCreators } from 'src/store/Auth';
 import { regionActionCreators, areSuperBaseRegionsLoaded } from 'src/store/Regions';
 import Navbar from '../Navbar';
 
-enum AuthorizationStatus {
-  Undetermined,
-  Successful,
-  Unsuccessful
-}
-
 export interface LayoutStateProps {
-  isLoaded: boolean;
-  authorizationStatus: AuthorizationStatus;
+  isLoading: boolean;
 }
 
 export interface LayoutDispatchProps {
-  onMounted(): void;
+  onMount(): void;
 }
 
-export type LayoutProps = LayoutStateProps & LayoutDispatchProps;
-
-export class UnconnectedLayout extends React.PureComponent<LayoutProps> {
+export class UnconnectedLayout extends React.Component<LayoutStateProps & LayoutDispatchProps> {
 
   componentDidMount() {
-    this.props.onMounted();
+    this.props.onMount();
   }
 
   render() {
-    if (this.props.authorizationStatus !== AuthorizationStatus.Successful) {
-      return null;
-    }
-
-    if (!this.props.isLoaded) {
+    if (this.props.isLoading) {
       return null;
     }
 
     return (
       <div>
         <Navbar />
-        {this.props.children}
+        <div>{this.props.children}</div>
       </div>
     );
   }
 }
 
-function getAuthorizationStatus(state: AuthState): AuthorizationStatus {
-  if (state.regionMembershipsLoading || !state.regionMemberships) {
-    return AuthorizationStatus.Undetermined;
-  }
-  return isAdministrator(state) ? AuthorizationStatus.Successful : AuthorizationStatus.Unsuccessful;
-}
-
 export default appConnect<LayoutStateProps, LayoutDispatchProps>(
   state => ({
-    authorizationStatus: getAuthorizationStatus(state.auth),
-    isLoaded: areSuperBaseRegionsLoaded(state)
+    isLoading: !areSuperBaseRegionsLoaded(state)
   }),
   dispatch => ({
-    onMounted: async () => {
-      await dispatch(authActionCreators.fetchRegionMemberships());
-      await dispatch(regionActionCreators.fetchBaseRegionParents());
+    onMount: () => {
+      dispatch(authActionCreators.fetchRegionMemberships());
+      dispatch(regionActionCreators.fetchBaseRegionParents());
     }
   })
 )(UnconnectedLayout) as any;

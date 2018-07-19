@@ -26,12 +26,28 @@ export const fetchMockRegionResponse = (regionId: string, response?: _fetchMock.
 
   fetchMock.mock(
     location,
-    response || createRegionResponse(regionId)
+    response || createRegionResponse(regionId),
+    {
+      overwriteRoutes: true
+    }
   );
 }
 
-export const fetchMockSuppressNotFound = () => {
+export const fetchMockThrowNotFound = () => {
   fetchMock.get('*', 404);
+}
+
+export const fetchMockSuppressNotFound = () => {
+  fetchMock.get('*', {
+    body: {},
+    status: 200
+  });
+}
+
+export const fetchMockRegionQueryResponse = () => {
+  fetchMock.get(REGIONS_API, {
+    body: []
+  });
 }
 
 

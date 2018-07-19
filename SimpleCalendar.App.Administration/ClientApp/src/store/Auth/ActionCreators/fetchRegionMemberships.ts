@@ -10,7 +10,7 @@ export default function fetchRegionMemberships(): ApplicationThunkActionAsync {
 
     dispatch({ ...new FetchRegionMembershipsBegin() });
 
-    const regionMemberships = await new Api().getMyRegionMemberships();
+    const regionMemberships = await new Api(getState().auth.accessToken).getMyRegionMemberships();
 
     dispatch({ ...new FetchRegionMembershipsComplete(regionMemberships) });
   };

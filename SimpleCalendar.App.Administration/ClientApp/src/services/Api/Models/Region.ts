@@ -16,3 +16,8 @@ export interface IRegionMembershipQuery {
   regionId?: string;
   userId?: string;
 }
+
+export interface IRegionRole {
+  id: string;
+  name: string;
+}

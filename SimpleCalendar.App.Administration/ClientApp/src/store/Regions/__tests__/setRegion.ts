@@ -1,6 +1,6 @@
 import { ROOT_REGION_ID } from 'src/constants';
 import configureStore from 'test-helpers/configureStore';
-import { fetchMockRootRegionResponse, fetchMockRegionResponse, createRegionResponse } from 'test-helpers/mocks/fetch';
+import { fetchMockRootRegionResponse, fetchMockRegionResponse, createRegionResponse, fetchMockSuppressNotFound } from 'test-helpers/mocks/fetch';
 import { regionActionCreators, RegionPathComponentValue } from '../';
 
 describe('store.regions.setRegion', () => {
@@ -39,9 +39,9 @@ describe('store.regions.setRegion', () => {
     expect(regionPathComponentValue.region.id).toBe(regionId);
   };
 
-  it(`[SHOULD] load root region
-      [WHEN] set region is called with root region id`,
+  it(`[SHOULD] load root region [WHEN] set region is called with root region id`,
   async () => {
+    fetchMockSuppressNotFound();
     fetchMockRootRegionResponse();
 
     await dispatchSetRegion(ROOT_REGION_ID);
@@ -49,9 +49,9 @@ describe('store.regions.setRegion', () => {
     expectRegion(ROOT_REGION_ID);
   });
 
-  it(`[SHOULD] load root region and new-zealand
-      [WHEN] set region is called with new-zealand`,
+  it(`[SHOULD] load root region and new-zealand [WHEN] set region is called with new-zealand`,
   async () => {
+    fetchMockSuppressNotFound();
     fetchMockRootRegionResponse();
     fetchMockRegionResponse(NEW_ZEALAND_REGION_ID);
 
@@ -60,9 +60,9 @@ describe('store.regions.setRegion', () => {
     expectRegion(NEW_ZEALAND_REGION_ID);
   });
 
-  it(`[SHOULD] load root region, new-zealand and wellington
-      [WHEN] set region is called with wellington`,
+  it(`[SHOULD] load root region, new-zealand and wellington [WHEN] set region is called with wellington`,
   async () => {
+    fetchMockSuppressNotFound();
     fetchMockRootRegionResponse();
     fetchMockRegionResponse(NEW_ZEALAND_REGION_ID);
     fetchMockRegionResponse(WELLINGTON_REGION_ID);
@@ -73,9 +73,9 @@ describe('store.regions.setRegion', () => {
   });
 
 
-  it(`[SHOULD] load root region and australia
-      [WHEN] set region is called with new-zealand and then australia`,
+  it(`[SHOULD] load root region and australia [WHEN] set region is called with new-zealand and then australia`,
   async () => {
+    fetchMockSuppressNotFound();
     fetchMockRootRegionResponse();
     fetchMockRegionResponse(NEW_ZEALAND_REGION_ID);
     fetchMockRegionResponse(AUSTRALIA_REGION_ID);
@@ -86,9 +86,9 @@ describe('store.regions.setRegion', () => {
     expectRegion(AUSTRALIA_REGION_ID);
   });
 
-  it(`[SHOULD] load root region and australia 2
-      [WHEN] set region is called with new-zealand and then immediately australia, and new-zealand returns after`,
+  it(`[SHOULD] load root region and australia [WHEN] set region is called with new-zealand and then immediately australia, and new-zealand returns after`,
   async () => {
+    fetchMockSuppressNotFound();
     fetchMockRootRegionResponse();
 
     let resolveNewZealandResponse: () => void;
@@ -113,9 +113,9 @@ describe('store.regions.setRegion', () => {
     expectRegion(AUSTRALIA_REGION_ID);
   });
 
-  it(`[SHOULD] load root region, new-zealand and auckland
-      [WHEN] set region is called with wellington and then auckland`,
+  it(`[SHOULD] load root region, new-zealand and auckland [WHEN] set region is called with wellington and then auckland`,
   async () => {
+    fetchMockSuppressNotFound();
     fetchMockRootRegionResponse();
     fetchMockRegionResponse(NEW_ZEALAND_REGION_ID);
     fetchMockRegionResponse(WELLINGTON_REGION_ID);

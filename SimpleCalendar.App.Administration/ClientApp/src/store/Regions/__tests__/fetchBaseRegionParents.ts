@@ -1,6 +1,6 @@
 import { ROOT_REGION_ID } from 'src/constants';
 import configureStore from 'test-helpers/configureStore';
-import { fetchMockRegionResponse, fetchMockRootRegionResponse, fetchMockSuppressNotFound } from 'test-helpers/mocks/fetch';
+import { fetchMockRegionResponse, fetchMockRootRegionResponse, fetchMockThrowNotFound } from 'test-helpers/mocks/fetch';
 import { configurationActionCreators } from 'src/store/Configuration';
 import { regionActionCreators } from '../';
 
@@ -8,7 +8,7 @@ describe('store.regions.fetchBaseRegionParents', () => {
   const { dispatch, getState } = configureStore();
 
   it('SHOULD not fetch any regions WHEN base is root', async () => {
-    fetchMockSuppressNotFound();
+    fetchMockThrowNotFound();
 
     await dispatch(regionActionCreators.fetchBaseRegionParents());
 

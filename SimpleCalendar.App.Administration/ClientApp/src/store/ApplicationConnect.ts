@@ -39,6 +39,8 @@ interface MergeProps<TStateProps, TDispatchProps, TOwnProps, TMergedProps> {
 }
 
 export interface ApplicationConnect {
+  (): InferableComponentEnhancerWithProps<{}, {}>; 
+
   <TStateProps = {}, no_dispatch = {}, TOwnProps = {}>(
     mapStateToProps: MapStateToProps<TStateProps, TOwnProps>
   ): InferableComponentEnhancerWithProps<TStateProps & ApplicationDispatchProp, TOwnProps>;

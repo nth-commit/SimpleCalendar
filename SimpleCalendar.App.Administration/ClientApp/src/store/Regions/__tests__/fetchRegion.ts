@@ -2,7 +2,7 @@ import { ROOT_REGION_ID } from 'src/constants';
 import { configurationActionCreators } from '../../Configuration';
 import configureStore from 'test-helpers/configureStore';
 import { expectThrowsAsync } from 'test-helpers/expect-helpers';
-import { fetchMockRegionResponse, fetchMockSuppressNotFound } from 'test-helpers/mocks/fetch';
+import { fetchMockRegionResponse, fetchMockThrowNotFound } from 'test-helpers/mocks/fetch';
 import { regionActionCreators } from '../';
 
 describe('store.regions.fetchRegion', () => {
@@ -23,7 +23,7 @@ describe('store.regions.fetchRegion', () => {
 
   it('should throw when region not found', async () => {
     fetchMockRegionResponse(ROOT_REGION_ID);
-    fetchMockSuppressNotFound();
+    fetchMockThrowNotFound();
 
     await dispatch(regionActionCreators.fetchRegion(ROOT_REGION_ID));
     await expectThrowsAsync(() => dispatch(regionActionCreators.fetchRegion('non-existent-region')));

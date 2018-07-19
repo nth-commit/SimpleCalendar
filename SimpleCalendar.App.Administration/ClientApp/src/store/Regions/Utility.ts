@@ -66,14 +66,14 @@ function isRegionsState(state: RegionState | RegionPath): state is RegionState {
 
 export function isPathLoading(state: ApplicationState | RegionState | RegionPath): boolean {
   if (isState(state)) {
-    return isPathLoading(state.regions);
+    state = state.regions;
   }
 
   if (isRegionsState(state)) {
-    return isPathLoading(state.path);
+    state = state.path
   }
   
-  return state.length === 0 || state.some(r => r.loading);
+  return state.length > 0 && state.some(r => r.loading);
 }
 
 export function pathContainsRegion(state: ApplicationState, regionId: string): boolean {

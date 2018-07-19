@@ -10,7 +10,7 @@ export function fetchRegion(regionId: string): ApplicationThunkActionAsync {
 
     dispatch({ ...new FetchRegionBegin(regionId) });
 
-    const api = new Api();
+    const api = new Api(getState().auth.accessToken);
     const [region, childRegions, regionMemberships] = await Promise.all([
       api.getRegion(regionId),
       api.getRegions(regionId),

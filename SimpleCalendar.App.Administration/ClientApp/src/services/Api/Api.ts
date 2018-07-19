@@ -1,11 +1,12 @@
 import { ROOT_REGION_ID } from 'src/constants';
 import { getConfiguration } from './Configure';
-import { IRegion, IRegionMembership, IRegionMembershipQuery } from './Models';
-import { Auth } from '../Auth';
+import { IRegion, IRegionMembership, IRegionMembershipQuery, IRegionRole } from './Models';
 
 export class Api {
 
   private configuration = getConfiguration();
+
+  constructor(private accessToken: string) { }
 
   getRegion(id: string): Promise<IRegion> {
     return this.fetchJson<IRegion>(this.getUrl(`regions/${id}`));
@@ -40,6 +41,10 @@ export class Api {
     return this.fetchJson<IRegionMembership[]>(url, search);
   }
 
+  getRegionRoles(): Promise<IRegionRole[]> {
+    return this.fetchJson<IRegionRole[]>(this.getUrl('regionroles'));
+  }
+
   private async fetchJson<T>(url: URL, search?: URLSearchParams): Promise<T> {
     const response = await this.fetchResponse(url, search);
     const json: T = await response.json();
@@ -53,9 +58,8 @@ export class Api {
 
     const headers = new Headers();
 
-    const auth = new Auth();
-    if (auth.isAuthenticated()) {
-      headers.append('Authorization', `Bearer ${localStorage.getItem('access_token')}`);
+    if (this.accessToken) {
+      headers.append('Authorization', `Bearer ${this.accessToken}`);
     }
 
     const response = await fetch(url.toString(), {
