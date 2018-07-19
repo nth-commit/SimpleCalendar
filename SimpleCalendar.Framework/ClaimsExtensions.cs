@@ -24,9 +24,7 @@ namespace SimpleCalendar.Framework
         public static void AddRegionMembershipRole(
             this ClaimsIdentity claimsIdentity,
             RegionMembershipRoleClaimValue claimValue) =>
-                claimsIdentity.AddClaim(new Claim(
-                    ClaimsIdentity.DefaultRoleClaimType,
-                    $"{claimValue.RegionId}:{claimValue.RegionRoleId}"));
+                claimsIdentity.AddClaim(claimValue.ToClaim());
 
         public static IEnumerable<RegionMembershipRoleClaimValue> GetRegionMembershipRoles(this ClaimsPrincipal principal) =>
             principal.Claims
@@ -43,6 +41,10 @@ namespace SimpleCalendar.Framework
             public string RegionId { get; set; }
 
             public string RegionRoleId { get; set; }
+
+            public Claim ToClaim() => new Claim(
+                ClaimsIdentity.DefaultRoleClaimType,
+                $"{RegionId}:{RegionRoleId}");
         }
     }
 }

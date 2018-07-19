@@ -11,11 +11,10 @@ namespace SimpleCalendar.Api.Core.Data
         [Key]
         public string Email { get; set; }
 
-        public string ClaimsByAuthorityJson { get; set; }
+        public string ClaimsBySubJson { get; set; }
 
-        public int ClaimsByAuthorityVersion { get; set; }
+        public int ClaimsBySubVersion { get; set; }
 
-        [InverseProperty(nameof(RegionMembershipEntity.User))]
-        public List<RegionMembershipEntity> Memberships { get; set; }
+        public string OriginatingSub { get; set; }
     }
 }

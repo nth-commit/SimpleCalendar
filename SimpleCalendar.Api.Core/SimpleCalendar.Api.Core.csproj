@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SimpleCalendar.Api.Core.Authorization.Abstractions\SimpleCalendar.Api.Core.Authorization.Abstractions.csproj" />
+    <ProjectReference Include="..\SimpleCalendar.Api.Core.Authorization\SimpleCalendar.Api.Core.Authorization.csproj" />
     <ProjectReference Include="..\SimpleCalendar.Api.Core.Data\SimpleCalendar.Api.Core.Data.csproj" />
     <ProjectReference Include="..\SimpleCalendar.Api.Models\SimpleCalendar.Api.Models.csproj" />
     <ProjectReference Include="..\SimpleCalendar.Framework\SimpleCalendar.Framework.csproj" />

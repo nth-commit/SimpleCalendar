@@ -37,7 +37,7 @@ namespace SimpleCalendar.Api.UnitTests.Utililty
             else
             {
                 var identity = new ClaimsIdentity("TestAuthenticationType");
-                identity.AddClaim(new Claim("sub", Guid.NewGuid().ToString()));
+                identity.AddClaim(new Claim("sub", "test|123"));
                 identity.AddClaim(new Claim("email", userEmail));
                 var principal = new ClaimsPrincipal(identity);
                 result = AuthenticateResult.Success(new AuthenticationTicket(principal, "TestScheme"));

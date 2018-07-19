@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using SimpleCalendar.Api.Core.Data;
+using SimpleCalendar.Api.Middleware.UserPreparation;
 using SimpleCalendar.Api.UnitTests.Utililty;
 using System;
 using System.Collections.Generic;
@@ -23,6 +24,8 @@ namespace SimpleCalendar.Api.UnitTests
         public IServiceProvider Services { get; private set; }
 
         public Mock<IUserEmailContainer> UserEmail => _mocks.UserEmail;
+
+        public Mock<IUserInfoService> UserInfoService => _mocks.UserInfoService;
 
         public GivenAnyContext() => InitializeAsync().GetAwaiter().GetResult();
 

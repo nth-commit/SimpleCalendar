@@ -4,7 +4,6 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
-using IdentityModel.Client;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -19,8 +18,6 @@ using SimpleCalendar.Framework;
 using SimpleCalendar.Framework.Identity;
 using SimpleCalendar.Utility.DependencyInjection;
 using Microsoft.Extensions.Configuration;
-using Microsoft.AspNetCore.Authentication;
-using SimpleCalendar.Api.Core.Authorization;
 
 namespace SimpleCalendar.Api
 {
@@ -58,9 +55,10 @@ namespace SimpleCalendar.Api
             services.ConfigureAuth0();
             services.ConfigureHosts();
 
+            services.AddUserPreparation();
+
             services.AddRegionMembershipServices();
             services.AddRegionRoleServices();
-            services.AddTransient<IClaimsTransformation, AddRolesClaimTransformation>();
 
             services.ValidateRequirements();
         }
@@ -83,22 +81,13 @@ namespace SimpleCalendar.Api
 
                     options.Events = new JwtBearerEvents()
                     {
-                        OnTokenValidated = async (context) =>
+                        OnTokenValidated = (context) =>
                         {
-                            // TODO: Slow!
-                            var discoveryClient = new DiscoveryClient(auth0AuthOptions.GetAuthority(), null);
-                            var discoveryResponse = await discoveryClient.GetAsync();
-
-                            var userInfoClient = new UserInfoClient(discoveryResponse.UserInfoEndpoint);
-                            var token = (context.SecurityToken as JwtSecurityToken)?.RawData;
-                            var userInfo = await userInfoClient.GetAsync(token);
-
-                            await Task.CompletedTask;
+                            context.HttpContext.SetSecurityToken(((JwtSecurityToken)context.SecurityToken)?.RawData);
+                            return Task.CompletedTask;
                         }
                     };
                 });
-
-            services.AddSingleton<IClaimsTransformation, ClaimsTransformation>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -136,6 +125,8 @@ namespace SimpleCalendar.Api
                 .AllowCredentials());
 
             app.UseAuthentication();
+
+            app.UseUserPreparation();
 
             app.UseMvc();
         }

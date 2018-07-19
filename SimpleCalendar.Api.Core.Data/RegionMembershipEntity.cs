@@ -21,8 +21,5 @@ namespace SimpleCalendar.Api.Core.Data
         public RegionRoleEntity RegionRole { get; set; }
 
         public string UserEmail { get; set; }
-
-        [ForeignKey(nameof(UserEmail))]
-        public UserEntity User { get; set; }
     }
 }

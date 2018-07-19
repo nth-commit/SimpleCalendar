@@ -44,13 +44,13 @@ namespace SimpleCalendar.Api.Core.Data
                 new RegionRoleEntity()
                 {
                     Id = Constants.RegionRoles.SuperAdministrator,
-                    Name = "Super Administrators",
+                    Name = "Super Admins",
                     Permissions = RegionPermission.All
                 },
                 new RegionRoleEntity()
                 {
                     Id = Constants.RegionRoles.Administrator,
-                    Name = "Administrators",
+                    Name = "Admins",
                     Permissions = RegionPermission.Events_All | RegionPermission.Memberships_WriteReader,
                     ChildPermissions = RegionPermission.Memberships_WriteWriter,
                     ParentPermissions = RegionPermission.Memberships_Read
@@ -67,8 +67,8 @@ namespace SimpleCalendar.Api.Core.Data
             modelBuilder.Entity<UserEntity>().HasData(new UserEntity()
             {
                 Email = "michaelfry2002@gmail.com",
-                ClaimsByAuthorityJson = JsonConvert.SerializeObject(new Dictionary<string, Dictionary<string, string>>()),
-                ClaimsByAuthorityVersion = 1
+                ClaimsBySubJson = JsonConvert.SerializeObject(new Dictionary<string, Dictionary<string, string>>()),
+                ClaimsBySubVersion = 1
             });
 
             modelBuilder.Entity<RegionMembershipEntity>().HasAlternateKey(nameof(RegionMembershipEntity.RegionId), nameof(RegionMembershipEntity.UserEmail));
