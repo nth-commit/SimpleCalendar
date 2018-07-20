@@ -67,38 +67,86 @@ namespace SimpleCalendar.Api.Middleware.UserPreparation
         private async Task EnsureUserAsync(CoreDbContext coreDbContext, IEnumerable<Claim> userInfoClaims)
         {
             // TODO: Cache / ETag
-            var userEmail = userInfoClaims.First(c => c.Type == "email").Value;
-            var sub = userInfoClaims.First(c => c.Type == "sub").Value;
-
-            var user = await coreDbContext.Users.FindAsync(userEmail);
+            var email = GetEmailFromUserInfoClaims(userInfoClaims);
+            var user = await coreDbContext.Users.FindAsync(email);
             if (user == null)
             {
-                await coreDbContext.Users.AddAsync(new UserEntity()
-                {
-                    Email = userEmail,
-                    ClaimsBySubJson = JsonConvert.SerializeObject(new Dictionary<string, Dictionary<string, string>>()
-                    {
-                        { sub, userInfoClaims.ToDictionary(c => c.Type, c => c.Value) }
-                    }),
-                    ClaimsBySubVersion = 1,
-                    OriginatingSub = sub
-                });
+                await AddUserAsync(coreDbContext, userInfoClaims);
             }
             else
             {
-                var claimsBySub = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, string>>>(user.ClaimsBySubJson);
-                claimsBySub[sub] = userInfoClaims.ToDictionary(c => c.Type, c => c.Value);
-                user.ClaimsBySubJson = JsonConvert.SerializeObject(claimsBySub);
-
-                if (string.IsNullOrEmpty(user.OriginatingSub))
-                {
-                    user.OriginatingSub = sub;
-                }
-
-                coreDbContext.Users.Update(user);
+                await UpdateUserAsync(coreDbContext, user, userInfoClaims);
             }
 
             await coreDbContext.SaveChangesAsync();
+        }
+
+        private async Task AddUserAsync(CoreDbContext coreDbContext, IEnumerable<Claim> userInfoClaims)
+        {
+            var sub = GetSubFromUserInfoClaims(userInfoClaims);
+            var email = GetEmailFromUserInfoClaims(userInfoClaims);
+
+            await coreDbContext.Users.AddAsync(new UserEntity()
+            {
+                Email = email,
+                ClaimsBySubJson = JsonConvert.SerializeObject(new Dictionary<string, Dictionary<string, string>>()
+                    {
+                        { sub, userInfoClaims.ToDictionary(c => c.Type, c => c.Value) }
+                    }),
+                ClaimsBySubVersion = 1,
+                OriginatingSub = sub
+            });
+
+            await coreDbContext.SaveChangesAsync();
+        }
+
+        private async Task UpdateUserAsync(CoreDbContext coreDbContext, UserEntity user, IEnumerable<Claim> userInfoClaims)
+        {
+            var sub = GetSubFromUserInfoClaims(userInfoClaims);
+
+            bool shouldUpdate = false;
+
+            if (string.IsNullOrEmpty(user.OriginatingSub))
+            {
+                shouldUpdate = true;
+                user.OriginatingSub = sub;
+            }
+
+            var claimsBySub = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, string>>>(user.ClaimsBySubJson);
+            var claims = userInfoClaims.ToDictionary(c => c.Type, c => c.Value);
+            if (!claimsBySub.TryGetValue(sub, out Dictionary<string, string> existingClaims) ||
+                !AreDictionariesEqual(existingClaims, claims))
+            {
+                // TODO: Test
+                shouldUpdate = true;
+                claimsBySub[sub] = claims;
+                user.ClaimsBySubJson = JsonConvert.SerializeObject(claimsBySub);
+            }
+
+            if (shouldUpdate)
+            {
+                coreDbContext.Users.Update(user);
+                await coreDbContext.SaveChangesAsync();
+            }
+        }
+
+        private string GetEmailFromUserInfoClaims(IEnumerable<Claim> userInfoClaims) =>
+            userInfoClaims.First(c => c.Type == "email").Value;
+
+        private string GetSubFromUserInfoClaims(IEnumerable<Claim> userInfoClaims) =>
+            userInfoClaims.First(c => c.Type == "sub").Value;
+
+        private bool AreDictionariesEqual(Dictionary<string, string> a, Dictionary<string, string> b)
+        {
+            if (a.Count() != b.Count())
+            {
+                return false;
+            }
+
+            IOrderedEnumerable<KeyValuePair<string, string>> order(Dictionary<string, string> dict) =>
+                dict.OrderBy(kvp => kvp.Key);
+
+            return order(a).SequenceEqual(order(b));
         }
     }
 }
