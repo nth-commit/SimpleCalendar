@@ -6,6 +6,7 @@ import {
   RegionPath, RegionPathComponentValue,
   isPathLoading, pathContainsRegion
 } from 'src/store/Regions';
+import { IRegionRole } from 'src/services/Api';
 import RegionManagementTabs from '../../presentational/RegionManagementTabs';
 import createRegionHrefResolver from '../../utility/RegionHrefResolver';
 
@@ -14,6 +15,7 @@ interface RegionStateProps {
   regionId: string;
   regionPath: RegionPath;
   baseRegionId: string;
+  roles: IRegionRole[];
 }
 
 interface RegionMergedProps {
@@ -21,6 +23,7 @@ interface RegionMergedProps {
   regionId: string;
   regionPath: RegionPath;
   baseRegionId: string;
+  roles: IRegionRole[];
   onMount(): void;
 }
 
@@ -35,20 +38,27 @@ export class UnconnectedRegion extends React.PureComponent<RegionMergedProps> {
       return null;
     }
 
-    const { regionPath, regionId, baseRegionId } = this.props;
+    const { regionPath, regionId, baseRegionId, roles } = this.props;
     const regionIndex = regionPath.findIndex(r => r.id === regionId);
 
     const regionPathComponentValues = regionPath.map(r => r.value as RegionPathComponentValue);
     const regionPathComponentValue = regionPathComponentValues[regionIndex];
     const parentRegionPathComponentValues = regionPathComponentValues.slice(0, regionIndex);
 
+    const region = regionPathComponentValue.region;
+
+    const memberships = regionPathComponentValue.memberships;
+    const inheritedMemberships = parentRegionPathComponentValues.selectMany(r => r.memberships);
+    const membershipRoleIds = Set.fromArray([...memberships, ...inheritedMemberships], m => m.regionRoleId);
+
     return (
       <div>
         <RegionManagementTabs
+          roles={roles.filter(r => region.permissions.canAddMemberships[r.id] || membershipRoleIds.has(r.id))}
           childRegions={regionPathComponentValue.childRegions}
           regionHrefResolver={createRegionHrefResolver(baseRegionId)}
-          memberships={regionPathComponentValue.memberships}
-          inheritedMemberships={parentRegionPathComponentValues.selectMany(r => r.memberships)} />
+          memberships={memberships}
+          inheritedMemberships={inheritedMemberships} />
       </div>
     );
   }
@@ -75,15 +85,13 @@ export default appConnect<RegionStateProps, {}, {}, RegionMergedProps>(
       regionId,
       loading: isPathLoading(state) || !pathContainsRegion(state, regionId),
       regionPath: state.regions.path,
-      baseRegionId: state.configuration.baseRegionId
+      baseRegionId: state.configuration.baseRegionId,
+      roles: state.roles.roles
     };
   },
   undefined,
-  ({ loading, regionPath, regionId, baseRegionId }, { dispatch }) => ({
-    loading,
-    regionId,
-    regionPath,
-    baseRegionId,
-    onMount: () => dispatch(regionActionCreators.setRegion(regionId))
+  (stateProps, { dispatch }) => ({
+    ...stateProps,
+    onMount: () => dispatch(regionActionCreators.setRegion(stateProps.regionId))
   })
 )(UnconnectedRegion);

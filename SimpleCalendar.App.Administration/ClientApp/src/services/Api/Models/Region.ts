@@ -1,6 +1,11 @@
 export interface IRegion {
   id: string;
   name: string;
+  permissions: {
+    canAddMemberships: {
+      [membershipId: string]: boolean;
+    }
+  }
 }
 
 export interface IRegionMembership {

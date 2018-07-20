@@ -35,7 +35,20 @@ namespace SimpleCalendar.Api.Commands.RegionRoles.Impl.Query
             }
 
             var entities = await _coreDbContext.RegionRoles.ToListAsync();
-            return new OkObjectResult(entities.Select(e => _mapper.Map<RegionRole>(e)));
+            return new OkObjectResult(entities
+                .OrderBy(e => GetPermissionFlagCount(e.Permissions))
+                .ThenBy(e => GetPermissionFlagCount(e.ChildPermissions))
+                .ThenBy(e => GetPermissionFlagCount(e.ParentPermissions))
+                .Select(e => _mapper.Map<RegionRole>(e)));
+        }
+
+        private int GetPermissionFlagCount(RegionPermission permissions)
+        {
+            var result = Enum.GetValues(typeof(RegionPermission))
+                .OfType<RegionPermission>()
+                .Where(p => permissions.HasFlag(p))
+                .Count();
+            return result;
         }
     }
 }

@@ -1,10 +1,9 @@
-// tslint:disable:no-bitwise
 import * as React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import { IRegion, IRegionMembership, SUPER_ADMINISTRATOR, ADMINISTRATOR, USER } from 'src/services/Api';
+import { IRegion, IRegionMembership, IRegionRole } from 'src/services/Api';
 import { RegionHrefResolver } from '../../utility/RegionHrefResolver';
 import RegionList from '../RegionList';
 import RegionMemberships from '../RegionMemberships';
@@ -20,6 +19,7 @@ const styles = theme => ({
 });
 
 export interface RegionManagementTabsProps {
+  roles: IRegionRole[];
   childRegions: IRegion[];
   memberships: IRegionMembership[];
   inheritedMemberships: IRegionMembership[];
@@ -43,7 +43,7 @@ class RegionManagementTabs extends React.Component<RegionManagementTabsProps> {
   }
 
   render() {
-    const { classes, childRegions } = this.props;
+    const { classes, childRegions, roles } = this.props;
     const { value } = this.state;
 
     return (
@@ -51,9 +51,7 @@ class RegionManagementTabs extends React.Component<RegionManagementTabsProps> {
         <AppBar position="static">
           <Tabs value={value} onChange={this.handleChange}>
             {childRegions.length && <Tab className={classes.tab} value={0} label="Sub-Regions" />}
-            <Tab className={classes.tab} value={1} label="Super Admins" />
-            <Tab className={classes.tab} value={2} label="Admins" />
-            <Tab className={classes.tab} value={3} label="Users" />
+            {roles.map((rr, i) => <Tab key={rr.id} className={classes.tab} value={i + 1} label={rr.name} /> )}
           </Tabs>
         </AppBar>
         {this.renderTab()}
@@ -71,23 +69,16 @@ class RegionManagementTabs extends React.Component<RegionManagementTabsProps> {
           regions={childRegions}
           regionHrefResolver={regionHrefResolver} />
         );
-    } else if (value === 1) {
-      return (
-        <RegionMemberships memberships={this.getMemberships(SUPER_ADMINISTRATOR)} />
-      );
-    } else if (value === 2) {
-      return (
-        <RegionMemberships memberships={this.getMemberships(ADMINISTRATOR)} />        
-      );
     } else {
       return (
-        <RegionMemberships memberships={this.getMemberships(USER)} />
+        <RegionMemberships memberships={this.getMemberships(value - 1)} />
       );
     }
   }
 
-  private getMemberships(regionRoleId: string, includeInherited = true) {
-    const { memberships, inheritedMemberships } = this.props;
+  private getMemberships(regionRoleIndex: number, includeInherited = true) {
+    const { memberships, inheritedMemberships, roles } = this.props;
+    const regionRoleId = roles[regionRoleIndex].id
     return [
       ...(includeInherited ? inheritedMemberships.filter(m => m.regionRoleId === regionRoleId) : []),
       ...memberships.filter(m => m.regionRoleId === regionRoleId)
