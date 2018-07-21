@@ -71,12 +71,10 @@ const updatePathOnRegionFetch = (path: RegionPath, action: FetchRegionComplete):
 
 export const regionsReducer: Reducer = (state: RegionState, action: RegionActions): RegionState => {
   switch (action.type) {
-
     case RegionsActionTypes.SET_REGION:
       return merge(state, {
         regionId: action.regionId
       });
-    
     case RegionsActionTypes.FETCH_REGION_BEGIN:
       return merge(state, {
         path: mergePath(state.path, {
@@ -85,12 +83,10 @@ export const regionsReducer: Reducer = (state: RegionState, action: RegionAction
           value: null
         })
       });
-
     case RegionsActionTypes.FETCH_REGION_COMPLETE:
       return merge(state, {
         path: updatePathOnRegionFetch(state.path, action)
       });
-
     default:
       return state || {
         path: []

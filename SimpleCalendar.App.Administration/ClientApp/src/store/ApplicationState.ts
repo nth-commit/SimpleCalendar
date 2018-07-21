@@ -3,6 +3,7 @@ import { RegionState } from './Regions';
 import { IConfigurationState } from './Configuration';
 import { AuthState } from './Auth';
 import { RoleState } from './Roles';
+import { UIState } from './UI';
 
 export interface ApplicationState {
   router: RouterState;
@@ -10,4 +11,5 @@ export interface ApplicationState {
   regions: RegionState;
   auth: AuthState
   roles: RoleState;
+  ui: UIState;
 }

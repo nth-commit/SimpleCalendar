@@ -6,6 +6,7 @@ import {
   RegionPath, RegionPathComponentValue,
   isPathLoading, pathContainsRegion
 } from 'src/store/Regions';
+import { uiActionCreators } from 'src/store/UI';
 import { IRegionRole } from 'src/services/Api';
 import RegionManagementTabs from '../../presentational/RegionManagementTabs';
 import createRegionHrefResolver from '../../utility/RegionHrefResolver';
@@ -24,13 +25,14 @@ interface RegionMergedProps {
   regionPath: RegionPath;
   baseRegionId: string;
   roles: IRegionRole[];
-  onMount(): void;
+  mounted(): void;
+  membershipCreateRequested(): void;
 }
 
 export class UnconnectedRegion extends React.PureComponent<RegionMergedProps> {
 
   componentDidMount() {
-    this.props.onMount();
+    this.props.mounted();
   }
   
   render() {
@@ -38,7 +40,7 @@ export class UnconnectedRegion extends React.PureComponent<RegionMergedProps> {
       return null;
     }
 
-    const { regionPath, regionId, baseRegionId, roles } = this.props;
+    const { regionPath, regionId, baseRegionId, roles, membershipCreateRequested } = this.props;
     const regionIndex = regionPath.findIndex(r => r.id === regionId);
 
     const regionPathComponentValues = regionPath.map(r => r.value as RegionPathComponentValue);
@@ -52,13 +54,14 @@ export class UnconnectedRegion extends React.PureComponent<RegionMergedProps> {
     const membershipRoleIds = Set.fromArray([...memberships, ...inheritedMemberships], m => m.regionRoleId);
 
     return (
-      <div>
+      <div style={{ height: '100%' }}>
         <RegionManagementTabs
           roles={roles.filter(r => region.permissions.canAddMemberships[r.id] || membershipRoleIds.has(r.id))}
           childRegions={regionPathComponentValue.childRegions}
           regionHrefResolver={createRegionHrefResolver(baseRegionId)}
           memberships={memberships}
-          inheritedMemberships={inheritedMemberships} />
+          inheritedMemberships={inheritedMemberships}
+          createMembershipClicked={membershipCreateRequested}/>
       </div>
     );
   }
@@ -92,6 +95,7 @@ export default appConnect<RegionStateProps, {}, {}, RegionMergedProps>(
   undefined,
   (stateProps, { dispatch }) => ({
     ...stateProps,
-    onMount: () => dispatch(regionActionCreators.setRegion(stateProps.regionId))
+    mounted: () => dispatch(regionActionCreators.setRegion(stateProps.regionId)),
+    membershipCreateRequested: () => dispatch(uiActionCreators.openDialog('test'))
   })
 )(UnconnectedRegion);

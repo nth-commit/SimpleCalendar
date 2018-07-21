@@ -19,6 +19,7 @@ const styles = theme => ({
 });
 
 export interface RegionManagementTabsProps {
+  createMembershipClicked(): void;
   roles: IRegionRole[];
   childRegions: IRegion[];
   memberships: IRegionMembership[];
@@ -28,42 +29,62 @@ export interface RegionManagementTabsProps {
 }
 
 class RegionManagementTabs extends React.Component<RegionManagementTabsProps> {
+
+  private appBarElement: HTMLElement | null = null;
+  private appBarContainerRef = (e) =>  {
+    if (e) {
+      this.appBarElement = e.querySelector('#tabs-container');
+      this.setAppBarHeightState();
+    }
+  };
+
   state = {
-    value: 0,
+    tab: 0,
+    appBarHeight: 0
   };
 
   componentWillMount() {
-    if (!this.props.childRegions.length && this.state.value === 0) {
-      this.setState({ value: 1 });
+    if (!this.props.childRegions.length && this.state.tab === 0) {
+      this.setState({ tab: 1 });
     }
   }
 
-  handleChange = (event, value) => {
-    this.setState({ value });
+  setAppBarHeightState = () => {
+    if (this.appBarElement) {
+      this.setState({
+        appBarHeight: this.appBarElement.clientHeight
+      });
+    }
+  }
+
+  setTabState = (event, tab) => {
+    this.setState({ tab });
   }
 
   render() {
     const { classes, childRegions, roles } = this.props;
-    const { value } = this.state;
+    const { tab, appBarHeight } = this.state;
 
     return (
-      <div className={classes.root}>
-        <AppBar position="static">
-          <Tabs value={value} onChange={this.handleChange}>
+      <div className={classes.root} style={{ height: '100%' }} ref={this.appBarContainerRef}>
+        <AppBar id="tabs-container" position="static">
+          <Tabs value={tab} onChange={this.setTabState}>
             {childRegions.length && <Tab className={classes.tab} value={0} label="Sub-Regions" />}
             {roles.map((rr, i) => <Tab key={rr.id} className={classes.tab} value={i + 1} label={rr.name} /> )}
           </Tabs>
         </AppBar>
-        {this.renderTab()}
+        <div style={{ height: `calc(100% - ${appBarHeight}px)` }}>
+          {this.renderTab()}
+        </div>
       </div>
     );
   }
 
   private renderTab() {
-    const { childRegions, regionHrefResolver } = this.props;
-    const { value } = this.state;
+    const { childRegions, regionHrefResolver, createMembershipClicked } = this.props;
+    const { tab } = this.state;
 
-    if (value === 0) {
+    if (tab === 0) {
       return (
         <RegionList
           regions={childRegions}
@@ -71,7 +92,9 @@ class RegionManagementTabs extends React.Component<RegionManagementTabsProps> {
         );
     } else {
       return (
-        <RegionMemberships memberships={this.getMemberships(value - 1)} />
+        <RegionMemberships
+          memberships={this.getMemberships(tab - 1)}
+          createClicked={createMembershipClicked}/>
       );
     }
   }

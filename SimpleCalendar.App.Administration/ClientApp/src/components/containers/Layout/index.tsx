@@ -3,6 +3,7 @@ import { appConnect } from 'src/store';
 import { authActionCreators } from 'src/store/Auth';
 import { regionActionCreators, areSuperBaseRegionsLoaded } from 'src/store/Regions';
 import Navbar from '../Navbar';
+import DialogTrigger from '../DialogTrigger';
 
 export interface LayoutStateProps {
   isLoading: boolean;
@@ -24,9 +25,14 @@ export class UnconnectedLayout extends React.Component<LayoutStateProps & Layout
     }
 
     return (
-      <div>
-        <Navbar />
-        <div>{this.props.children}</div>
+      <div style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
+        <div>
+          <Navbar />
+        </div>
+        <div style={{ flex: 1 }}>
+          {this.props.children}
+        </div>
+        <DialogTrigger />
       </div>
     );
   }
