@@ -61,6 +61,7 @@ namespace SimpleCalendar.Api
 
             services.AddRegionMembershipServices();
             services.AddRegionRoleServices();
+            services.AddUserServices();
 
             services.ValidateRequirements();
         }
