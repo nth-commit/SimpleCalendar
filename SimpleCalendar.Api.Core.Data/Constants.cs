@@ -12,9 +12,9 @@ namespace SimpleCalendar.Api.Core.Data
 
         public static class RegionRoles
         {
-            public const string SuperAdministrator = "ROLE_SUPER_ADMINISTRATOR";
-            public const string Administrator = "ROLE_ADMINISTRATOR";
-            public const string User = "ROLE_USER";
+            public const string SuperAdministrator = Framework.Constants.RegionRoles.SuperAdministrator;
+            public const string Administrator = Framework.Constants.RegionRoles.Administrator;
+            public const string User = Framework.Constants.RegionRoles.User;
         }
     }
 }

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SimpleCalendar.Api.Core.Data;
 using SimpleCalendar.Api.Models;
+using SimpleCalendar.Framework;
 using SimpleCalendar.Utility.Authorization;
 
 namespace SimpleCalendar.Api.Commands.RegionMemberships.Impl.Query
@@ -25,17 +26,29 @@ namespace SimpleCalendar.Api.Commands.RegionMemberships.Impl.Query
 
         public async Task<IActionResult> InvokeAsync(ActionContext context, string regionId, string userEmail)
         {
-            // TODO: Change to:
-            //  canQueryMemberships (resource authorization against region) &&
-            //  canQueryUsers? 
-            var canQuery = await _authorizationService.CanQueryMembershipsAsync(regionId, userEmail);
-            if (!canQuery)
+            var isRegionQuery = !string.IsNullOrWhiteSpace(regionId);
+            var isUserQuery = !string.IsNullOrEmpty(userEmail);
+
+            if (!isUserQuery && !isRegionQuery)
             {
-                return new UnauthorizedResult();
+                var canQuery = context.HttpContext.User.IsAdministratorOrSuperAdministrator();
+                if (!canQuery)
+                {
+                    return new UnauthorizedResult();
+                }
+            }
+
+            if (isUserQuery)
+            {
+                var user = context.HttpContext.User;
+                var canQueryUser = userEmail == user.GetUserEmail() || user.IsAdministratorOrSuperAdministrator();
+                if (!canQueryUser)
+                {
+                    return new UnauthorizedResult();
+                }
             }
 
             var query = _coreDbContext.RegionMemberships.AsQueryable();
-            var isRegionQuery = !string.IsNullOrWhiteSpace(regionId);
 
             RegionEntity region = null;
             if (isRegionQuery)
@@ -46,6 +59,13 @@ namespace SimpleCalendar.Api.Commands.RegionMemberships.Impl.Query
                     context.ModelState.AddModelError(nameof(regionId), "Region could not be found");
                     return new BadRequestObjectResult(context.ModelState);
                 }
+
+                var canQueryRegion = await _authorizationService.CanQueryMembershipsAsync(region);
+                if (!canQueryRegion)
+                {
+                    return new UnauthorizedResult();
+                }
+
                 query = query.Where(r => r.RegionId == region.Id);
             }
 

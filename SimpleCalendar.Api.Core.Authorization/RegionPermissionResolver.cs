@@ -51,7 +51,7 @@ namespace SimpleCalendar.Api.Core.Authorization
                 return true;
             }
 
-            return region.Id == Constants.RootRegionId ?
+            return region.Id == Data.Constants.RootRegionId ?
                 false :
                 HasPermission(permission, region.Parent, regionRolesById, regionMembershipsByRegionId, isParentOfTargetRegion: true);
         }

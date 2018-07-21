@@ -55,6 +55,13 @@ namespace SimpleCalendar.Api.Core.Authorization
                     context.Succeed(requirement);
                 }
             }
+            else if (requirement.Name == nameof(RegionOperationRequirement.QueryMemberships))
+            {
+                if (await HasPermissionAsync(resource, RegionPermission.Memberships_Read, context))
+                {
+                    context.Succeed(requirement);
+                }
+            }
         }
 
         private Task<bool> HasPermissionAsync(

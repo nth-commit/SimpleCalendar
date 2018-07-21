@@ -36,6 +36,13 @@ namespace SimpleCalendar.Framework
                     RegionRoleId = c[1]
                 });
 
+        public static bool IsAdministratorOrSuperAdministrator(this ClaimsPrincipal principal)
+        {
+            return principal.GetRegionMembershipRoles().Any(rm =>
+                rm.RegionRoleId == Constants.RegionRoles.Administrator ||
+                rm.RegionRoleId == Constants.RegionRoles.SuperAdministrator);
+        }
+
         public class RegionMembershipRoleClaimValue
         {
             public string RegionId { get; set; }

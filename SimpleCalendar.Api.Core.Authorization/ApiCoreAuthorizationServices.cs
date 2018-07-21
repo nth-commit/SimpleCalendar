@@ -17,7 +17,6 @@ namespace SimpleCalendar.Utility.DependencyInjection
         {
             services.AddTransient<IAuthorizationHandler, RegionPermissionAuthorizationHandler>();
             services.AddTransient<IAuthorizationHandler, EventPermissionAuthorizationHandler>();
-            services.AddTransient<IAuthorizationHandler, RegionMembershipAuthorizationHandler>();
             services.AddTransient<IAuthorizationHandler, RegionOperationAuthorizationHandler>();
             services.AddTransient<IAuthorizationHandler, RegionRoleAuthorizationHandler>();
             services.AddTransient<IRegionPermissionResolver, RegionPermissionResolver>();

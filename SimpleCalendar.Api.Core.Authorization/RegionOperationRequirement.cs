@@ -12,6 +12,7 @@ namespace SimpleCalendar.Api.Core.Authorization
 
         public static CreateMembershipRequirement CreateMembership(string regionRoleId) => new CreateMembershipRequirement(regionRoleId);
         public static RegionOperationRequirement ViewMemberships => new RegionOperationRequirement(nameof(ViewMemberships));
+        public static RegionOperationRequirement QueryMemberships => new RegionOperationRequirement(nameof(QueryMemberships));
         public static RegionOperationRequirement DeleteMemberships => new RegionOperationRequirement(nameof(DeleteMemberships));
 
         public class CreateMembershipRequirement : RegionOperationRequirement

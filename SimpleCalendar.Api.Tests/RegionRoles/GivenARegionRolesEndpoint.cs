@@ -66,7 +66,7 @@ namespace SimpleCalendar.Api.UnitTests.RegionRoles
         {
             var expected = await this.GetCoreDbContext().RegionRoles.ToListAsync();
             Assert.Equal(expected.Count(), actual.Count());
-            Assert.Equal(expected.Select(rr => rr.Id), actual.Select(rr => rr.Id));
+            Assert.Equal(expected.Select(rr => rr.Id).OrderBy(x => x), actual.Select(rr => rr.Id).OrderBy(x => x));
         }
     }
 }
