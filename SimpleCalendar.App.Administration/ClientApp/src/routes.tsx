@@ -56,8 +56,8 @@ const AuthGuard = appConnect<AuthGuardStateProps>(
     authorizationStatus: state.auth.status
   }),
   dispatch => ({
-    onMount: () => {
-      dispatch(authActionCreators.login(localStorage.getItem('access_token') as string));
+    onMount: async () => {
+      await dispatch(authActionCreators.login(localStorage.getItem('access_token') as string));
       dispatch(rolesActionCreators.fetchRoles());
     }
   })

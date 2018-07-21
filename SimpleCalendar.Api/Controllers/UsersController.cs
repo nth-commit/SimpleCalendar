@@ -21,12 +21,13 @@ namespace SimpleCalendar.Api.Controllers
             _getUserCommand = getUserCommand;
         }
 
+        // TODO: Authorize
         [HttpGet("{email}")]
         public Task<IActionResult> Get([FromQuery] string email) =>
             _getUserCommand.Value.InvokeAsync(ControllerContext, email);
 
-        [HttpGet("me")]
-        public Task<IActionResult> GetMyself() =>
+        [HttpGet("my")]
+        public Task<IActionResult> GetMy() =>
             _getUserCommand.Value.InvokeAsync(ControllerContext, User.GetUserEmail());
     }
 }

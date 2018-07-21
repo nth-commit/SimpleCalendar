@@ -1,6 +1,6 @@
 import { ROOT_REGION_ID } from 'src/constants';
 import { getConfiguration } from './Configure';
-import { IRegion, IRegionMembership, IRegionMembershipQuery, IRegionRole, IRegionMembershipCreate } from './Models';
+import { IRegion, IRegionMembership, IRegionMembershipQuery, IRegionRole, IRegionMembershipCreate, IUser } from './Models';
 
 export class Api {
 
@@ -39,6 +39,10 @@ export class Api {
     }
 
     return this.getJson<IRegionMembership[]>(url, search);
+  }
+
+  getMyUser(): Promise<IUser> {
+    return this.getJson<IUser>(this.getUrl('users/my'));
   }
 
   getRegionRoles(): Promise<IRegionRole[]> {

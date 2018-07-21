@@ -1,4 +1,4 @@
-import { IRegionMembership } from 'src/services/Api';
+import { IRegionMembership, IUser } from 'src/services/Api';
 
 export enum AuthorizationStatus {
   Indetermined = 1,
@@ -11,4 +11,5 @@ export interface AuthState {
   regionMemberships: IRegionMembership[];
   status: AuthorizationStatus;
   accessToken: string;
+  user: IUser;
 }

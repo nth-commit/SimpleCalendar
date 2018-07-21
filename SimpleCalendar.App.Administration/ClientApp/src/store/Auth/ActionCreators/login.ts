@@ -1,10 +1,15 @@
-import { ApplicationThunkAction } from '../../';
-import { LoginComplete } from '../Actions';
+import { ApplicationThunkActionAsync } from '../../';
+import { LoginBegin, LoginComplete } from '../Actions';
+import { Api } from 'src/services/Api';
 
 export class AccessTokenNotFoundException { }
 
-export default function setAuthorizationStatus(accessToken: string): ApplicationThunkAction {
-  return (dispatch) => {
-    dispatch({ ...new LoginComplete(accessToken) });
+export default function setAuthorizationStatus(accessToken: string): ApplicationThunkActionAsync {
+  return async (dispatch) => {
+    dispatch({ ...new LoginBegin(accessToken) });
+
+    const user = await new Api(accessToken).getMyUser();
+
+    dispatch({ ...new LoginComplete(user) });
   };
 }
