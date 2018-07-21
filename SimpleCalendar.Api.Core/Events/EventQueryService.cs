@@ -19,17 +19,20 @@ namespace SimpleCalendar.Api.Core.Events
         private readonly CoreDbContext _dbContext;
         private readonly IUserAccessor _userAccessor;
         private readonly IEventPermissionResolver _eventPermissionResolver;
+        private readonly IRegionRolesAccessor _regionRolesAccessor;
         private readonly IMapper _mapper;
 
         public EventQueryService(
             CoreDbContext dbContext,
             IUserAccessor userAccessor,
             IEventPermissionResolver eventPermissionResolver,
+            IRegionRolesAccessor regionRolesAccessor,
             IMapper mapper)
         {
             _dbContext = dbContext;
             _userAccessor = userAccessor;
             _eventPermissionResolver = eventPermissionResolver;
+            _regionRolesAccessor = regionRolesAccessor;
             _mapper = mapper;
         }
 
@@ -61,11 +64,11 @@ namespace SimpleCalendar.Api.Core.Events
                 isThreadSafe: true);
 
             return events
-                .Where(e => _eventPermissionResolver.HasPermissionAsync(
+                .Where(e => _eventPermissionResolver.HasPermission(
                     _userAccessor.User,
                     e,
                     EventPermissions.View,
-                    lazyRegionRolesTask).Result)
+                    _regionRolesAccessor.RegionRoles))
                 .Select(e => _mapper.MapEntityToResult(e, e.Region));
         }
     }

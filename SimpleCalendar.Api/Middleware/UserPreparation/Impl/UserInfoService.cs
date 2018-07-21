@@ -22,7 +22,7 @@ namespace SimpleCalendar.Api.Middleware.UserPreparation.Impl
         public async Task<IEnumerable<Claim>> GetUserInfoAsync(HttpContext httpContext)
         {
             var securityToken = httpContext.GetSecurityToken();
-            return await _memoryCache.GetOrCreateAsync(securityToken, async (entry) =>
+            return await _memoryCache.GetOrCreateAsync($"{nameof(UserInfoService)}:{securityToken}", async (entry) =>
             {
                 entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5);
 

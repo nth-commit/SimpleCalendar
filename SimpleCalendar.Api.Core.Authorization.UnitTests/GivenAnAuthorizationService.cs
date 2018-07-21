@@ -17,7 +17,7 @@ namespace SimpleCalendar.Api.Core.Authorization.UnitTests
         private const string Email = "example@website.com";
 
         private readonly IAuthorizationService _authorizationService;
-        private readonly Mock<IRegionRoleCache> _regionRoleCache = new Mock<IRegionRoleCache>();
+        private readonly Mock<IRegionRolesAccessor> _regionRolesAccessor = new Mock<IRegionRolesAccessor>();
         private readonly List<RegionRoleEntity> _regionRoleEntities = new List<RegionRoleEntity>();
         private readonly List<ClaimsExtensions.RegionMembershipRoleClaimValue> _regionMembershipRoleClaimValues = new List<ClaimsExtensions.RegionMembershipRoleClaimValue>();
 
@@ -29,11 +29,11 @@ namespace SimpleCalendar.Api.Core.Authorization.UnitTests
             services.AddLogging();
             services.AddTransient<IAuthorizationHandler, RegionPermissionAuthorizationHandler>();
             services.AddTransient<IRegionPermissionResolver, RegionPermissionResolver>();
-            services.AddSingleton(_regionRoleCache.Object);
+            services.AddSingleton(_regionRolesAccessor.Object);
 
             _authorizationService = services.BuildServiceProvider().GetRequiredService<IAuthorizationService>();
 
-            _regionRoleCache.Setup(x => x.ListAsync()).ReturnsAsync(_regionRoleEntities);
+            _regionRolesAccessor.Setup(x => x.RegionRoles).Returns(_regionRoleEntities);
         }
 
         protected async Task<bool> IsAuthorizedAsync(RegionEntity region, IAuthorizationRequirement requirement)

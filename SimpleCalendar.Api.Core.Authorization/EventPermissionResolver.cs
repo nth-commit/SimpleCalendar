@@ -19,58 +19,58 @@ namespace SimpleCalendar.Api.Core.Authorization
             _regionPermissionResolver = regionPermissionResolver;
         }
 
-        public async Task<bool> HasPermissionAsync(
+        public bool HasPermission(
             ClaimsPrincipal user,
             EventEntity ev,
             EventPermissions permission,
-            Lazy<Task<IEnumerable<RegionRoleEntity>>> lazyRegionRolesTask)
+            IEnumerable<RegionRoleEntity> regionRoles)
         {
             switch (permission)
             {
                 case EventPermissions.View:
-                    return await CanViewEventAsync(user, ev, lazyRegionRolesTask);
+                    return CanViewEvent(user, ev, regionRoles);
                 default:
                     return false;
             }
         }
 
-        private async Task<bool> CanViewEventAsync(
+        private bool CanViewEvent(
             ClaimsPrincipal user,
             EventEntity ev,
-            Lazy<Task<IEnumerable<RegionRoleEntity>>> lazyRegionRolesTask)
+            IEnumerable<RegionRoleEntity> regionRoles)
         {
             if (ev.IsPublished)
             {
                 return (
                     ev.IsPublic ||
-                    await HasRegionMembershipAsync(ev.Region, user, lazyRegionRolesTask));
+                    HasRegionMembership(ev.Region, user, regionRoles));
             }
 
             return (
                 IsCreator(ev, user) ||
-                await CanViewDraftEventsAsync(ev.Region, user, lazyRegionRolesTask));
+                CanViewDraftEvents(ev.Region, user, regionRoles));
         }
 
         private bool IsCreator(EventEntity ev, ClaimsPrincipal user) =>
             !string.IsNullOrEmpty(ev.CreatedByEmail) && ev.CreatedByEmail == user.GetUserEmail();
 
-        private Task<bool> HasRegionMembershipAsync(
+        private bool HasRegionMembership(
             RegionEntity region,
             ClaimsPrincipal user,
-            Lazy<Task<IEnumerable<RegionRoleEntity>>> lazyRegionRolesTask) =>
-                HasRegionPermissionAsync(user, region, RegionPermission.None, lazyRegionRolesTask);
+            IEnumerable<RegionRoleEntity> regionRoles) =>
+                HasRegionPermission(user, region, RegionPermission.None, regionRoles);
 
-        private Task<bool> CanViewDraftEventsAsync(
+        private bool CanViewDraftEvents(
             RegionEntity region,
             ClaimsPrincipal user,
-            Lazy<Task<IEnumerable<RegionRoleEntity>>> lazyRegionRolesTask) =>
-                HasRegionPermissionAsync(user, region, RegionPermission.Events_Write, lazyRegionRolesTask);
+            IEnumerable<RegionRoleEntity> regionRoles) =>
+                HasRegionPermission(user, region, RegionPermission.Events_Write, regionRoles);
 
-        private async Task<bool> HasRegionPermissionAsync(
+        private bool HasRegionPermission(
             ClaimsPrincipal user,
             RegionEntity region,
             RegionPermission regionPermission,
-            Lazy<Task<IEnumerable<RegionRoleEntity>>> lazyRegionRolesTask)
+            IEnumerable<RegionRoleEntity> regionRoles)
         {
             if (!user.Identity.IsAuthenticated)
             {
@@ -81,7 +81,7 @@ namespace SimpleCalendar.Api.Core.Authorization
                 user,
                 region,
                 regionPermission,
-                await lazyRegionRolesTask.Value);
+                regionRoles);
         }
     }
 }

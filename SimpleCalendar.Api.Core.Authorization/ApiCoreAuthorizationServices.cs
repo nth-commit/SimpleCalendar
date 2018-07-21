@@ -3,6 +3,7 @@ using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
 using SimpleCalendar.Api.Core.Authorization;
 using SimpleCalendar.Api.Core.Data;
+using SimpleCalendar.Framework;
 using SimpleCalendar.Utility.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -22,12 +23,8 @@ namespace SimpleCalendar.Utility.DependencyInjection
             services.AddTransient<IRegionPermissionResolver, RegionPermissionResolver>();
             services.AddTransient<IEventPermissionResolver, EventPermissionResolver>();
 
-            services.AddTransient<IRegionCache, RegionCache>();
-            services.AddTransient<IRegionRoleCache, RegionRoleCache>();
-
             services.AddRequirement<IAuthorizationService>();
-            // services.AddRequirement<IMemoryCache>();
-            services.AddRequirement<CoreDbContext>();
+            services.AddRequirement<IRegionRolesAccessor>();
 
             return services;
         }

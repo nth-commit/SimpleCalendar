@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\SimpleCalendar.Api.Core.Data\SimpleCalendar.Api.Core.Data.csproj" />
     <ProjectReference Include="..\util\SimpleCalendar.Utility.Configuration\SimpleCalendar.Utility.Configuration.csproj" />
   </ItemGroup>
 

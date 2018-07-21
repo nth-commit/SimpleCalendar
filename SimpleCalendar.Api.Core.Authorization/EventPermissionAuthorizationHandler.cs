@@ -10,32 +10,34 @@ namespace SimpleCalendar.Api.Core.Authorization
 {
     public class EventPermissionAuthorizationHandler : AuthorizationHandler<EventPermissionRequirement, EventEntity>
     {
-        private readonly IRegionRoleCache _regionRoleCache;
+        private readonly IRegionRolesAccessor _regionRolesAccessor;
         private readonly IEventPermissionResolver _eventPermissionResolver;
 
         public EventPermissionAuthorizationHandler(
-            IRegionRoleCache regionRoleCache,
+            IRegionRolesAccessor regionRolesAccessor,
             IEventPermissionResolver eventPermissionResolver)
         {
-            _regionRoleCache = regionRoleCache;
+            _regionRolesAccessor = regionRolesAccessor;
             _eventPermissionResolver = eventPermissionResolver;
         }
 
-        protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context, EventPermissionRequirement requirement, EventEntity resource)
+        protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, EventPermissionRequirement requirement, EventEntity resource)
         {
-            if (await IsSuccessfulAsync(context, requirement, resource))
+            if (IsSuccessful(context, requirement, resource))
             {
                 context.Succeed(requirement);
             }
+            return Task.CompletedTask;
         }
 
-        private Task<bool> IsSuccessfulAsync(AuthorizationHandlerContext context, EventPermissionRequirement requirement, EventEntity resource) =>
-            _eventPermissionResolver.HasPermissionAsync(
-                context.User,
-                resource,
-                requirement.Permission,
-                new Lazy<Task<IEnumerable<RegionRoleEntity>>>(
-                    () => _regionRoleCache.ListAsync(),
-                    isThreadSafe: true));
+        private bool IsSuccessful(
+            AuthorizationHandlerContext context,
+            EventPermissionRequirement requirement,
+            EventEntity resource) =>
+                _eventPermissionResolver.HasPermission(
+                    context.User,
+                    resource,
+                    requirement.Permission,
+                    _regionRolesAccessor.RegionRoles);
     }
 }

@@ -12,17 +12,17 @@ namespace SimpleCalendar.Api.Core.Authorization
     public class RegionOperationAuthorizationHandler : AuthorizationHandler<RegionOperationRequirement, RegionEntity>
     {
         private readonly IRegionPermissionResolver _regionPermissionResolver;
-        private readonly IRegionRoleCache _regionRoleCache;
+        private readonly IRegionRolesAccessor _regionRolesAccessor;
 
         public RegionOperationAuthorizationHandler(
             IRegionPermissionResolver regionPermissionResolver,
-            IRegionRoleCache regionRoleCache)
+            IRegionRolesAccessor regionRolesAccessor)
         {
             _regionPermissionResolver = regionPermissionResolver;
-            _regionRoleCache = regionRoleCache;
+            _regionRolesAccessor = regionRolesAccessor;
         }
 
-        protected override async Task HandleRequirementAsync(
+        protected override Task HandleRequirementAsync(
             AuthorizationHandlerContext context,
             RegionOperationRequirement requirement,
             RegionEntity resource)
@@ -31,47 +31,47 @@ namespace SimpleCalendar.Api.Core.Authorization
             {
                 var createMembershipsRequirement = requirement as RegionOperationRequirement.CreateMembershipRequirement;
 
-                var regionRoles = await _regionRoleCache.ListAsync();
+                var regionRoles = _regionRolesAccessor.RegionRoles;
                 var regionRole = regionRoles.Single(rr => rr.Id == createMembershipsRequirement.RegionRoleId);
 
                 var requiredPermission = regionRole.IsWriter() ?
-                    RegionPermission.Memberships_WriteWriter :
-                    RegionPermission.Memberships_WriteReader;
+                    RegionPermission.Memberships_Write_Writer :
+                    RegionPermission.Memberships_Write_Reader;
 
-                if (await _regionPermissionResolver.HasPermissionAsync(
+                if (_regionPermissionResolver.HasPermission(
                     context.User,
                     resource,
                     requiredPermission,
-                    new Lazy<Task<IEnumerable<RegionRoleEntity>>>(
-                        () => Task.FromResult(regionRoles))))
+                    regionRoles))
                 {
                     context.Succeed(requirement);
                 }
             }
             else if (requirement.Name == nameof(RegionOperationRequirement.DeleteMemberships))
             {
-                if (await HasPermissionAsync(resource, RegionPermission.Memberships_WriteReader, context))
+                if (HasPermissionAsync(resource, RegionPermission.Memberships_Write_Reader, context))
                 {
                     context.Succeed(requirement);
                 }
             }
             else if (requirement.Name == nameof(RegionOperationRequirement.QueryMemberships))
             {
-                if (await HasPermissionAsync(resource, RegionPermission.Memberships_Read, context))
+                if (HasPermissionAsync(resource, RegionPermission.Memberships_Read, context))
                 {
                     context.Succeed(requirement);
                 }
             }
+            return Task.CompletedTask;
         }
 
-        private Task<bool> HasPermissionAsync(
+        private bool HasPermissionAsync(
             RegionEntity resource,
             RegionPermission permission,
             AuthorizationHandlerContext context)  =>
-                _regionPermissionResolver.HasPermissionAsync(
+                _regionPermissionResolver.HasPermission(
                     context.User,
                     resource,
                     permission,
-                    _regionRoleCache);
+                    _regionRolesAccessor.RegionRoles);
     }
 }

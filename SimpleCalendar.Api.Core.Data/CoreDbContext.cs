@@ -2,7 +2,6 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
-using SimpleCalendar.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -51,8 +50,8 @@ namespace SimpleCalendar.Api.Core.Data
                 {
                     Id = Constants.RegionRoles.Administrator,
                     Name = "Admins",
-                    Permissions = RegionPermission.Events_All | RegionPermission.Memberships_WriteReader | RegionPermission.Memberships_Read,
-                    ChildPermissions = RegionPermission.Memberships_WriteWriter
+                    Permissions = RegionPermission.Events_All | RegionPermission.Memberships_Write_Reader | RegionPermission.Memberships_Read,
+                    ChildPermissions = RegionPermission.Memberships_Write_Writer
                 },
                 new RegionRoleEntity()
                 {
@@ -60,7 +59,7 @@ namespace SimpleCalendar.Api.Core.Data
                     Name = "Users",
                     Permissions =
                         RegionPermission.Events_Read |
-                        RegionPermission.Events_WriteDraft
+                        RegionPermission.Events_Write_Draft
                 });
 
             modelBuilder.Entity<UserEntity>().HasData(new UserEntity()

@@ -52,12 +52,11 @@ export class UnconnectedRegion extends React.PureComponent<RegionMergedProps> {
 
     const memberships = regionPathComponentValue.memberships;
     const inheritedMemberships = parentRegionPathComponentValues.selectMany(r => r.memberships);
-    const membershipRoleIds = Set.fromArray([...memberships, ...inheritedMemberships], m => m.regionRoleId);
 
     return (
       <div style={{ height: '100%' }}>
         <RegionManagementTabs
-          roles={roles.filter(r => region.permissions.canAddMemberships[r.id] || membershipRoleIds.has(r.id))}
+          roles={roles.filter(r => region.permissions.canAddMemberships[r.id])}
           childRegions={regionPathComponentValue.childRegions}
           regionHrefResolver={createRegionHrefResolver(baseRegionId)}
           memberships={memberships}

@@ -10,25 +10,13 @@ namespace SimpleCalendar.Api.Core.Authorization
 {
     public static class RegionPermissionResolverAsyncExtensions
     {
-        public static Task<bool> HasPermissionAsync(
-            this IRegionPermissionResolver regionPermissionResolver,
-            ClaimsPrincipal user,
-            RegionEntity region,
-            RegionPermission permission,
-            IRegionRoleCache regionRoleCache)
-                => regionPermissionResolver.HasPermissionAsync(
-                    user,
-                    region,
-                    permission,
-                    new Lazy<Task<IEnumerable<RegionRoleEntity>>>(
-                        () => regionRoleCache.ListAsync()));
 
-        public static async Task<bool> HasPermissionAsync(
+        public static bool HasPermission(
             this IRegionPermissionResolver regionPermissionResolver,
             ClaimsPrincipal user,
             RegionEntity region,
             RegionPermission permission,
-            Lazy<Task<IEnumerable<RegionRoleEntity>>> lazyRegionRolesTask)
+            IEnumerable<RegionRoleEntity> regionRoles)
         {
             if (!TryGetUserEmail(user, out string userEmail))
             {
@@ -39,7 +27,7 @@ namespace SimpleCalendar.Api.Core.Authorization
                 user,
                 region,
                 permission,
-                await lazyRegionRolesTask.Value);
+                regionRoles);
         }
 
         private static bool TryGetUserEmail(ClaimsPrincipal user, out string userEmail)
