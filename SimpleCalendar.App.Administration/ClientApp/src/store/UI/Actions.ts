@@ -7,7 +7,7 @@ export enum UIActionTypes {
 
 export class OpenDialogAction implements Action {
   readonly type = UIActionTypes.OPEN_DIALOG;
-  constructor(public dialogId: string) { }
+  constructor(public dialogId: string, public dialogOptions?: any) { }
 }
 
 export class CloseDialogAction implements Action {

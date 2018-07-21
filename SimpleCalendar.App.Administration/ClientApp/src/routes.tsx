@@ -6,7 +6,7 @@ import Region from './components/containers/Region';
 import { Auth } from 'src/services/Auth';
 import { appConnect } from 'src/store';
 import { rolesActionCreators } from 'src/store/Roles';
-import { AuthorizationStatus } from 'src/store/Auth';
+import { authActionCreators, AuthorizationStatus } from 'src/store/Auth';
 
 const NotFound = () => <div>Page not found</div>;
 
@@ -56,7 +56,10 @@ const AuthGuard = appConnect<AuthGuardStateProps>(
     authorizationStatus: state.auth.status
   }),
   dispatch => ({
-    onMount: () => dispatch(rolesActionCreators.fetchRoles())
+    onMount: () => {
+      dispatch(authActionCreators.login(localStorage.getItem('access_token') as string));
+      dispatch(rolesActionCreators.fetchRoles());
+    }
   })
 )(UnconnectedAuthGuard) as any;
 

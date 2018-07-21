@@ -30,7 +30,6 @@ const merge = (prevState: RegionState, newStatePartial: DeepPartial<RegionState>
 const mergePathComponent = (prevPathComponent: RegionPathComponent, newPathComponentPartial: DeepPartial<RegionPathComponent>): RegionPathComponent =>
   Object.assign({}, prevPathComponent, newPathComponentPartial);
 
-
 const getSubPath = (path: RegionPath, regionId: string): RegionPath => {
   if (path.length === 0) {
     return [];
@@ -69,6 +68,30 @@ const updatePathOnRegionFetch = (path: RegionPath, action: FetchRegionComplete):
   })
 }
 
+const updateCurrentRegionPathComponentValue = (
+  state: RegionState,
+  updateFunc: (currentRegionPathComponentValue: RegionPathComponentValue) => DeepPartial<RegionPathComponentValue>): RegionState => {
+    const { path } = state;
+    const regionPathIndex = state.path.length - 1;
+    const regionPathComponent = path[regionPathIndex];
+    const regionPathComponentValue = regionPathComponent.value as RegionPathComponentValue;
+
+    return merge(state, {
+      path: [
+        ...path.slice(0, regionPathIndex),
+        {
+          ...regionPathComponent,
+          ...{
+            value: {
+              ...regionPathComponentValue,
+              ...updateFunc(regionPathComponentValue)
+            }
+          }
+        }
+      ]
+    });
+  };
+
 export const regionsReducer: Reducer = (state: RegionState, action: RegionActions): RegionState => {
   switch (action.type) {
     case RegionsActionTypes.SET_REGION:
@@ -87,6 +110,10 @@ export const regionsReducer: Reducer = (state: RegionState, action: RegionAction
       return merge(state, {
         path: updatePathOnRegionFetch(state.path, action)
       });
+    case RegionsActionTypes.CREATE_MEMBERSHIP_BEGIN:
+      return updateCurrentRegionPathComponentValue(state, v => ({
+        memberships: [...v.memberships, action.membership as IRegionMembership]
+      }));
     default:
       return state || {
         path: []

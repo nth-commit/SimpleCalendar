@@ -20,9 +20,10 @@ class DialogTrigger extends React.Component<DialogTriggerStateProps & DialogTrig
       return null;
     }
 
+    const { dialogProps, component } = dialogRegistration.getDialog(dialogId);
     return (
-      <Dialog open={true} onClose={this.props.closed}>
-        {React.createElement(dialogRegistration.getDialog(dialogId))}
+      <Dialog open={true} onClose={this.props.closed} {...dialogProps}>
+        {React.createElement(component)}
       </Dialog>
     );
   }

@@ -25,6 +25,9 @@ namespace SimpleCalendar.Api.Commands.RegionMemberships.Impl.Query
 
         public async Task<IActionResult> InvokeAsync(ActionContext context, string regionId, string userEmail)
         {
+            // TODO: Change to:
+            //  canQueryMemberships (resource authorization against region) &&
+            //  canQueryUsers? 
             var canQuery = await _authorizationService.CanQueryMembershipsAsync(regionId, userEmail);
             if (!canQuery)
             {

@@ -3,6 +3,7 @@ import { UIActionTypes, UIAction } from './Actions';
 
 export interface UIState {
   dialogId: string | null;
+  dialogOptions?: any;
 }
 
 const merge = (prevState: UIState, newStatePartial: DeepPartial<UIState>): UIState =>
@@ -11,7 +12,10 @@ const merge = (prevState: UIState, newStatePartial: DeepPartial<UIState>): UISta
 export const uiReducer: Reducer = (state: UIState, action: UIAction): UIState => {
   switch (action.type) {
     case UIActionTypes.OPEN_DIALOG: {
-      return merge(state, { dialogId: action.dialogId });
+      return merge(state, {
+        dialogId: action.dialogId,
+        dialogOptions: action.dialogOptions
+      });
     }
     case UIActionTypes.CLOSE_DIALOG: {
       return merge(state, { dialogId: null });

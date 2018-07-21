@@ -51,9 +51,8 @@ namespace SimpleCalendar.Api.Core.Data
                 {
                     Id = Constants.RegionRoles.Administrator,
                     Name = "Admins",
-                    Permissions = RegionPermission.Events_All | RegionPermission.Memberships_WriteReader,
-                    ChildPermissions = RegionPermission.Memberships_WriteWriter,
-                    ParentPermissions = RegionPermission.Memberships_Read
+                    Permissions = RegionPermission.Events_All | RegionPermission.Memberships_WriteReader | RegionPermission.Memberships_Read,
+                    ChildPermissions = RegionPermission.Memberships_WriteWriter
                 },
                 new RegionRoleEntity()
                 {

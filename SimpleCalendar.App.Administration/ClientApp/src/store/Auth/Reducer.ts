@@ -7,29 +7,27 @@ const merge = (prevState: AuthState, newStatePartial: DeepPartial<AuthState>): A
 
 export const authReducer: Reducer = (state: AuthState, action: AuthAction): AuthState => {
   switch (action.type) {
-
+    case AuthActionTypes.LOGIN_COMPLETE: {
+      return merge(state, { accessToken: action.accessToken });
+    }
     case AuthActionTypes.FETCH_REGION_MEMBERSHIPS_BEGIN:
       return merge(state, {
         regionMembershipsLoading: true
       });
-    
     case AuthActionTypes.FETCH_REGION_MEMBERSHIPS_COMPLETE: {
       return merge(state, {
         regionMembershipsLoading: false,
         regionMemberships: action.regionMemberships
       });
     }
-
     case AuthActionTypes.SET_AUTHORIZATION_STATUS: {
       return merge(state, {
         status: action.status
       });
     }
-
     default:
       return state || {
-        status: AuthorizationStatus.Indetermined,
-        accessToken: localStorage.getItem('access_token')
+        status: AuthorizationStatus.Indetermined
       };
   }
 }

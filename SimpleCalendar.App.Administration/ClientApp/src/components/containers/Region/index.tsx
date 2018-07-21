@@ -8,6 +8,7 @@ import {
 } from 'src/store/Regions';
 import { uiActionCreators } from 'src/store/UI';
 import { IRegionRole } from 'src/services/Api';
+import { CREATE_MEMBERSHIP_DIALOG_ID, CreateMembershipDialogOptions } from '../../dialogs/CreateMembershipDialog';
 import RegionManagementTabs from '../../presentational/RegionManagementTabs';
 import createRegionHrefResolver from '../../utility/RegionHrefResolver';
 
@@ -20,13 +21,13 @@ interface RegionStateProps {
 }
 
 interface RegionMergedProps {
+  mounted(): void;
+  membershipCreateRequested(regionRoleId: string): void;
   loading: boolean;
   regionId: string;
   regionPath: RegionPath;
   baseRegionId: string;
   roles: IRegionRole[];
-  mounted(): void;
-  membershipCreateRequested(): void;
 }
 
 export class UnconnectedRegion extends React.PureComponent<RegionMergedProps> {
@@ -96,6 +97,8 @@ export default appConnect<RegionStateProps, {}, {}, RegionMergedProps>(
   (stateProps, { dispatch }) => ({
     ...stateProps,
     mounted: () => dispatch(regionActionCreators.setRegion(stateProps.regionId)),
-    membershipCreateRequested: () => dispatch(uiActionCreators.openDialog('test'))
+    membershipCreateRequested: roleId => dispatch(uiActionCreators.openDialog(
+      CREATE_MEMBERSHIP_DIALOG_ID,
+      { roleId } as CreateMembershipDialogOptions))
   })
 )(UnconnectedRegion);

@@ -8,10 +8,14 @@ export interface IRegion {
   }
 }
 
-export interface IRegionMembership {
+export interface IRegionMembershipCreate {
   regionId: string;
-  userId: string;
+  userEmail: string;
   regionRoleId: string;
+}
+
+export interface IRegionMembership extends IRegionMembershipCreate {
+  id: string;
   permissions: {
     canDelete: boolean;
   }

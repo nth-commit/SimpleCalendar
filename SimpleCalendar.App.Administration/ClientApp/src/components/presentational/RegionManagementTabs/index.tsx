@@ -19,7 +19,7 @@ const styles = theme => ({
 });
 
 export interface RegionManagementTabsProps {
-  createMembershipClicked(): void;
+  createMembershipClicked(roleId: string): void;
   roles: IRegionRole[];
   childRegions: IRegion[];
   memberships: IRegionMembership[];
@@ -83,6 +83,10 @@ class RegionManagementTabs extends React.Component<RegionManagementTabsProps> {
   private renderTab() {
     const { childRegions, regionHrefResolver, createMembershipClicked } = this.props;
     const { tab } = this.state;
+    const regionRoleIndex = tab - 1;
+
+    const regionRoleId = this.getRegionRoleId(regionRoleIndex);
+    const createClicked = () => createMembershipClicked(regionRoleId);
 
     if (tab === 0) {
       return (
@@ -94,7 +98,7 @@ class RegionManagementTabs extends React.Component<RegionManagementTabsProps> {
       return (
         <RegionMemberships
           memberships={this.getMemberships(tab - 1)}
-          createClicked={createMembershipClicked}/>
+          createClicked={createClicked} />
       );
     }
   }
@@ -106,6 +110,11 @@ class RegionManagementTabs extends React.Component<RegionManagementTabsProps> {
       ...(includeInherited ? inheritedMemberships.filter(m => m.regionRoleId === regionRoleId) : []),
       ...memberships.filter(m => m.regionRoleId === regionRoleId)
     ]
+  }
+
+  private getRegionRoleId(regionRoleIndex: number): string {
+    const { roles } = this.props;
+    return roles[regionRoleIndex].id
   }
 }
 

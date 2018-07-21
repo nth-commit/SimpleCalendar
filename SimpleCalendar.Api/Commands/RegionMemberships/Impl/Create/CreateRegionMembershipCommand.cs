@@ -71,6 +71,7 @@ namespace SimpleCalendar.Api.Commands.RegionMemberships.Impl.Create
                 RegionId = region.Id,
                 RegionRoleId = create.RegionRoleId
             });
+            await _coreDbContext.SaveChangesAsync();
 
             return new CreatedResult(
                 $"regionmemberships/{result.Entity.Id}",

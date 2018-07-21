@@ -24,7 +24,7 @@ namespace SimpleCalendar.Api.Middleware.UserPreparation.Impl
             var securityToken = httpContext.GetSecurityToken();
             return await _memoryCache.GetOrCreateAsync(securityToken, async (entry) =>
             {
-                entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(60);
+                entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5);
 
                 var authority = httpContext.User.Claims.Where(c => c.Type == "iss").First();
                 var discoveryClient = new DiscoveryClient(authority.Value);

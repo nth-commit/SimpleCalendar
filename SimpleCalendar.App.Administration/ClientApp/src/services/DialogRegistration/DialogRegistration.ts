@@ -1,21 +1,30 @@
 import * as React from 'react';
+import { DialogProps } from '@material-ui/core/Dialog';
 
 export class DialogIdDuplicationException { }
 
 export class DialogNotFoundException { }
 
-class DialogRegistrationService {
-  private dialogs = new Map<string, typeof React.Component>();
+export interface DialogDefinition {
+  component: typeof React.Component;
+  dialogProps: DialogProps;
+}
 
-  register(dialogId: string, component: typeof React.Component) {
+class DialogRegistrationService {
+  private dialogs = new Map<string, DialogDefinition>();
+
+  register(dialogId: string, component: typeof React.Component, dialogProps?: Partial<DialogProps>) {
     if (this.dialogs.has(dialogId)) {
       throw new DialogIdDuplicationException();
     }
 
-    this.dialogs.set(dialogId, component);
+    this.dialogs.set(dialogId, {
+      component,
+      dialogProps: (dialogProps || {}) as DialogProps
+    });
   }
 
-  getDialog(dialogId: string): typeof React.Component {
+  getDialog(dialogId: string): DialogDefinition {
     const result = this.dialogs.get(dialogId);
     if (!result) {
       throw new DialogNotFoundException();

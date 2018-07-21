@@ -9,7 +9,6 @@ import configureStore from './configureStore';
 import { ApplicationState } from './store';
 import * as RoutesModule from './routes';
 import './extensions';
-import './components/dialogs';
 import { ROOT_REGION_ID } from './constants';
 
 import { IConfigurationState, configurationActionCreators } from './store/Configuration';

@@ -1,6 +1,6 @@
 import { ROOT_REGION_ID } from 'src/constants';
 import { getConfiguration } from './Configure';
-import { IRegion, IRegionMembership, IRegionMembershipQuery, IRegionRole } from './Models';
+import { IRegion, IRegionMembership, IRegionMembershipQuery, IRegionRole, IRegionMembershipCreate } from './Models';
 
 export class Api {
 
@@ -9,7 +9,7 @@ export class Api {
   constructor(private accessToken: string) { }
 
   getRegion(id: string): Promise<IRegion> {
-    return this.fetchJson<IRegion>(this.getUrl(`regions/${id}`));
+    return this.getJson<IRegion>(this.getUrl(`regions/${id}`));
   }
   
   getRegions(parentRegionId: string): Promise<IRegion[]> {
@@ -20,11 +20,11 @@ export class Api {
       search.append('parentId', parentRegionId);
     }
 
-    return this.fetchJson<IRegion[]>(url, search);
+    return this.getJson<IRegion[]>(url, search);
   }
 
   getMyRegionMemberships(): Promise<IRegionMembership[]> {
-    return this.fetchJson<IRegionMembership[]>(this.getUrl('regionmemberships/my'));
+    return this.getJson<IRegionMembership[]>(this.getUrl('regionmemberships/my'));
   }
 
   getRegionMemberships(query: IRegionMembershipQuery): Promise<IRegionMembership[]> {
@@ -38,20 +38,25 @@ export class Api {
       search.append('userId', query.userId);
     }
 
-    return this.fetchJson<IRegionMembership[]>(url, search);
+    return this.getJson<IRegionMembership[]>(url, search);
   }
 
   getRegionRoles(): Promise<IRegionRole[]> {
-    return this.fetchJson<IRegionRole[]>(this.getUrl('regionroles'));
+    return this.getJson<IRegionRole[]>(this.getUrl('regionroles'));
   }
 
-  private async fetchJson<T>(url: URL, search?: URLSearchParams): Promise<T> {
-    const response = await this.fetchResponse(url, search);
+  async createRegionMembership(create: IRegionMembershipCreate): Promise<IRegionMembership> {
+    const response = await this.post(this.getUrl('regionmemberships'), create);
+    return await response.json();
+  }
+
+  private async getJson<T>(url: URL, search?: URLSearchParams): Promise<T> {
+    const response = await this.get(url, search);
     const json: T = await response.json();
     return json;
   }
 
-  private async fetchResponse(url: URL, search?: URLSearchParams): Promise<Response> {
+  private async get(url: URL, search?: URLSearchParams): Promise<Response> {
     if (search) {
       url.search = search.toString();
     }
@@ -69,6 +74,24 @@ export class Api {
     if (response.status !== 200) {
       throw new Error(await response.text());
     }
+
+    return response;
+  }
+
+  private async post(url: URL, body?: any): Promise<Response> {
+    const headers = new Headers();
+
+    if (this.accessToken) {
+      headers.append('Authorization', `Bearer ${this.accessToken}`);
+    }
+
+    headers.append('Content-Type', 'application/json');
+
+    const response = await fetch(url.toString(), {
+      headers,
+      method: 'POST',
+      body: body ? JSON.stringify(body) : undefined
+    });
 
     return response;
   }
