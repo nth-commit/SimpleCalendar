@@ -35,6 +35,7 @@ namespace SimpleCalendar.Api
             var services = new ValidatableServiceCollection(innerServices);
 
             services.AddMvc();
+            services.AddMemoryCache();
 
             services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
             services.AddTransient<IUserAccessor, HttpUserAccessor>();
