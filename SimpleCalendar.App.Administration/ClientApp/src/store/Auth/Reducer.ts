@@ -13,6 +13,11 @@ export const authReducer: Reducer = (state: AuthState, action: AuthAction): Auth
     case AuthActionTypes.LOGIN_COMPLETE: {
       return merge(state, { user: action.user });
     }
+    case AuthActionTypes.LOGOUT: {
+      return merge(state, {
+        accessToken: undefined
+      });
+    }
     case AuthActionTypes.FETCH_REGION_MEMBERSHIPS_BEGIN:
       return merge(state, {
         regionMembershipsLoading: true
