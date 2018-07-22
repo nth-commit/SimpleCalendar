@@ -28,7 +28,7 @@ namespace SimpleCalendar.Api.UnitTests.RegionMemberships.Query.My
         public async Task WhenIGetMyMemberships_ItReturnsAllMyMemberships()
         {
             var memberships = await QueryMyMembershipsAndAssertOKAsync();
-            Assert.Equal(3, memberships.Where(m => m.UserId == UserId).Count());
+            Assert.Equal(3, memberships.Where(m => m.UserEmail == UserId).Count());
         }
 
         [Fact]

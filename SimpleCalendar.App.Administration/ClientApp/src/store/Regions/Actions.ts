@@ -9,6 +9,9 @@ export enum RegionsActionTypes {
   CREATE_MEMBERSHIP_BEGIN = '[Regions] CREATE_MEMBERSHIP_BEGIN',
   CREATE_MEMBERSHIP_COMPLETE = '[Regions] CREATE_MEMBERSHIP_COMPLETE',
   CREATE_MEMBERSHIP_ERROR = '[Regions] CREATE_MEMBERSHIP_ERROR',
+  DELETE_MEMBERSHIP_BEGIN = '[Regions] DELETE_MEMBERSHIP_BEGIN',
+  DELETE_MEMBERSHIP_COMPLETE = '[Regions] DELETE_MEMBERSHIP_COMPLETE',
+  DELETE_MEMBERSHIP_ERROR = '[Regions] DELETE_MEMBERSHIP_ERROR',
 }
 
 export class FetchRegionBegin implements Action {
@@ -41,11 +44,26 @@ export class CreateMembershipBegin implements Action {
 
 export class CreateMembershipComplete implements Action {
   readonly type = RegionsActionTypes.CREATE_MEMBERSHIP_COMPLETE;
-  constructor(public trackingId: number) { }
+  constructor(public trackingId: number, membership: IRegionMembership) { }
 }
 
 export class CreateMembershipError implements Action {
   readonly type = RegionsActionTypes.CREATE_MEMBERSHIP_ERROR;
+  constructor(public trackingId: number) { }
+}
+
+export class DeleteMembershipBegin implements Action {
+  readonly type = RegionsActionTypes.DELETE_MEMBERSHIP_BEGIN;
+  constructor(public membershipId: string, public trackingId: number) { }
+}
+
+export class DeleteMembershipComplete implements Action {
+  readonly type = RegionsActionTypes.DELETE_MEMBERSHIP_COMPLETE;
+  constructor(public trackingId: number) { }
+}
+
+export class DeleteMembershipError implements Action {
+  readonly type = RegionsActionTypes.DELETE_MEMBERSHIP_ERROR;
   constructor(public trackingId: number) { }
 }
 
@@ -56,4 +74,7 @@ export type RegionActions =
   SetRegion |
   CreateMembershipBegin |
   CreateMembershipComplete |
-  CreateMembershipError;
+  CreateMembershipError |
+  DeleteMembershipBegin |
+  DeleteMembershipComplete |
+  DeleteMembershipError;

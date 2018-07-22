@@ -30,7 +30,7 @@ namespace SimpleCalendar.Api.Commands.RegionMemberships.Impl.Delete
             }
 
             var region = await _coreDbContext.GetRegionByIdAsync(entity.RegionId);
-            var canDelete = await _authorizationService.CanDeleteMembershipsAsync(region);
+            var canDelete = await _authorizationService.CanDeleteMembershipsAsync(region, entity.RegionRoleId, entity.UserEmail);
             if (!canDelete)
             {
                 return new UnauthorizedResult();

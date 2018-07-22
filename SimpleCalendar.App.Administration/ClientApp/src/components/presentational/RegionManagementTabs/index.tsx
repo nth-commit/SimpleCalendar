@@ -6,7 +6,7 @@ import Tab from '@material-ui/core/Tab';
 import { IRegion, IRegionMembership, IRegionRole } from 'src/services/Api';
 import { RegionHrefResolver } from '../../utility/RegionHrefResolver';
 import RegionList from '../RegionList';
-import RegionMemberships from '../RegionMemberships';
+import RegionMemberships, { Memberships } from '../RegionMemberships';
 
 const styles = theme => ({
   root: {
@@ -20,11 +20,13 @@ const styles = theme => ({
 
 export interface RegionManagementTabsProps {
   createMembershipClicked(roleId: string): void;
+  deleteMembershipClicked(membershipId: string): void;
   roles: IRegionRole[];
   childRegions: IRegion[];
   memberships: IRegionMembership[];
   inheritedMemberships: IRegionMembership[];
   regionHrefResolver: RegionHrefResolver;
+  regionId: string;
   classes: any;
 }
 
@@ -71,6 +73,7 @@ class RegionManagementTabs extends React.Component<RegionManagementTabsProps> {
           <Tabs value={tab} onChange={this.setTabState}>
             {childRegions.length && <Tab className={classes.tab} value={0} label="Sub-Regions" />}
             {roles.map((rr, i) => <Tab key={rr.id} className={classes.tab} value={i + 1} label={rr.name} /> )}
+            <Tab value={roles.length + 1} label="Users (New!)" />
           </Tabs>
         </AppBar>
         <div style={{ height: `calc(100% - ${appBarHeight}px)` }}>
@@ -81,20 +84,29 @@ class RegionManagementTabs extends React.Component<RegionManagementTabsProps> {
   }
 
   private renderTab() {
-    const { childRegions, regionHrefResolver, createMembershipClicked } = this.props;
+    const { childRegions, regionHrefResolver, createMembershipClicked, deleteMembershipClicked, roles, memberships, inheritedMemberships, regionId } = this.props;
     const { tab } = this.state;
-    const regionRoleIndex = tab - 1;
-
-    const regionRoleId = this.getRegionRoleId(regionRoleIndex);
-    const createClicked = () => createMembershipClicked(regionRoleId);
 
     if (tab === 0) {
       return (
         <RegionList
           regions={childRegions}
           regionHrefResolver={regionHrefResolver} />
-        );
+      );
+    } else if (tab === roles.length + 1) {
+      const createClicked = () => createMembershipClicked('');
+      return (
+        <Memberships
+          createClicked={createClicked}
+          deleteClicked={deleteMembershipClicked}
+          regionId={regionId}
+          memberships={[...memberships, ...inheritedMemberships]}
+          roles={roles} />
+      );
     } else {
+      const regionRoleIndex = tab - 1;
+      const regionRoleId = this.getRegionRoleId(regionRoleIndex);
+      const createClicked = () => createMembershipClicked(regionRoleId);
       return (
         <RegionMemberships
           memberships={this.getMemberships(tab - 1)}

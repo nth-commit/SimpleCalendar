@@ -78,12 +78,15 @@ namespace SimpleCalendar.Api.Commands.RegionMemberships.Impl.Create
                 new RegionMembership()
                 {
                     Id = result.Entity.Id,
-                    UserId = result.Entity.UserEmail,
+                    UserEmail = result.Entity.UserEmail,
                     RegionId = create.RegionId,
                     RegionRoleId = create.RegionRoleId,
                     Permissions = new RegionMembershipAuthorization()
                     {
-                        CanDelete = _authorizationService.CanDeleteMembershipsAsync(region).Result
+                        CanDelete = _authorizationService.CanDeleteMembershipsAsync(
+                            region,
+                            create.RegionRoleId,
+                            result.Entity.UserEmail).Result
                     }
                 });
         }

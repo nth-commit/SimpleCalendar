@@ -42,15 +42,13 @@ namespace SimpleCalendar.Utiltiy.Validation
                         return;
                     }
 
-                    var validateAgainstTypeIfAttribute = attribute as ValidateAgainstTypeIfAttribute;
-                    if (validateAgainstTypeIfAttribute != null)
+                    if (attribute is ValidateAgainstTypeIfAttribute validateAgainstTypeIfAttribute)
                     {
                         ValidateAgainstTypeIf(model, serviceProvider, items, modelErrors, pi, validateAgainstTypeIfAttribute);
                         return;
                     }
 
-                    var validateAgainstTypeAttribute = attribute as ValidateAgainstTypeAttribute;
-                    if (validateAgainstTypeAttribute != null)
+                    if (attribute is ValidateAgainstTypeAttribute validateAgainstTypeAttribute)
                     {
                         ValidateAgainstType(model, serviceProvider, items, modelErrors, pi, validateAgainstTypeAttribute);
                         return;
@@ -144,11 +142,9 @@ namespace SimpleCalendar.Utiltiy.Validation
             IValidateAgainstType attr)
         {
             var propertyModelValue = pi.GetValue(model);
-            var propertyModel = propertyModelValue as IDictionary<string, object>;
-            if (propertyModel == null)
+            if (!(propertyModelValue is IDictionary<string, object> propertyModel))
             {
-                var propertyEnumerableModel = propertyModelValue as IEnumerable<object>;
-                if (propertyEnumerableModel == null)
+                if (!(propertyModelValue is IEnumerable<object> propertyEnumerableModel))
                 {
                     // Everything is fine. RequiredAttribute should handle validation here if not.
                     return;

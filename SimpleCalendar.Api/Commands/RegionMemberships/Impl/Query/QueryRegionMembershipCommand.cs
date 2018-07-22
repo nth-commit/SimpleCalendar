@@ -99,11 +99,14 @@ namespace SimpleCalendar.Api.Commands.RegionMemberships.Impl.Query
             {
                 Id = e.Id,
                 RegionId = regionsById[e.RegionId].GetId(),
-                UserId = e.UserEmail,
+                UserEmail = e.UserEmail,
                 RegionRoleId = e.RegionRoleId,
                 Permissions = new RegionMembershipAuthorization()
                 {
-                    CanDelete = _authorizationService.CanDeleteMembershipsAsync(regionsById[e.RegionId]).Result
+                    CanDelete = _authorizationService.CanDeleteMembershipsAsync(
+                        regionsById[e.RegionId],
+                        e.RegionRoleId,
+                        e.UserEmail).Result
                 }
             }));
         }

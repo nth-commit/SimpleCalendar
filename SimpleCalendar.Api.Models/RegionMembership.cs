@@ -8,7 +8,7 @@ namespace SimpleCalendar.Api.Models
     {
         public string Id { get; set; }
 
-        public string UserId { get; set; }
+        public string UserEmail { get; set; }
 
         public string RegionId { get; set; }
 

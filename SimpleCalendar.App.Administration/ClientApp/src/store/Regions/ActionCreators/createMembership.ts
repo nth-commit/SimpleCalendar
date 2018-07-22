@@ -1,8 +1,8 @@
 import { ApplicationThunkActionAsync } from '../../';
-import { CreateMembershipBegin, CreateMembershipComplete } from '../Actions';
+import { CreateMembershipBegin, CreateMembershipComplete, CreateMembershipError } from '../Actions';
 import { Api } from 'src/services/Api';
 
-let createMembershipTrackingId = 0;
+let createMembershipTrackingIdCounter = 0;
 
 export function createMembership(userEmail: string, roleId: string): ApplicationThunkActionAsync {
   return async (dispatch, getState) => {
@@ -14,10 +14,14 @@ export function createMembership(userEmail: string, roleId: string): Application
       regionRoleId: roleId
     };
 
-    dispatch({ ...new CreateMembershipBegin(newMembership, createMembershipTrackingId++) });
+    const createMembershipTrackingId = createMembershipTrackingIdCounter++;
+    dispatch({ ...new CreateMembershipBegin(newMembership, createMembershipTrackingId) });
 
-    const membership = await new Api(auth.accessToken).createRegionMembership(newMembership);
-
-    console.log(CreateMembershipComplete, membership);
+    try {
+      const membership = await new Api(auth.accessToken).createRegionMembership(newMembership);
+      dispatch({ ...new CreateMembershipComplete(createMembershipTrackingId, membership) })
+    } catch {
+      dispatch({ ...new CreateMembershipError(createMembershipTrackingId) })
+    }
   };
 }

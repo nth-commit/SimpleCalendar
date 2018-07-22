@@ -54,6 +54,10 @@ export class Api {
     return await response.json();
   }
 
+  deleteRegionMembersip(regionMembershipId: string): Promise<void> {
+    return this.delete(this.getUrl(`regionmemberships/${regionMembershipId}`)).then(() => {});
+  }
+
   private async getJson<T>(url: URL, search?: URLSearchParams): Promise<T> {
     const response = await this.get(url, search);
     const json: T = await response.json();
@@ -95,6 +99,21 @@ export class Api {
       headers,
       method: 'POST',
       body: body ? JSON.stringify(body) : undefined
+    });
+
+    return response;
+  }
+
+  private async delete(url: URL): Promise<Response> {
+    const headers = new Headers();
+
+    if (this.accessToken) {
+      headers.append('Authorization', `Bearer ${this.accessToken}`);
+    }
+
+    const response = await fetch(url.toString(), {
+      headers,
+      method: 'DELETE'
     });
 
     return response;

@@ -29,34 +29,29 @@ namespace SimpleCalendar.Api.Core.Authorization
         {
             if (requirement.Name == nameof(RegionOperationRequirement.CreateMembership))
             {
-                var createMembershipsRequirement = requirement as RegionOperationRequirement.CreateMembershipRequirement;
+                var regionRoleId = ((RegionOperationRequirement.CreateMembershipRequirement)requirement).RegionRoleId;
+                var requiredPermission = GetRequiredMembershipWritePermission(regionRoleId);
 
-                var regionRoles = _regionRolesAccessor.RegionRoles;
-                var regionRole = regionRoles.Single(rr => rr.Id == createMembershipsRequirement.RegionRoleId);
-
-                var requiredPermission = regionRole.IsWriter() ?
-                    RegionPermission.Memberships_Write_Writer :
-                    RegionPermission.Memberships_Write_Reader;
-
-                if (_regionPermissionResolver.HasPermission(
-                    context.User,
-                    resource,
-                    requiredPermission,
-                    regionRoles))
+                if (HasPermission(resource, requiredPermission, context))
                 {
                     context.Succeed(requirement);
                 }
             }
             else if (requirement.Name == nameof(RegionOperationRequirement.DeleteMemberships))
             {
-                if (HasPermissionAsync(resource, RegionPermission.Memberships_Write_Reader, context))
+                var deleteRequirement = (RegionOperationRequirement.DeleteMembershipRequirement)requirement;
+                var regionRoleId = deleteRequirement.RegionRoleId;
+                var requiredPermission = GetRequiredMembershipWritePermission(regionRoleId);
+
+                if (HasPermission(resource, requiredPermission, context) &&
+                    deleteRequirement.UserEmail != context.User.GetUserEmail())
                 {
                     context.Succeed(requirement);
                 }
             }
             else if (requirement.Name == nameof(RegionOperationRequirement.QueryMemberships))
             {
-                if (HasPermissionAsync(resource, RegionPermission.Memberships_Read, context))
+                if (HasPermission(resource, RegionPermission.Memberships_Read, context))
                 {
                     context.Succeed(requirement);
                 }
@@ -64,7 +59,17 @@ namespace SimpleCalendar.Api.Core.Authorization
             return Task.CompletedTask;
         }
 
-        private bool HasPermissionAsync(
+        private RegionPermission GetRequiredMembershipWritePermission(string regionRoleId)
+        {
+            var regionRoles = _regionRolesAccessor.RegionRoles;
+            var regionRole = regionRoles.Single(rr => rr.Id == regionRoleId);
+
+            return regionRole.IsWriter() ?
+                RegionPermission.Memberships_Write_Writer :
+                RegionPermission.Memberships_Write_Reader;
+        }
+
+        private bool HasPermission(
             RegionEntity resource,
             RegionPermission permission,
             AuthorizationHandlerContext context)  =>

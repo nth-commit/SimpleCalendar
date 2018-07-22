@@ -35,7 +35,7 @@ const Navbar = ({ isLoading, regions, baseRegionId, profileImageSrc, logout }: N
         </Toolbar>
       </AppBar>
     </div>
-  )
+  );
 };
 
 export default appConnect<NavbarStateProps, NavbarDispatchProps>(

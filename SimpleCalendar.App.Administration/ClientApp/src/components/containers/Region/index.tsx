@@ -22,7 +22,8 @@ interface RegionStateProps {
 
 interface RegionMergedProps {
   mounted(): void;
-  membershipCreateRequested(regionRoleId: string): void;
+  membershipCreateRequested(roleId: string): void;
+  membershipDeleteRequested(membershipId: string): void;
   loading: boolean;
   regionId: string;
   regionPath: RegionPath;
@@ -41,7 +42,7 @@ export class UnconnectedRegion extends React.PureComponent<RegionMergedProps> {
       return null;
     }
 
-    const { regionPath, regionId, baseRegionId, roles, membershipCreateRequested } = this.props;
+    const { regionPath, regionId, baseRegionId, roles, membershipCreateRequested, membershipDeleteRequested } = this.props;
     const regionIndex = regionPath.findIndex(r => r.id === regionId);
 
     const regionPathComponentValues = regionPath.map(r => r.value as RegionPathComponentValue);
@@ -56,12 +57,14 @@ export class UnconnectedRegion extends React.PureComponent<RegionMergedProps> {
     return (
       <div style={{ height: '100%' }}>
         <RegionManagementTabs
+          createMembershipClicked={membershipCreateRequested}
+          deleteMembershipClicked={membershipDeleteRequested}
+          regionId={region.id}
           roles={roles.filter(r => region.permissions.canAddMemberships[r.id])}
           childRegions={regionPathComponentValue.childRegions}
           regionHrefResolver={createRegionHrefResolver(baseRegionId)}
           memberships={memberships}
-          inheritedMemberships={inheritedMemberships}
-          createMembershipClicked={membershipCreateRequested}/>
+          inheritedMemberships={inheritedMemberships} />
       </div>
     );
   }
@@ -98,6 +101,7 @@ export default appConnect<RegionStateProps, {}, {}, RegionMergedProps>(
     mounted: () => dispatch(regionActionCreators.setRegion(stateProps.regionId)),
     membershipCreateRequested: roleId => dispatch(uiActionCreators.openDialog(
       CREATE_MEMBERSHIP_DIALOG_ID,
-      { roleId } as CreateMembershipDialogOptions))
+      { roleId } as CreateMembershipDialogOptions)),
+    membershipDeleteRequested: membershipId => dispatch(regionActionCreators.deleteMembership(membershipId))
   })
 )(UnconnectedRegion);
