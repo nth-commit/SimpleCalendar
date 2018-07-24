@@ -1,5 +1,5 @@
-import { Action } from 'redux';
-import { IRegion, IRegionMembership, IRegionMembershipCreate } from 'src/services/Api';
+import { Action } from 'redux'
+import { IRegion, IRegionMembership, IRegionMembershipCreate } from 'src/services/Api'
 
 export enum RegionsActionTypes {
   SET_REGION = '[Regions] SET_REGION',
@@ -15,12 +15,12 @@ export enum RegionsActionTypes {
 }
 
 export class FetchRegionBegin implements Action {
-  readonly type = RegionsActionTypes.FETCH_REGION_BEGIN;
+  readonly type = RegionsActionTypes.FETCH_REGION_BEGIN
   constructor(public regionId: string) { }
 }
 
 export class FetchRegionComplete implements Action {
-  readonly type = RegionsActionTypes.FETCH_REGION_COMPLETE;
+  readonly type = RegionsActionTypes.FETCH_REGION_COMPLETE
   constructor(
     public region: IRegion,
     public childRegions: IRegion[],
@@ -28,42 +28,42 @@ export class FetchRegionComplete implements Action {
 }
 
 export class FetchRegionError implements Action {
-  readonly type = RegionsActionTypes.FETCH_REGION_ERROR;
+  readonly type = RegionsActionTypes.FETCH_REGION_ERROR
   constructor() { }
 }
 
 export class SetRegion implements Action {
-  readonly type = RegionsActionTypes.SET_REGION;
+  readonly type = RegionsActionTypes.SET_REGION
   constructor(public regionId: string) { }
 }
 
 export class CreateMembershipBegin implements Action {
-  readonly type = RegionsActionTypes.CREATE_MEMBERSHIP_BEGIN;
+  readonly type = RegionsActionTypes.CREATE_MEMBERSHIP_BEGIN
   constructor(public membership: IRegionMembershipCreate, public trackingId: number) { }
 }
 
 export class CreateMembershipComplete implements Action {
-  readonly type = RegionsActionTypes.CREATE_MEMBERSHIP_COMPLETE;
+  readonly type = RegionsActionTypes.CREATE_MEMBERSHIP_COMPLETE
   constructor(public trackingId: number, membership: IRegionMembership) { }
 }
 
 export class CreateMembershipError implements Action {
-  readonly type = RegionsActionTypes.CREATE_MEMBERSHIP_ERROR;
+  readonly type = RegionsActionTypes.CREATE_MEMBERSHIP_ERROR
   constructor(public trackingId: number) { }
 }
 
 export class DeleteMembershipBegin implements Action {
-  readonly type = RegionsActionTypes.DELETE_MEMBERSHIP_BEGIN;
+  readonly type = RegionsActionTypes.DELETE_MEMBERSHIP_BEGIN
   constructor(public membershipId: string, public trackingId: number) { }
 }
 
 export class DeleteMembershipComplete implements Action {
-  readonly type = RegionsActionTypes.DELETE_MEMBERSHIP_COMPLETE;
+  readonly type = RegionsActionTypes.DELETE_MEMBERSHIP_COMPLETE
   constructor(public trackingId: number) { }
 }
 
 export class DeleteMembershipError implements Action {
-  readonly type = RegionsActionTypes.DELETE_MEMBERSHIP_ERROR;
+  readonly type = RegionsActionTypes.DELETE_MEMBERSHIP_ERROR
   constructor(public trackingId: number) { }
 }
 
@@ -77,4 +77,4 @@ export type RegionActions =
   CreateMembershipError |
   DeleteMembershipBegin |
   DeleteMembershipComplete |
-  DeleteMembershipError;
+  DeleteMembershipError

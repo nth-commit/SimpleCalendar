@@ -1,13 +1,13 @@
-import { Reducer, DeepPartial } from 'redux';
-import { UIActionTypes, UIAction } from './Actions';
+import { Reducer, DeepPartial } from 'redux'
+import { UIActionTypes, UIAction } from './Actions'
 
 export interface UIState {
-  dialogId: string | null;
-  dialogOptions?: any;
+  dialogId: string | null
+  dialogOptions?: any
 }
 
 const merge = (prevState: UIState, newStatePartial: DeepPartial<UIState>): UIState =>
-  Object.assign({}, prevState, newStatePartial);
+  Object.assign({}, prevState, newStatePartial)
 
 export const uiReducer: Reducer = (state: UIState, action: UIAction): UIState => {
   switch (action.type) {
@@ -15,15 +15,15 @@ export const uiReducer: Reducer = (state: UIState, action: UIAction): UIState =>
       return merge(state, {
         dialogId: action.dialogId,
         dialogOptions: action.dialogOptions
-      });
+      })
     }
     case UIActionTypes.CLOSE_DIALOG: {
-      return merge(state, { dialogId: null });
+      return merge(state, { dialogId: null })
     }
     default:
-      return state || {};
+      return state || {}
   }
 }
 
-export * from './Actions';
-export * from './ActionCreators';
+export * from './Actions'
+export * from './ActionCreators'

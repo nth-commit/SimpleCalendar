@@ -1,18 +1,18 @@
 export interface IAuthConfiguration {
-  clientId: string;
-  domain: string;
-  redirectUri: string;
+  clientId: string
+  domain: string
+  redirectUri: string
 }
 
-let config: IAuthConfiguration;
+let config: IAuthConfiguration
 
 export const getConfiguration = (): IAuthConfiguration => {
   if (!config) {
-    throw new Error('Auth not configured');
+    throw new Error('Auth not configured')
   }
-  return config;
-};
+  return config
+}
 
 export const setConfiguration = (configuration: IAuthConfiguration) => {
-  config = configuration;
-};
+  config = configuration
+}

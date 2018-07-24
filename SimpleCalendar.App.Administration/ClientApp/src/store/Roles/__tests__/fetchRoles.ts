@@ -1,10 +1,10 @@
-import { rolesActionCreators } from '../';
-import { AuthorizationStatus } from 'src/store/Auth';
-import configureStore from 'test-helpers/configureStore';
-import { fetchMock } from 'test-helpers/mocks/fetch';
+import { rolesActionCreators } from '../'
+import { AuthorizationStatus } from 'src/store/Auth'
+import configureStore from 'test-helpers/configureStore'
+import { fetchMock } from 'test-helpers/mocks/fetch'
 
 describe('store.roles.fetchRoles', () => {
-  const { dispatch, getState } = configureStore();
+  const { dispatch, getState } = configureStore()
 
   it('[SHOULD] set authorization status to unauthorized [WHEN] /regionroles returns unauthorized', async () => {
     fetchMock.mock(
@@ -14,11 +14,11 @@ describe('store.roles.fetchRoles', () => {
       },
       {
         overwriteRoutes: true
-      });
+      })
 
-    await dispatch(rolesActionCreators.fetchRoles());
+    await dispatch(rolesActionCreators.fetchRoles())
 
-    const { auth } = getState();
-    expect(auth.status).toEqual(AuthorizationStatus.Unauthorized);
-  });
-});
+    const { auth } = getState()
+    expect(auth.status).toEqual(AuthorizationStatus.Unauthorized)
+  })
+})

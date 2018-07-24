@@ -1,1 +1,1 @@
-export * from './DialogRegistration';
+export * from './DialogRegistration'

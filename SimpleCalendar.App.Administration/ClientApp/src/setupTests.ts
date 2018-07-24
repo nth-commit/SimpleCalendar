@@ -1,28 +1,28 @@
-import * as Enzyme from 'enzyme';
-import * as ReactSixteenAdapter from 'enzyme-adapter-react-16';
-import './extensions';
+import * as Enzyme from 'enzyme'
+import * as ReactSixteenAdapter from 'enzyme-adapter-react-16'
+import './extensions'
 
-const adapter = new ReactSixteenAdapter();
-Enzyme.configure({ adapter });
+const adapter = new ReactSixteenAdapter()
+Enzyme.configure({ adapter })
 
 class LocalStorageMock {
-  private store = {};
+  private store = {}
 
   clear() {
-    this.store = {};
+    this.store = {}
   }
 
   getItem(key) {
-    return this.store[key] || null;
+    return this.store[key] || null
   }
 
   setItem(key, value) {
-    this.store[key] = value.toString();
+    this.store[key] = value.toString()
   }
 
   removeItem(key) {
-    delete this.store[key];
+    delete this.store[key]
   }
-};
+}
 
-(global as any).localStorage = new LocalStorageMock;
+(global as any).localStorage = new LocalStorageMock

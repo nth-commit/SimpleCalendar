@@ -1,9 +1,9 @@
 export const expectThrowsAsync = async (action: () => Promise<any>) => {
-  let successful = false;
+  let successful = false
   try {
-    await action();
+    await action()
   } catch {
-    successful = true;
+    successful = true
   }
-  expect(successful).toBe(true);
+  expect(successful).toBe(true)
 }

@@ -1,27 +1,27 @@
-import * as React from 'react';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
+import * as React from 'react'
+import AppBar from '@material-ui/core/AppBar'
+import Toolbar from '@material-ui/core/Toolbar'
 import { appConnect } from 'src/store/ApplicationConnect'
-import { getRegionPathAboveBase, isPathLoading, RegionPath } from 'src/store/Regions';
-import { authActionCreators } from 'src/store/Auth';
-import Breadcrumbs from '../../presentational/Breadcrumbs';
-import UserMenuTrigger from '../../presentational/UserMenuTrigger';
-import createRegionHrefResolver from '../../utility/RegionHrefResolver';
+import { getRegionPathAboveBase, isPathLoading, RegionPath } from 'src/store/Regions'
+import { authActionCreators } from 'src/store/Auth'
+import Breadcrumbs from '../../presentational/Breadcrumbs'
+import UserMenuTrigger from '../../presentational/UserMenuTrigger'
+import createRegionHrefResolver from '../../utility/RegionHrefResolver'
 
 export interface NavbarStateProps {
-  regions: RegionPath;
-  isLoading: boolean;
-  baseRegionId: string;
-  profileImageSrc: string;
+  regions: RegionPath
+  isLoading: boolean
+  baseRegionId: string
+  profileImageSrc: string
 }
 
 export interface NavbarDispatchProps {
-  logout(): void;
+  logout(): void
 }
 
 const Navbar = ({ isLoading, regions, baseRegionId, profileImageSrc, logout }: NavbarStateProps & NavbarDispatchProps) => {
   if (isLoading) {
-    return null;
+    return null
   }
 
   return (
@@ -35,8 +35,8 @@ const Navbar = ({ isLoading, regions, baseRegionId, profileImageSrc, logout }: N
         </Toolbar>
       </AppBar>
     </div>
-  );
-};
+  )
+}
 
 export default appConnect<NavbarStateProps, NavbarDispatchProps>(
   state => ({
@@ -47,7 +47,7 @@ export default appConnect<NavbarStateProps, NavbarDispatchProps>(
   }),
   dispatch => ({
     logout: () => {
-      dispatch(authActionCreators.logout());
+      dispatch(authActionCreators.logout())
     }
   })
-)(Navbar);
+)(Navbar)

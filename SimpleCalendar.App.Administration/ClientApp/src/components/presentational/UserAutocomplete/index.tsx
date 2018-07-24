@@ -1,27 +1,27 @@
-import * as React from 'react';
-import TextField from '@material-ui/core/TextField';
+import * as React from 'react'
+import TextField from '@material-ui/core/TextField'
 
 export interface UserAutocompleteProps {
-  userSelected(email: string | null, userExists: boolean): void;
+  userSelected(email: string | null, userExists: boolean): void
 }
 
 const UserAutocomplete = ({ userSelected }: UserAutocompleteProps) => {
-  let email = '';
-  let lastSelectedEmail = '';
-  let isValid: boolean = false;
+  let email = ''
+  let lastSelectedEmail = ''
+  let isValid: boolean = false
 
   const onTextFieldChange = (event) => {
-    const v = event.target.value;
+    const v = event.target.value
     isValid = !!v
-    email = isValid ? v : '';
+    email = isValid ? v : ''
 
     if (email && email !== lastSelectedEmail) {
-      lastSelectedEmail = email;
-      userSelected(email, false);
+      lastSelectedEmail = email
+      userSelected(email, false)
     }
   }
 
-  return <TextField error={isValid} onChange={onTextFieldChange}  />;
+  return <TextField error={isValid} onChange={onTextFieldChange}  />
 }
 
-export default UserAutocomplete;
+export default UserAutocomplete

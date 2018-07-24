@@ -1,53 +1,53 @@
-import * as React from 'react';
-import { Route, Switch } from 'react-router-dom';
-import Layout from './components/containers/Layout';
-import AuthCallback from './components/containers/AuthCallback';
-import Region from './components/containers/Region';
-import { Auth } from 'src/services/Auth';
-import { appConnect } from 'src/store';
-import { rolesActionCreators } from 'src/store/Roles';
-import { authActionCreators, AuthorizationStatus } from 'src/store/Auth';
+import * as React from 'react'
+import { Route, Switch } from 'react-router-dom'
+import Layout from './components/containers/Layout'
+import AuthCallback from './components/containers/AuthCallback'
+import Region from './components/containers/Region'
+import { Auth } from 'src/services/Auth'
+import { appConnect } from 'src/store'
+import { rolesActionCreators } from 'src/store/Roles'
+import { authActionCreators, AuthorizationStatus } from 'src/store/Auth'
 
-const NotFound = () => <div>Page not found</div>;
+const NotFound = () => <div>Page not found</div>
 
 interface AuthGuardStateProps {
-  authorizationStatus: AuthorizationStatus;
+  authorizationStatus: AuthorizationStatus
 }
 
 interface AuthGuardDispatchProps {
-  onMount();
+  onMount()
 }
 
 class UnconnectedAuthGuard extends React.Component<AuthGuardStateProps & AuthGuardDispatchProps> {
 
-  private isAuthenticated: boolean;
+  private isAuthenticated: boolean
 
   componentWillMount() {
-    const auth = new Auth();
+    const auth = new Auth()
     if (!auth.isAuthenticated()) {
-      this.isAuthenticated = false;
-      auth.login();
+      this.isAuthenticated = false
+      auth.login()
     } else {
-      this.isAuthenticated = true;
+      this.isAuthenticated = true
     }
   }
 
   componentDidMount() {
     if (this.isAuthenticated) {
-      this.props.onMount();
+      this.props.onMount()
     }
   }
 
   render() {
     if (!this.isAuthenticated) {
-      return null;
+      return null
     }
 
     if (this.props.authorizationStatus !== AuthorizationStatus.Authorized) {
-      return null;
+      return null
     }
 
-    return <div>{this.props.children}</div>;
+    return <div>{this.props.children}</div>
   }
 }
 
@@ -57,11 +57,11 @@ const AuthGuard = appConnect<AuthGuardStateProps>(
   }),
   dispatch => ({
     onMount: async () => {
-      await dispatch(authActionCreators.login(localStorage.getItem('access_token') as string));
-      dispatch(rolesActionCreators.fetchRoles());
+      await dispatch(authActionCreators.login(localStorage.getItem('access_token') as string))
+      dispatch(rolesActionCreators.fetchRoles())
     }
   })
-)(UnconnectedAuthGuard) as any;
+)(UnconnectedAuthGuard) as any
 
 export const routes = (
   <Switch>
@@ -74,4 +74,4 @@ export const routes = (
       </Layout>
     </AuthGuard>
   </Switch>
-);
+)

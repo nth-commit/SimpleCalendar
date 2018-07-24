@@ -1,31 +1,31 @@
-import * as React from 'react';
-import Dialog from '@material-ui/core/Dialog';
-import { appConnect } from 'src/store';
-import { dialogRegistration } from 'src/services/DialogRegistration';
-import { uiActionCreators } from 'src/store/UI';
+import * as React from 'react'
+import Dialog from '@material-ui/core/Dialog'
+import { appConnect } from 'src/store'
+import { dialogRegistration } from 'src/services/DialogRegistration'
+import { uiActionCreators } from 'src/store/UI'
 
 export interface DialogTriggerStateProps {
-  dialogId: string | null;
+  dialogId: string | null
 }
 
 export interface DialogTriggerDispatchProps {
-  closed(): void;
+  closed(): void
 }
 
 class DialogTrigger extends React.Component<DialogTriggerStateProps & DialogTriggerDispatchProps> {
 
   render() {
-    const { dialogId } = this.props;
+    const { dialogId } = this.props
     if (!dialogId) {
-      return null;
+      return null
     }
 
-    const { dialogProps, component } = dialogRegistration.getDialog(dialogId);
+    const { dialogProps, component } = dialogRegistration.getDialog(dialogId)
     return (
       <Dialog open={true} onClose={this.props.closed} {...dialogProps}>
         {React.createElement(component)}
       </Dialog>
-    );
+    )
   }
 }
 
@@ -36,4 +36,4 @@ export default appConnect<DialogTriggerStateProps>(
   dispatch => ({
     closed: () => dispatch(uiActionCreators.closeDialog())
   })
-)(DialogTrigger) as any;
+)(DialogTrigger) as any

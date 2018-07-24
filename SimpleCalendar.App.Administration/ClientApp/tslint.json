@@ -12,7 +12,8 @@
     "no-empty": false,
     "interface-name": false,
     "class-name": false,
-    "jsx-key": false
+    "jsx-key": false,
+    "semicolon": [true, "never"]
   },
   "linterOptions": {
     "exclude": [

@@ -1,3 +1,3 @@
-import './ArrayExtensions';
-import './MapExtensions';
-import './SetExtensions';
+import './ArrayExtensions'
+import './MapExtensions'
+import './SetExtensions'

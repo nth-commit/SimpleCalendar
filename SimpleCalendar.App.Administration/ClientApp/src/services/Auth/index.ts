@@ -1,2 +1,2 @@
-export * from './Auth';
-export * from './Configure';
+export * from './Auth'
+export * from './Configure'

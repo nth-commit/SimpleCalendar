@@ -1,20 +1,20 @@
 export interface IApiConfiguration {
-  baseUri: string;
+  baseUri: string
 }
 
-let config: IApiConfiguration | undefined;
+let config: IApiConfiguration | undefined
 
 export const getConfiguration = (): IApiConfiguration => {
   if (!config) {
-    throw new Error('Api not configured');
+    throw new Error('Api not configured')
   }
-  return config;
-};
+  return config
+}
 
 export const setConfiguration = (configuration: IApiConfiguration) => {
-  config = configuration;
-};
+  config = configuration
+}
 
 export const clearConfiguration = () => {
-  config = undefined;
+  config = undefined
 }

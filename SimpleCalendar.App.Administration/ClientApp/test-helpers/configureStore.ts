@@ -1,51 +1,51 @@
-import { createBrowserHistory } from 'history';
-import { ROOT_REGION_ID } from 'src/constants';
-import configureStoreReal from 'src/configureStore';
-import { ApplicationStore } from 'src/store';
-import { configurationActionCreators, IConfigurationState } from 'src/store/Configuration';
-import { API_BASE_PATH } from './constants';
-import { fetchMock } from './mocks/fetch';
+import { createBrowserHistory } from 'history'
+import { ROOT_REGION_ID } from 'src/constants'
+import configureStoreReal from 'src/configureStore'
+import { ApplicationStore } from 'src/store'
+import { configurationActionCreators, IConfigurationState } from 'src/store/Configuration'
+import { API_BASE_PATH } from './constants'
+import { fetchMock } from './mocks/fetch'
 
 const DEFAULT_CONFIGURATION = {
   baseRegionId: ROOT_REGION_ID,
   api: API_BASE_PATH
-} as IConfigurationState;
+} as IConfigurationState
 
 export default function configureStore(configuration = DEFAULT_CONFIGURATION) {
-  let store: ApplicationStore;
+  let store: ApplicationStore
 
   beforeEach(() => {
-    store = configureStoreReal(createBrowserHistory(), {});
-    store.dispatch(configurationActionCreators.update(configuration));
+    store = configureStoreReal(createBrowserHistory(), {})
+    store.dispatch(configurationActionCreators.update(configuration))
 
     fetchMock.mock(
       url => new URL(url).pathname === '/regions',
       {
         body: []
-      });
+      })
 
     fetchMock.mock(
       url => new URL(url).pathname === '/regionmemberships',
       {
         body: []
       }
-    );
+    )
 
     fetchMock.mock(
       url => new URL(url).pathname === '/regionroles',
       {
         body: []
       }
-    );
-  });
+    )
+  })
 
   afterEach(() => {
-    fetchMock.reset();
-    fetchMock.restore();
-  });
+    fetchMock.reset()
+    fetchMock.restore()
+  })
 
   return {
     dispatch: (...args) => (store as any).dispatch(...args),
     getState: (...args) => (store as any).getState(...args)
-  } as ApplicationStore;
+  } as ApplicationStore
 }

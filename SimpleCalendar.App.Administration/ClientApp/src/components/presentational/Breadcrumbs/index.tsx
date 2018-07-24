@@ -1,11 +1,11 @@
-import * as React from 'react';
+import * as React from 'react'
 import Typography from '@material-ui/core/Typography'
-import { RegionPath, RegionPathComponentValue } from 'src/store/Regions';
-import { RegionHrefResolver } from '../../utility/RegionHrefResolver';
+import { RegionPath, RegionPathComponentValue } from 'src/store/Regions'
+import { RegionHrefResolver } from '../../utility/RegionHrefResolver'
 
 export interface BreadcrumbsProps {
-  regions: RegionPath;
-  regionHrefResolver: RegionHrefResolver;
+  regions: RegionPath
+  regionHrefResolver: RegionHrefResolver
 }
 
 const Breadcrumbs = ({ regions, regionHrefResolver }: BreadcrumbsProps) => (
@@ -28,6 +28,6 @@ const Breadcrumbs = ({ regions, regionHrefResolver }: BreadcrumbsProps) => (
       }
     </div>
   </div>
-);
+)
 
-export default Breadcrumbs;
+export default Breadcrumbs

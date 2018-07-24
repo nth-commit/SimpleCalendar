@@ -1,4 +1,4 @@
-import { Action } from 'redux';
+import { Action } from 'redux'
 
 export enum UIActionTypes {
   OPEN_DIALOG = '[UI] OPEN_DIALOG',
@@ -6,14 +6,14 @@ export enum UIActionTypes {
 }
 
 export class OpenDialogAction implements Action {
-  readonly type = UIActionTypes.OPEN_DIALOG;
+  readonly type = UIActionTypes.OPEN_DIALOG
   constructor(public dialogId: string, public dialogOptions?: any) { }
 }
 
 export class CloseDialogAction implements Action {
-  readonly type = UIActionTypes.CLOSE_DIALOG;
+  readonly type = UIActionTypes.CLOSE_DIALOG
 }
 
 export type UIAction =
   OpenDialogAction |
-  CloseDialogAction;
+  CloseDialogAction

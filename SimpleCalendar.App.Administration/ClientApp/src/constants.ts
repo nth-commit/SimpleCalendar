@@ -1,1 +1,1 @@
-export const ROOT_REGION_ID = 'ROOT';
+export const ROOT_REGION_ID = 'ROOT'

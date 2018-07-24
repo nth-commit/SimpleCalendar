@@ -1,11 +1,11 @@
-import { Reducer, Action, DeepPartial } from 'redux';
-import { ApplicationThunkActionAsync } from '../';
-import { Api, IRegionRole } from 'src/services/Api';
-import { authActionCreators, AuthorizationStatus } from 'src/store/Auth';
+import { Reducer, Action, DeepPartial } from 'redux'
+import { ApplicationThunkActionAsync } from '../'
+import { Api, IRegionRole } from 'src/services/Api'
+import { authActionCreators, AuthorizationStatus } from 'src/store/Auth'
 
 export interface RoleState {
-  roles: IRegionRole[];
-  loading: boolean;
+  roles: IRegionRole[]
+  loading: boolean
 }
 
 enum RoleActionTypes {
@@ -16,60 +16,60 @@ enum RoleActionTypes {
 }
 
 class FetchRolesBegin implements Action {
-  readonly type = RoleActionTypes.FETCH_ROLES_BEGIN;
+  readonly type = RoleActionTypes.FETCH_ROLES_BEGIN
 }
 
 class FetchRolesComplete implements Action {
-  readonly type = RoleActionTypes.FETCH_ROLES_COMPLETE;
+  readonly type = RoleActionTypes.FETCH_ROLES_COMPLETE
   constructor(public roles: IRegionRole[]) { }
 }
 
 class FetchRolesError implements Action {
-  readonly type = RoleActionTypes.FETCH_ROLES_ERROR;
+  readonly type = RoleActionTypes.FETCH_ROLES_ERROR
 }
 
 declare type RolesAction =
   FetchRolesBegin |
   FetchRolesComplete |
-  FetchRolesError;
+  FetchRolesError
 
 const merge = (prevState: RoleState, newStatePartial: DeepPartial<RoleState>): RoleState => {
-  return Object.assign({}, prevState, newStatePartial);
+  return Object.assign({}, prevState, newStatePartial)
 }
 
 export const rolesReducer: Reducer = (state: RoleState, action: RolesAction): RoleState => {
     switch (action.type) {
       case RoleActionTypes.FETCH_ROLES_BEGIN:
-        return merge(state, { loading: true });
+        return merge(state, { loading: true })
       case RoleActionTypes.FETCH_ROLES_COMPLETE:
         return merge(state, {
           loading: false,
           roles: action.roles
-        });
+        })
       default:
-        return state || {};
+        return state || {}
     }
 }
 
 function fetchRoles(): ApplicationThunkActionAsync {
   return async (dispatch, getState) => {
-    dispatch({ ...new FetchRolesBegin() });
+    dispatch({ ...new FetchRolesBegin() })
 
-    let roles: IRegionRole[] | null = null;
+    let roles: IRegionRole[] | null = null
     try {
-      roles = await new Api(getState().auth.accessToken).getRegionRoles();
+      roles = await new Api(getState().auth.accessToken).getRegionRoles()
     } catch {
-      dispatch({ ...new FetchRolesError() });
-      dispatch(authActionCreators.setAuthorizationStatus(AuthorizationStatus.Unauthorized));
+      dispatch({ ...new FetchRolesError() })
+      dispatch(authActionCreators.setAuthorizationStatus(AuthorizationStatus.Unauthorized))
     }
 
     if (roles !== null) {
-      dispatch({ ...new FetchRolesComplete(roles) });
-      dispatch(authActionCreators.setAuthorizationStatus(AuthorizationStatus.Authorized));
+      dispatch({ ...new FetchRolesComplete(roles) })
+      dispatch(authActionCreators.setAuthorizationStatus(AuthorizationStatus.Authorized))
     }
-  };
+  }
 }
 
 export const rolesActionCreators = {
   fetchRoles
-};
+}

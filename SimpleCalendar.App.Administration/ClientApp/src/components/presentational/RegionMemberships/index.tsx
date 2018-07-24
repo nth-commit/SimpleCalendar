@@ -1,21 +1,21 @@
-import * as React from 'react';
-import { IRegionMembership, IRegionRole } from 'src/services/Api';
-import { withStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import MembershipMenuTrigger from '../MembershipMenuTrigger';
+import * as React from 'react'
+import { IRegionMembership, IRegionRole } from 'src/services/Api'
+import { withStyles } from '@material-ui/core/styles'
+import Button from '@material-ui/core/Button'
+import List from '@material-ui/core/List'
+import ListItem from '@material-ui/core/ListItem'
+import ListItemText from '@material-ui/core/ListItemText'
+import ListItemIcon from '@material-ui/core/ListItemIcon'
+import MembershipMenuTrigger from '../MembershipMenuTrigger'
 
 export interface RegionMembershipsProps {
-  createClicked(): void;
-  memberships: IRegionMembership[];
-  classes: any;
+  createClicked(): void
+  memberships: IRegionMembership[]
+  classes: any
 }
 
 export interface RegionMembershipsListProps {
-  memberships: IRegionMembership[];
+  memberships: IRegionMembership[]
 }
 
 const RegionMembershipsList = ({ memberships }: RegionMembershipsListProps) => {
@@ -29,7 +29,7 @@ const styles = theme => ({
   input: {
     display: 'none',
   },
-});
+})
 
 const RegionMemberships = ({ memberships, createClicked, classes }: RegionMembershipsProps) => (
   memberships.length ?
@@ -40,30 +40,30 @@ const RegionMemberships = ({ memberships, createClicked, classes }: RegionMember
         Create
       </Button>
     </div>
-);
+)
 
-export default withStyles(styles)(RegionMemberships);
+export default withStyles(styles)(RegionMemberships)
 
 export interface MembershipListProps {
-  deleteClicked(membershipId: string);
-  memberships: IRegionMembership[];
-  roles: IRegionRole[];
-  regionId: string;
+  deleteClicked(membershipId: string)
+  memberships: IRegionMembership[]
+  roles: IRegionRole[]
+  regionId: string
 }
 
 const MembershipList = ({ memberships, roles, regionId, deleteClicked }: MembershipListProps) => {
-  const rolesById = Map.fromArray(roles, r => r.id);
+  const rolesById = Map.fromArray(roles, r => r.id)
   return (
     <List>
       {memberships.map(m => {
-        const isInherited = m.regionId !== regionId;
+        const isInherited = m.regionId !== regionId
 
-        let roleLabel = `${(rolesById.get(m.regionRoleId) as IRegionRole).name}`;
+        let roleLabel = `${(rolesById.get(m.regionRoleId) as IRegionRole).name}`
         if (isInherited) {
           roleLabel += ' (Inherited)'
         }
 
-        const onDeleteClicked = () => deleteClicked(m.id);
+        const onDeleteClicked = () => deleteClicked(m.id)
 
         return (
           <ListItem key={m.userEmail}>
@@ -77,19 +77,19 @@ const MembershipList = ({ memberships, roles, regionId, deleteClicked }: Members
               </ListItemIcon>
             )}
           </ListItem>
-        );
+        )
       })}
     </List>
-  );
+  )
 }
 
 export interface MembershipsProps {
-  createClicked(): void;
-  deleteClicked(membershipId: string);
-  memberships: IRegionMembership[];
-  roles: IRegionRole[];
-  regionId: string;
-  classes: any;
+  createClicked(): void
+  deleteClicked(membershipId: string)
+  memberships: IRegionMembership[]
+  roles: IRegionRole[]
+  regionId: string
+  classes: any
 }
 
 const MembershipsUnstyled = ({ deleteClicked, memberships, createClicked, roles, regionId, classes }: MembershipsProps) => (
@@ -105,7 +105,7 @@ const MembershipsUnstyled = ({ deleteClicked, memberships, createClicked, roles,
         Create
       </Button>
     </div>
-);
+)
 
 
-export const Memberships = withStyles(styles)(MembershipsUnstyled);
+export const Memberships = withStyles(styles)(MembershipsUnstyled)

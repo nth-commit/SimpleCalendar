@@ -1,12 +1,12 @@
-import * as React from 'react';
-import { Redirect } from 'react-router-dom';
-import { Auth } from 'src/services/Auth';
+import * as React from 'react'
+import { Redirect } from 'react-router-dom'
+import { Auth } from 'src/services/Auth'
 
 export default class AuthCallback extends React.Component {
 
   state = {
     authSuccessful: null
-  };
+  }
 
   public componentDidMount() {
     new Auth().handleAuthentication()
@@ -15,9 +15,9 @@ export default class AuthCallback extends React.Component {
   }
 
   public render() {
-    const { authSuccessful } = this.state;
+    const { authSuccessful } = this.state
     if (authSuccessful === null) {
-      return null;
+      return null
     }
     return <Redirect to={ authSuccessful ? '/' : '/error' } />
   }
