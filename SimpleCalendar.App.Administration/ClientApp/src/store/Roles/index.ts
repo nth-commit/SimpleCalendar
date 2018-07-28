@@ -1,18 +1,17 @@
 import { Reducer, Action, DeepPartial } from 'redux'
 import { ApplicationThunkActionAsync } from '../'
 import { Api, IRegionRole } from 'src/services/Api'
-import { authActionCreators, AuthorizationStatus } from 'src/store/Auth'
 
 export interface RoleState {
-  roles: IRegionRole[]
+  roles: IRegionRole[] | null
   loading: boolean
+  error?: any
 }
 
 enum RoleActionTypes {
   FETCH_ROLES_BEGIN = '[Regions] FETCH_ROLES_BEGIN',
   FETCH_ROLES_COMPLETE = '[Regions] FETCH_ROLES_COMPLETE',
-  FETCH_ROLES_ERROR = '[Regions] FETCH_ROLES_ERROR',
-  FETCH_ROLES_UNAUTHORIZED = '[Regions] FETCH_ROLES_UNAUTHORIZED'
+  FETCH_ROLES_ERROR = '[Regions] FETCH_ROLES_ERROR'
 }
 
 class FetchRolesBegin implements Action {
@@ -26,6 +25,7 @@ class FetchRolesComplete implements Action {
 
 class FetchRolesError implements Action {
   readonly type = RoleActionTypes.FETCH_ROLES_ERROR
+  constructor(public error: any) { }
 }
 
 declare type RolesAction =
@@ -46,6 +46,11 @@ export const rolesReducer: Reducer = (state: RoleState, action: RolesAction): Ro
           loading: false,
           roles: action.roles
         })
+      case RoleActionTypes.FETCH_ROLES_ERROR:
+        return merge(state, {
+          loading: false,
+          error: action.error
+        })
       default:
         return state || {}
     }
@@ -53,19 +58,17 @@ export const rolesReducer: Reducer = (state: RoleState, action: RolesAction): Ro
 
 function fetchRoles(): ApplicationThunkActionAsync {
   return async (dispatch, getState) => {
-    dispatch({ ...new FetchRolesBegin() })
+    dispatch(new FetchRolesBegin())
 
     let roles: IRegionRole[] | null = null
     try {
       roles = await new Api(getState().auth.accessToken).getRegionRoles()
-    } catch {
-      dispatch({ ...new FetchRolesError() })
-      dispatch(authActionCreators.setAuthorizationStatus(AuthorizationStatus.Unauthorized))
+    } catch (e) {
+      dispatch(new FetchRolesError(e))
     }
 
     if (roles !== null) {
-      dispatch({ ...new FetchRolesComplete(roles) })
-      dispatch(authActionCreators.setAuthorizationStatus(AuthorizationStatus.Authorized))
+      dispatch(new FetchRolesComplete(roles))
     }
   }
 }
