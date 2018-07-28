@@ -8,6 +8,7 @@ import { IRegionMembership } from 'src/services/Api'
 export interface MembershipMenuTriggerProps {
   deleteClicked(): void
   membership: IRegionMembership
+  isVisible?: boolean
 }
 
 class MembershipMenuTrigger extends React.Component<MembershipMenuTriggerProps> {
@@ -25,17 +26,16 @@ class MembershipMenuTrigger extends React.Component<MembershipMenuTriggerProps> 
 
   render() {
     const { membership, deleteClicked } = this.props
+    const isVisible = this.props.isVisible === undefined ? true : this.props.isVisible
+
     if (!membership.id) {
       return null
     }
 
     const { anchorEl } = this.state
     const menuId = `menu-${membership.id}`
-    
+
     const { canDelete } = membership.permissions
-    if (!canDelete) {
-      return null
-    }
 
     const onDeleteClicked = () => {
       this.handleClose()
@@ -48,6 +48,7 @@ class MembershipMenuTrigger extends React.Component<MembershipMenuTriggerProps> 
           aria-label="More"
           aria-owns={anchorEl ? menuId : undefined}
           aria-haspopup="true"
+          style={{ visibility: isVisible ? 'visible' : 'hidden' }}
           onClick={this.handleClick}>
             <MoreVertIcon />
         </IconButton>
@@ -56,7 +57,7 @@ class MembershipMenuTrigger extends React.Component<MembershipMenuTriggerProps> 
           anchorEl={anchorEl || undefined}
           open={!!anchorEl}
           onClose={this.handleClose}>
-            <MenuItem onClick={onDeleteClicked}>Delete</MenuItem>
+            {canDelete && <MenuItem onClick={onDeleteClicked}>Delete</MenuItem>}
         </Menu>
       </div>
     )

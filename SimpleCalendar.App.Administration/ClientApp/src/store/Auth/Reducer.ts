@@ -18,16 +18,6 @@ export const authReducer: Reducer = (state: AuthState, action: AuthAction): Auth
         accessToken: undefined
       })
     }
-    case AuthActionTypes.FETCH_REGION_MEMBERSHIPS_BEGIN:
-      return merge(state, {
-        regionMembershipsLoading: true
-      })
-    case AuthActionTypes.FETCH_REGION_MEMBERSHIPS_COMPLETE: {
-      return merge(state, {
-        regionMembershipsLoading: false,
-        regionMemberships: action.regionMemberships
-      })
-    }
     case AuthActionTypes.SET_AUTHORIZATION_STATUS: {
       return merge(state, {
         status: action.status

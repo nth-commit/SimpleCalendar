@@ -1,30 +1,29 @@
 import * as React from 'react'
+import { Link } from 'react-router-dom'
 import Typography from '@material-ui/core/Typography'
-import { RegionPath, RegionPathComponentValue } from 'src/store/Regions'
 import { RegionHrefResolver } from '../../utility/RegionHrefResolver'
+import { IRegion } from 'src/services/Api'
 
 export interface BreadcrumbsProps {
-  regions: RegionPath
+  regions: IRegion[]
   regionHrefResolver: RegionHrefResolver
 }
 
 const Breadcrumbs = ({ regions, regionHrefResolver }: BreadcrumbsProps) => (
   <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-    <a href='/' style={{ textDecoration: 'none', color: 'initial' }}>
+    <Link to={regionHrefResolver.resolve()} style={{ textDecoration: 'none', color: 'initial' }}>
       <Typography variant='title' color='inherit'>
         Calendar Administration
       </Typography>
-    </a>
+    </Link>
     <div style={{ fontSize: '0.8rem' }}>
       {
-        regions
-          .map(r => (r.value as RegionPathComponentValue).region)
-          .map(r => (
-            <span key={r.id}>
-              <span style={{ marginLeft: '0.3rem' }}>></span>
-              <a style={{ marginLeft: '0.3rem' }} href={regionHrefResolver.resolve(r)}>{r.name}</a>
-            </span>
-          ))
+        regions.map(r => (
+          <span key={r.id}>
+            <span style={{ marginLeft: '0.3rem' }}>></span>
+            <Link style={{ marginLeft: '0.3rem' }} to={regionHrefResolver.resolve(r)}>{r.name}</Link>
+          </span>
+        ))
       }
     </div>
   </div>

@@ -1,13 +1,9 @@
 import { fetchRegion } from './fetchRegion'
-import { fetchBaseRegionParents } from './fetchBaseRegionParents'
 import { setRegion } from './setRegion'
-import { createMembership } from './createMembership'
-import { deleteMembership } from './deleteMembership'
+import { fetchBaseRegionParents } from './fetchBaseRegionParents'
 
-export const regionActionCreators = {
+export default {
   fetchRegion,
-  fetchBaseRegionParents,
   setRegion,
-  createMembership,
-  deleteMembership
+  fetchBaseRegionParents
 }

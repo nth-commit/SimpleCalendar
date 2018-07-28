@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { Link } from 'react-router-dom'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
@@ -13,11 +14,11 @@ export interface RegionListProps {
 const RegionList = ({ regions, regionHrefResolver }: RegionListProps) => (
   <List component="nav">
     {regions.map(r => (
-      <a key={r.id} href={regionHrefResolver.resolve(r)} style={{ textDecoration: 'none' }}>
+      <Link key={r.id} to={regionHrefResolver.resolve(r)} style={{ textDecoration: 'none' }}>
         <ListItem button={true}>
           <ListItemText primary={r.name} />
         </ListItem>
-      </a>
+      </Link>
     ))}
   </List>
 )

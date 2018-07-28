@@ -61,6 +61,7 @@ namespace SimpleCalendar.App.Administration
             {
                 app2.Run(async context =>
                 {
+                    var baseRegionId = Configuration["BaseRegionId"];
                     var config = new
                     {
                         host = hostsOptions.Value.Administration,
@@ -69,7 +70,8 @@ namespace SimpleCalendar.App.Administration
                         {
                             domain = auth0AuthOptions.Value.Domain,
                             clientId = auth0AuthOptions.Value.ClientId
-                        }
+                        },
+                        baseRegionId = string.IsNullOrEmpty(baseRegionId) ? "ROOT" : baseRegionId
                     };
 
                     var json = JsonConvert.SerializeObject(config);

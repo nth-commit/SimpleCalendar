@@ -28,7 +28,7 @@ namespace SimpleCalendar.Api.Controllers
         }
 
         [HttpGet("")]
-        public async Task<IActionResult> List([FromQuery] string parentId)
+        public async Task<IActionResult> List([FromQuery] string parentId = Core.Data.Constants.RootRegionId)
         {
             try
             {

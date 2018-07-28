@@ -1,43 +1,42 @@
-import { ROOT_REGION_ID } from 'src/constants'
-import { Api } from 'src/services/Api'
-import { RegionState } from 'src/store/Regions'
 import { ApplicationThunkActionAsync } from '../../'
-import { FetchRegionBegin, FetchRegionComplete } from '../Actions'
+import { FetchRegionBegin, FetchRegionComplete, FetchRegionError } from 'src/store/Regions/Actions'
+import { Api } from 'src/services/Api'
+import { RegionDictionaryEntry } from '../RegionsState'
 
-export function fetchRegion(regionId: string): ApplicationThunkActionAsync {
+const outstandingRegionRequests = new Map<string, Promise<void>>()
+
+const isRegionExpired = (regionEntry: RegionDictionaryEntry, maxAge: number) =>
+  new Date().getTime() - (regionEntry.timestamp as number) > maxAge
+
+export function fetchRegion(regionId: string, maxAge: number = 5 * 60 * 1000): ApplicationThunkActionAsync {
   return async (dispatch, getState) => {
-    validateRegionState(regionId, getState().regions)
+    const { auth, regions } = getState()
+
+    const regionEntry = regions.regionDictionary[regionId]
+    if (regionEntry && !isRegionExpired(regionEntry, maxAge)) {
+      const outstandingRegionRequest = outstandingRegionRequests.get(regionId)
+      if (outstandingRegionRequest) {
+        await outstandingRegionRequest
+      }
+      return
+    }
 
     dispatch({ ...new FetchRegionBegin(regionId) })
 
-    const api = new Api(getState().auth.accessToken)
-    const [region, childRegions, regionMemberships] = await Promise.all([
+    const api = new Api(auth.accessToken)
+    const regionPromise = Promise.all([
       api.getRegion(regionId),
-      api.getRegions(regionId),
-      api.getRegionMemberships({ regionId })
+      api.getRegions(regionId)
     ])
+    outstandingRegionRequests.set(regionId, regionPromise as any)
 
-    dispatch({ ...new FetchRegionComplete(region, childRegions, regionMemberships) })
-  }
-}
-
-function validateRegionState(regionId: string, regions: RegionState) {
-  if (regions.path.length === 0 && regionId !== ROOT_REGION_ID) {
-    throw new Error('Root region was not found')
-  }
-
-  const regionIdComponents = regionId.split('/')
-  const regionLevel = regionIdComponents.length
-
-  for (let level = 1; level < regionLevel; level++) {
-    const expectedAncestorRegionId = regionIdComponents.slice(0, level).join('/')
-    if (!regions.path[level]) {
-      throw new Error(`Expected ancestor region "${expectedAncestorRegionId}" at path[${level}], but it was not found`)
-    }
-
-    const ancestorRegionId = regions.path[level].id
-    if (ancestorRegionId !== expectedAncestorRegionId) {
-      throw new Error(`Expected ancestor region "${expectedAncestorRegionId}" at path[${level}], but it was not found`)
+    try {
+      const [region, childRegions] = await regionPromise
+      dispatch({ ...new FetchRegionComplete(region, childRegions) })
+    } catch (e) {
+      dispatch({ ...new FetchRegionError(e) })
+    } finally {
+      outstandingRegionRequests.delete(regionId)
     }
   }
 }

@@ -12,3 +12,5 @@ export type ApplicationDispatch<A extends Action<any> = AnyAction> = Dispatch<A>
 export type ApplicationStore = Store<ApplicationState, AnyAction> & {
   dispatch: ApplicationDispatch
 }
+
+export type ApplicationEffect = (dispatch: ApplicationDispatch, getState: () => ApplicationState) => void

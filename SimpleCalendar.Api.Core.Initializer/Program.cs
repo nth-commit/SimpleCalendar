@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 using SimpleCalendar.Api.Core.Data;
 using SimpleCalendar.Api.Core.Initializer.Regions;
+using SimpleCalendar.Utility.Authorization;
 using SimpleCalendar.Utility.Configuration;
 using SimpleCalendar.Utility.DependencyInjection;
 using System;
@@ -29,6 +31,7 @@ namespace SimpleCalendar.Api.Core.Initializer
             });
 
             services.AddTransient<IDataInitializer, RegionDataInitializer>();
+            services.AddTransient<IUserAuthorizationService, StubbedUserAuthorizationService>();
 
             var serviceProvider = services.BuildServiceProvider();
             RunDataInitializers(serviceProvider).GetAwaiter().GetResult();
@@ -43,6 +46,19 @@ namespace SimpleCalendar.Api.Core.Initializer
             foreach (var dataInitializer in dataInitializers)
             {
                 await dataInitializer.RunAsync();
+            }
+        }
+
+        public class StubbedUserAuthorizationService : IUserAuthorizationService
+        {
+            public Task<AuthorizationResult> AuthorizeAsync(object resource, IEnumerable<IAuthorizationRequirement> requirements)
+            {
+                return Task.FromResult(AuthorizationResult.Success());
+            }
+
+            public Task<AuthorizationResult> AuthorizeAsync(object resource, string policyName)
+            {
+                return Task.FromResult(AuthorizationResult.Success());
             }
         }
     }

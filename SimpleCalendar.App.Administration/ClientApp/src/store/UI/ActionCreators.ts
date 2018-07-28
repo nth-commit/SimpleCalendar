@@ -5,7 +5,7 @@ export class DialogAlreadyOpenException { }
 
 export class DialogNotOpenException { }
 
-function openDialog(dialogId: string, dialogOptions?: any): ApplicationThunkAction {
+function openDialog(dialogId: string, dialogOptions: any = {}): ApplicationThunkAction {
   return (dispatch, getState) => {
     if (getState().ui.dialogId) {
       throw new DialogAlreadyOpenException()

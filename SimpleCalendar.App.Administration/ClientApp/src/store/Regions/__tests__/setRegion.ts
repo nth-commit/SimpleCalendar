@@ -1,9 +1,12 @@
 import { ROOT_REGION_ID } from 'src/constants'
 import configureStore from 'test-helpers/configureStore'
-import { fetchMockRootRegionResponse, fetchMockRegionResponse, createRegionResponse, fetchMockSuppressNotFound } from 'test-helpers/mocks/fetch'
-import { regionActionCreators, RegionPathComponentValue } from '../'
+import { fetchMockRootRegionResponse, fetchMockRegionResponse, createRegionResponse } from 'test-helpers/mocks/fetch'
+import regionActionCreators from '../ActionCreators'
+import { enumerateRegionId } from 'src/store/Regions/Utility'
+import { IRegion } from 'src/services/Api'
+import { RegionDictionaryEntry } from '../RegionsState'
 
-describe('store.regions.setRegion', () => {
+describe('store.regionsNew.setRegion', () => {
   const NEW_ZEALAND_REGION_ID = 'new-zealand'
   const WELLINGTON_REGION_ID = 'new-zealand/wellington'
   const AUCKLAND_REGION_ID = 'new-zealand/auckland'
@@ -11,37 +14,27 @@ describe('store.regions.setRegion', () => {
   const { dispatch, getState } = configureStore()
 
   const dispatchSetRegion = async (regionId: string) => {
-    const setActivePromise = dispatch(regionActionCreators.setRegion(regionId))
+    const setRegionPromise = dispatch(regionActionCreators.setRegion(regionId))
     expect(getState().regions.regionId).toBe(regionId)
-    await setActivePromise
+    await setRegionPromise
   }
 
-  const getRegionLevel = (regionId: string) =>
-    regionId === ROOT_REGION_ID ? 0 : regionId.split('/').length
+  const expectRegion = (expectedRegionId: string) => {
 
-  const expectRegion = (regionId: string) => {
-    const regionLevel = getRegionLevel(regionId)
-    const regionPath = getState().regions.path
-    expect(regionPath.length).toBe(regionLevel + 1)
-    regionPath.forEach(pathComponent => {
-      expect(pathComponent).toBeDefined()
-      expect(pathComponent.value).not.toBeNull()
+    const { regionId, regionDictionary } = getState().regions
+
+    expect(regionId).toBe(expectedRegionId)
+
+    enumerateRegionId(expectedRegionId).forEach(r => {
+      const regionEntry = regionDictionary[r]
+      expect(regionEntry).toBeDefined()
+
+      const region = (regionEntry as RegionDictionaryEntry).region as IRegion
+      expect(region).toBeDefined()
     })
-    
-    const regionPathComponent = regionPath[regionLevel]
-    expect(regionPathComponent).toBeDefined()
-
-    expect(regionPathComponent.id).toBe(regionId)
-    expect(regionPathComponent.value).not.toBe(null)
-
-    const regionPathComponentValue = regionPathComponent.value as RegionPathComponentValue
-    expect(regionPathComponentValue.region).not.toBe(null)
-    expect(regionPathComponentValue.region.id).toBe(regionId)
   }
 
-  it(`[SHOULD] load root region [WHEN] set region is called with root region id`,
-  async () => {
-    fetchMockSuppressNotFound()
+  it('[SHOULD] load the root region [WHEN] set region is called with root region id', async () => {
     fetchMockRootRegionResponse()
 
     await dispatchSetRegion(ROOT_REGION_ID)
@@ -49,9 +42,7 @@ describe('store.regions.setRegion', () => {
     expectRegion(ROOT_REGION_ID)
   })
 
-  it(`[SHOULD] load root region and new-zealand [WHEN] set region is called with new-zealand`,
-  async () => {
-    fetchMockSuppressNotFound()
+  it('[SHOULD] load root region and new-zealand [WHEN] set region is called with new-zealand', async () => {
     fetchMockRootRegionResponse()
     fetchMockRegionResponse(NEW_ZEALAND_REGION_ID)
 
@@ -60,9 +51,7 @@ describe('store.regions.setRegion', () => {
     expectRegion(NEW_ZEALAND_REGION_ID)
   })
 
-  it(`[SHOULD] load root region, new-zealand and wellington [WHEN] set region is called with wellington`,
-  async () => {
-    fetchMockSuppressNotFound()
+  it('[SHOULD] load root region, new-zealand and wellington [WHEN] set region is called with wellington', async () => {
     fetchMockRootRegionResponse()
     fetchMockRegionResponse(NEW_ZEALAND_REGION_ID)
     fetchMockRegionResponse(WELLINGTON_REGION_ID)
@@ -73,9 +62,7 @@ describe('store.regions.setRegion', () => {
   })
 
 
-  it(`[SHOULD] load root region and australia [WHEN] set region is called with new-zealand and then australia`,
-  async () => {
-    fetchMockSuppressNotFound()
+  it('[SHOULD] load root region and australia [WHEN] set region is called with new-zealand and then australia', async () => {
     fetchMockRootRegionResponse()
     fetchMockRegionResponse(NEW_ZEALAND_REGION_ID)
     fetchMockRegionResponse(AUSTRALIA_REGION_ID)
@@ -86,9 +73,7 @@ describe('store.regions.setRegion', () => {
     expectRegion(AUSTRALIA_REGION_ID)
   })
 
-  it(`[SHOULD] load root region and australia [WHEN] set region is called with new-zealand and then immediately australia, and new-zealand returns after`,
-  async () => {
-    fetchMockSuppressNotFound()
+  it('[SHOULD] load root region and australia [WHEN] set region is called with new-zealand and then immediately australia, and new-zealand returns after', async () => {
     fetchMockRootRegionResponse()
 
     let resolveNewZealandResponse: () => void
@@ -113,9 +98,7 @@ describe('store.regions.setRegion', () => {
     expectRegion(AUSTRALIA_REGION_ID)
   })
 
-  it(`[SHOULD] load root region, new-zealand and auckland [WHEN] set region is called with wellington and then auckland`,
-  async () => {
-    fetchMockSuppressNotFound()
+  it('[SHOULD] load root region, new-zealand and auckland [WHEN] set region is called with wellington and then auckland', async () => {
     fetchMockRootRegionResponse()
     fetchMockRegionResponse(NEW_ZEALAND_REGION_ID)
     fetchMockRegionResponse(WELLINGTON_REGION_ID)

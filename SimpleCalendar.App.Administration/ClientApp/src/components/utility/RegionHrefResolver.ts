@@ -2,7 +2,7 @@ import { ROOT_REGION_ID } from 'src/constants'
 import { IRegion } from 'src/services/Api'
 
 export interface RegionHrefResolver {
-  resolve(region: IRegion): string
+  resolve(region?: IRegion): string
 }
 
 export class RegionNotOfBaseError {
@@ -27,6 +27,6 @@ const getRegionPath = (regionId: string, baseRegionId: string): string => {
 
 export default function createRegionHrefResolver(baseRegionId: string): RegionHrefResolver {
   return {
-    resolve: (region: IRegion): string => getRegionPath(region.id, baseRegionId)
+    resolve: (region?: IRegion): string => region ? getRegionPath(region.id, baseRegionId) : '/'
   }
 }

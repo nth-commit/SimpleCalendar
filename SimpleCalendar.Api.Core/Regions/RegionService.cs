@@ -54,7 +54,7 @@ namespace SimpleCalendar.Api.Core.Regions
 
         public async Task<IEnumerable<RegionResult>> ListRegionsAsync(string parentId)
         {
-            var region = await _coreDbContext.GetRegionByCodesAsync(parentId ?? string.Empty);
+            var region = await _coreDbContext.GetRegionByCodesAsync(parentId);
             if (region == null)
             {
                 Validator.ThrowInvalid(nameof(parentId), $"Could not find region with {nameof(parentId)} \"{parentId}\"");

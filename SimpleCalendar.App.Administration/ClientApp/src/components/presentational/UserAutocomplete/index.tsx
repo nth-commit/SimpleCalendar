@@ -21,7 +21,11 @@ const UserAutocomplete = ({ userSelected }: UserAutocompleteProps) => {
     }
   }
 
-  return <TextField error={isValid} onChange={onTextFieldChange}  />
+  return <TextField
+    style={{ width: '100%' }}
+    label='Email'
+    error={isValid}
+    onChange={onTextFieldChange}  />
 }
 
 export default UserAutocomplete

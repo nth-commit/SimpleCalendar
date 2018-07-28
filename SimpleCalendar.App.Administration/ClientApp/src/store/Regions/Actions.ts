@@ -1,80 +1,49 @@
 import { Action } from 'redux'
-import { IRegion, IRegionMembership, IRegionMembershipCreate } from 'src/services/Api'
+import { IRegion } from 'src/services/Api'
 
 export enum RegionsActionTypes {
-  SET_REGION = '[Regions] SET_REGION',
-  FETCH_REGION_BEGIN = '[Regions] FETCH_REGION_BEGIN',
-  FETCH_REGION_COMPLETE = '[Regions] FETCH_REGION_COMPLETE',
-  FETCH_REGION_ERROR = '[Regions] FETCH_REGION_ERROR',
-  CREATE_MEMBERSHIP_BEGIN = '[Regions] CREATE_MEMBERSHIP_BEGIN',
-  CREATE_MEMBERSHIP_COMPLETE = '[Regions] CREATE_MEMBERSHIP_COMPLETE',
-  CREATE_MEMBERSHIP_ERROR = '[Regions] CREATE_MEMBERSHIP_ERROR',
-  DELETE_MEMBERSHIP_BEGIN = '[Regions] DELETE_MEMBERSHIP_BEGIN',
-  DELETE_MEMBERSHIP_COMPLETE = '[Regions] DELETE_MEMBERSHIP_COMPLETE',
-  DELETE_MEMBERSHIP_ERROR = '[Regions] DELETE_MEMBERSHIP_ERROR',
+  SET_REGION_BEGIN = '[RegionsNew] SET_REGION_BEGIN',
+  SET_REGION_COMPLETE = '[RegionsNew] SET_REGION_COMPLETE',
+  SET_REGION_ERROR = '[RegionsNew] SET_REGION_ERROR',
+  FETCH_REGION_BEGIN = '[RegionsNew] FETCH_REGION_BEGIN',
+  FETCH_REGION_COMPLETE = '[RegionsNew] FETCH_REGION_COMPLETE',
+  FETCH_REGION_ERROR = '[RegionsNew] FETCH_REGION_ERROR'
 }
 
 export class FetchRegionBegin implements Action {
   readonly type = RegionsActionTypes.FETCH_REGION_BEGIN
-  constructor(public regionId: string) { }
+  constructor(public regionId: string, public timestamp = new Date().getTime()) { }
 }
 
 export class FetchRegionComplete implements Action {
   readonly type = RegionsActionTypes.FETCH_REGION_COMPLETE
-  constructor(
-    public region: IRegion,
-    public childRegions: IRegion[],
-    public memberships: IRegionMembership[]) { }
+  constructor(public region: IRegion, public childRegions: IRegion[]) { }
 }
 
 export class FetchRegionError implements Action {
   readonly type = RegionsActionTypes.FETCH_REGION_ERROR
-  constructor() { }
+  constructor(public regionId: string, public error?: any) { }
 }
 
-export class SetRegion implements Action {
-  readonly type = RegionsActionTypes.SET_REGION
+export class SetRegionBegin implements Action {
+  readonly type = RegionsActionTypes.SET_REGION_BEGIN
   constructor(public regionId: string) { }
 }
 
-export class CreateMembershipBegin implements Action {
-  readonly type = RegionsActionTypes.CREATE_MEMBERSHIP_BEGIN
-  constructor(public membership: IRegionMembershipCreate, public trackingId: number) { }
+export class SetRegionComplete implements Action {
+  readonly type = RegionsActionTypes.SET_REGION_COMPLETE
+  constructor() { }
 }
 
-export class CreateMembershipComplete implements Action {
-  readonly type = RegionsActionTypes.CREATE_MEMBERSHIP_COMPLETE
-  constructor(public trackingId: number, membership: IRegionMembership) { }
+export class SetRegionError implements Action {
+  readonly type = RegionsActionTypes.SET_REGION_ERROR
+  constructor() { }
 }
 
-export class CreateMembershipError implements Action {
-  readonly type = RegionsActionTypes.CREATE_MEMBERSHIP_ERROR
-  constructor(public trackingId: number) { }
-}
-
-export class DeleteMembershipBegin implements Action {
-  readonly type = RegionsActionTypes.DELETE_MEMBERSHIP_BEGIN
-  constructor(public membershipId: string, public trackingId: number) { }
-}
-
-export class DeleteMembershipComplete implements Action {
-  readonly type = RegionsActionTypes.DELETE_MEMBERSHIP_COMPLETE
-  constructor(public trackingId: number) { }
-}
-
-export class DeleteMembershipError implements Action {
-  readonly type = RegionsActionTypes.DELETE_MEMBERSHIP_ERROR
-  constructor(public trackingId: number) { }
-}
-
-export type RegionActions = 
+export type RegionAction = 
   FetchRegionBegin |
   FetchRegionComplete |
   FetchRegionError |
-  SetRegion |
-  CreateMembershipBegin |
-  CreateMembershipComplete |
-  CreateMembershipError |
-  DeleteMembershipBegin |
-  DeleteMembershipComplete |
-  DeleteMembershipError
+  SetRegionBegin |
+  SetRegionComplete |
+  SetRegionError

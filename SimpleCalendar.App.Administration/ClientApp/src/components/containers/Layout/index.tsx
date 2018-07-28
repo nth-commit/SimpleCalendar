@@ -1,6 +1,5 @@
 import * as React from 'react'
 import { appConnect } from 'src/store'
-import { authActionCreators } from 'src/store/Auth'
 import { regionActionCreators, areSuperBaseRegionsLoaded } from 'src/store/Regions'
 import Navbar from '../Navbar'
 import DialogTrigger from '../DialogTrigger'
@@ -44,7 +43,6 @@ export default appConnect<LayoutStateProps, LayoutDispatchProps>(
   }),
   dispatch => ({
     onMount: () => {
-      dispatch(authActionCreators.fetchRegionMemberships())
       dispatch(regionActionCreators.fetchBaseRegionParents())
     }
   })

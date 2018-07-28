@@ -18,25 +18,12 @@ export default function configureStore(configuration = DEFAULT_CONFIGURATION) {
     store = configureStoreReal(createBrowserHistory(), {})
     store.dispatch(configurationActionCreators.update(configuration))
 
-    fetchMock.mock(
-      url => new URL(url).pathname === '/regions',
-      {
-        body: []
-      })
-
-    fetchMock.mock(
-      url => new URL(url).pathname === '/regionmemberships',
-      {
-        body: []
+    fetchMock.mock({
+      matcher: '/initFetchMock',
+      response: {
+        status: 404
       }
-    )
-
-    fetchMock.mock(
-      url => new URL(url).pathname === '/regionroles',
-      {
-        body: []
-      }
-    )
+    })
   })
 
   afterEach(() => {
