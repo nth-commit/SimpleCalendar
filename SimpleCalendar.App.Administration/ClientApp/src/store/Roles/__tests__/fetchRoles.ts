@@ -1,7 +1,7 @@
 import { rolesActionCreators } from '../'
 import { AuthorizationStatus } from 'src/store/Auth'
-import configureStore from 'test-helpers/configureStore'
-import { fetchMock } from 'test-helpers/mocks/fetch'
+import configureStore from '__testutils__/configureStore'
+import { fetchMock } from '__testutils__/mocks/fetch'
 
 describe('store.roles.fetchRoles', () => {
   const { dispatch, getState } = configureStore()

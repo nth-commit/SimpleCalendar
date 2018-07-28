@@ -52,7 +52,7 @@
   "jest": {
     "moduleNameMapper": {
       "src(.*)$": "<rootDir>/src/$1",
-      "test-helpers(.*)$": "<rootDir>/test-helpers/$1"
+      "__testutils__(.*)$": "<rootDir>/src/__testutils__/$1"
     }
   }
 }

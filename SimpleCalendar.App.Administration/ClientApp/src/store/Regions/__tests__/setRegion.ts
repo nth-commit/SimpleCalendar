@@ -1,6 +1,6 @@
 import { ROOT_REGION_ID } from 'src/constants'
-import configureStore from 'test-helpers/configureStore'
-import { fetchMockRootRegionResponse, fetchMockRegionResponse, createRegionResponse } from 'test-helpers/mocks/fetch'
+import configureStore from '__testutils__/configureStore'
+import { fetchMockRootRegionResponse, fetchMockRegionResponse, createRegionResponse } from '__testutils__/mocks/fetch'
 import regionActionCreators from '../ActionCreators'
 import { enumerateRegionId } from 'src/store/Regions/Utility'
 import { IRegion } from 'src/services/Api'

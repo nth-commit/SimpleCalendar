@@ -4,7 +4,8 @@
     "module": "commonjs",
     "paths": {
       "src/*": ["./src/*"],
-      "test-helpers/*": ["./test-helpers/*"]
+      "test-helpers/*": ["./src/__testutils__/*"],
+      "__testutils__/*": ["./src/__testutils__/*"]
     }
   },
   "exclude": [

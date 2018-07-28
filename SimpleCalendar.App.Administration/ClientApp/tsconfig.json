@@ -18,7 +18,8 @@
     "suppressImplicitAnyIndexErrors": true,
     "noUnusedLocals": true,
     "paths": {
-      "src/*": ["./src/*"]
+      "src/*": ["./src/*"],
+      "__testutils__/*": ["./src/__testutils__/*"]
     }
   },
   "exclude": [
@@ -29,6 +30,6 @@
     "webpack",
     "jest",
     "src/setupTests.ts",
-    "test-helpers"
+    "src/__testutils__"
   ]
 }

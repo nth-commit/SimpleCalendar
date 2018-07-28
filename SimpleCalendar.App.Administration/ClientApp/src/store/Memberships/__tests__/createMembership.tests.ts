@@ -1,8 +1,8 @@
 import { ROOT_REGION_ID } from 'src/constants'
-import configureStore from 'test-helpers/configureStore'
+import configureStore from '__testutils__/configureStore'
 import { membershipsActionCreators } from '../MembershipsActionCreators'
 import { IRegionMembershipCreate } from 'src/services/Api'
-import { fetchMockRegionMembershipCreateResponse, fetchMockRootRegionResponse, fetchMockRegionMembershipsByRegionResponse } from 'test-helpers/mocks/fetch'
+import { fetchMockRegionMembershipCreateResponse, fetchMockRootRegionResponse, fetchMockRegionMembershipsByRegionResponse } from '__testutils__/mocks/fetch'
 import { regionActionCreators } from 'src/store/Regions'
 import { MembershipDictionaryEntry, MembershipIdRegionLookupEntry } from 'src/store/Memberships/MembershipsState'
 

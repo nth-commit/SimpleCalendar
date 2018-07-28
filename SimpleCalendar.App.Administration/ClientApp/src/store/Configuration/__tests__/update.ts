@@ -1,5 +1,5 @@
 import { configurationActionCreators } from '../'
-import configureStore from 'test-helpers/configureStore'
+import configureStore from '__testutils__/configureStore'
 
 describe('configuration.update', () => {
   const { dispatch, getState } = configureStore()

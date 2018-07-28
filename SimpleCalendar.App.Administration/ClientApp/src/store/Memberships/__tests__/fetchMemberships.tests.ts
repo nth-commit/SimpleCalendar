@@ -1,6 +1,6 @@
 import { ROOT_REGION_ID } from 'src/constants'
-import configureStore from 'test-helpers/configureStore'
-import { fetchMockRegionMembershipsByRegionResponse, fetchMock } from 'test-helpers/mocks/fetch'
+import configureStore from '__testutils__/configureStore'
+import { fetchMockRegionMembershipsByRegionResponse, fetchMock } from '__testutils__/mocks/fetch'
 import { membershipsActionCreators } from '../MembershipsActionCreators'
 import { IRegionMembership } from 'src/services/Api'
 
