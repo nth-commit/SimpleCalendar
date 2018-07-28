@@ -25,8 +25,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "config", "config", "{82E6F7
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleCalendar.Utility.Authorization", "util\SimpleCalendar.Utility.Authorization\SimpleCalendar.Utility.Authorization.csproj", "{13DABBE3-963E-4A49-BE46-C1F3872DD6F0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleCalendar.App2", "SimpleCalendar.App2\SimpleCalendar.App2.csproj", "{D166969E-A0C6-4AFF-BAAD-DA2AA46DFEA8}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleCalendar.Api.UnitTests", "SimpleCalendar.Api.Tests\SimpleCalendar.Api.UnitTests.csproj", "{C11B24C8-8B53-4C10-876D-BEB55AD4DD50}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleCalendar.Framework", "SimpleCalendar.Framework\SimpleCalendar.Framework.csproj", "{AE0190EB-ED05-4505-AFBB-89490573A4B4}"
@@ -44,6 +42,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleCalendar.Api.Core.Authorization", "SimpleCalendar.Api.Core.Authorization\SimpleCalendar.Api.Core.Authorization.csproj", "{CEEE6C00-E50C-476A-BC81-CA32D6305848}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleCalendar.Api.Core.Authorization.UnitTests", "SimpleCalendar.Api.Core.Authorization.UnitTests\SimpleCalendar.Api.Core.Authorization.UnitTests.csproj", "{C7850CF6-0631-4052-BB7B-82242B105460}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleCalendar.App.Schedule", "SimpleCalendar.App.Schedule\SimpleCalendar.App.Schedule.csproj", "{BBAC4A2C-F1E2-4EE7-AB2E-83FFF3B1843D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -101,14 +101,6 @@ Global
 		{13DABBE3-963E-4A49-BE46-C1F3872DD6F0}.Release|Any CPU.Build.0 = Release|Any CPU
 		{13DABBE3-963E-4A49-BE46-C1F3872DD6F0}.Release|x64.ActiveCfg = Release|Any CPU
 		{13DABBE3-963E-4A49-BE46-C1F3872DD6F0}.Release|x64.Build.0 = Release|Any CPU
-		{D166969E-A0C6-4AFF-BAAD-DA2AA46DFEA8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D166969E-A0C6-4AFF-BAAD-DA2AA46DFEA8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D166969E-A0C6-4AFF-BAAD-DA2AA46DFEA8}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{D166969E-A0C6-4AFF-BAAD-DA2AA46DFEA8}.Debug|x64.Build.0 = Debug|Any CPU
-		{D166969E-A0C6-4AFF-BAAD-DA2AA46DFEA8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D166969E-A0C6-4AFF-BAAD-DA2AA46DFEA8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D166969E-A0C6-4AFF-BAAD-DA2AA46DFEA8}.Release|x64.ActiveCfg = Release|Any CPU
-		{D166969E-A0C6-4AFF-BAAD-DA2AA46DFEA8}.Release|x64.Build.0 = Release|Any CPU
 		{C11B24C8-8B53-4C10-876D-BEB55AD4DD50}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C11B24C8-8B53-4C10-876D-BEB55AD4DD50}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C11B24C8-8B53-4C10-876D-BEB55AD4DD50}.Debug|x64.ActiveCfg = Debug|Any CPU
@@ -181,6 +173,14 @@ Global
 		{C7850CF6-0631-4052-BB7B-82242B105460}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C7850CF6-0631-4052-BB7B-82242B105460}.Release|x64.ActiveCfg = Release|Any CPU
 		{C7850CF6-0631-4052-BB7B-82242B105460}.Release|x64.Build.0 = Release|Any CPU
+		{BBAC4A2C-F1E2-4EE7-AB2E-83FFF3B1843D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BBAC4A2C-F1E2-4EE7-AB2E-83FFF3B1843D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BBAC4A2C-F1E2-4EE7-AB2E-83FFF3B1843D}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{BBAC4A2C-F1E2-4EE7-AB2E-83FFF3B1843D}.Debug|x64.Build.0 = Debug|Any CPU
+		{BBAC4A2C-F1E2-4EE7-AB2E-83FFF3B1843D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BBAC4A2C-F1E2-4EE7-AB2E-83FFF3B1843D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BBAC4A2C-F1E2-4EE7-AB2E-83FFF3B1843D}.Release|x64.ActiveCfg = Release|Any CPU
+		{BBAC4A2C-F1E2-4EE7-AB2E-83FFF3B1843D}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
