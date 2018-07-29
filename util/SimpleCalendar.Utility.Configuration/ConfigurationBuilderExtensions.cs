@@ -12,13 +12,11 @@ namespace Microsoft.Extensions.Configuration
             this IConfigurationBuilder builder,
             string environmentName)
         {
-            var solutionDirectory = GetSolutionDirectory(new DirectoryInfo(Directory.GetCurrentDirectory()));
-
             builder
                 .AddJsonFile("appsettings.json", optional: false)
                 .AddJsonFile($"appsettings.{environmentName}.json", optional: true)
-                .AddJsonFile(Path.Combine(solutionDirectory, "appsettings.Shared.json"), optional: false)
-                .AddJsonFile(Path.Combine(solutionDirectory, $"appsettings.Shared.{environmentName}.json"), optional: true);
+                .AddJsonFile("appsettings.Shared.json", optional: false)
+                .AddJsonFile($"appsettings.Shared.{environmentName}.json", optional: true);
 
             if (environmentName == "Development")
             {
@@ -28,11 +26,6 @@ namespace Microsoft.Extensions.Configuration
             builder.AddEnvironmentVariables();
 
             return builder;
-        }
-
-        private static string GetSolutionDirectory(DirectoryInfo directory)
-        {
-            return Directory.EnumerateFiles(directory.FullName, "*.sln").Any() ? directory.FullName : GetSolutionDirectory(directory.Parent);
         }
     }
 }
