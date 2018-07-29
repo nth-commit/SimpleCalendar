@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using SimpleCalendar.Api.Core.Data;
-using SimpleCalendar.Api.Core.Regions;
 using SimpleCalendar.Api.UnitTests.Utility;
 using System;
 using System.Collections.Generic;

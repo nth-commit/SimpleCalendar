@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.Extensions.DependencyInjection;
 using SimpleCalendar.Api.Core.Events;
-using SimpleCalendar.Api.Core.Regions;
 using SimpleCalendar.Framework.Identity;
 using SimpleCalendar.Utility.Configuration;
 using SimpleCalendar.Utility.DependencyInjection;
@@ -61,16 +60,6 @@ namespace SimpleCalendar.Tools.Runner
                 StartTime = DateTime.Now,
                 EndTime = DateTime.Now
             });
-        }
-
-        public static async Task GetRegionAsync(IServiceProvider serviceProvider)
-        {
-            var regionService = serviceProvider.GetRequiredService<RegionService>();
-
-            var result = await regionService.GetRegionAsync("new_zealand");
-
-            //var result = await regionService.GetRegionAsync("new_zealand.wellington.wellington_city");
-            var result2 = await regionService.ListRegionsAsync("new_zealand.wellington");
         }
 
         public class StubbedUserAccessor : IUserAccessor

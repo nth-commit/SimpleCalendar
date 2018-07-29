@@ -11,8 +11,6 @@ namespace SimpleCalendar.Api.Core.Data
     {
         public string Id { get; set; }
 
-        public string Code { get; set; }
-
         public string ParentId { get; set; }
 
         public RegionEntity Parent { get; set; }
@@ -31,23 +29,7 @@ namespace SimpleCalendar.Api.Core.Data
     public static class RegionEntityExtensions
     {
         public static int GetLevel(this RegionEntity region) =>
-            region.Id == Constants.RootRegionId ? 0 : region.GetId().Split('/').Count();
-
-        public static string GetId(this RegionEntity region) =>
-            region.Id == Constants.RootRegionId ? Constants.RootRegionId : region.GetIdInternal();
-
-        private static string GetIdInternal(this RegionEntity region)
-        {
-            if (region.ParentId == Constants.RootRegionId)
-            {
-                return region.Code;
-            }
-            else
-            {
-                var parentId = region.Parent.GetIdInternal();
-                return string.IsNullOrEmpty(parentId) ? region.Code : $"{parentId}/{region.Code}";
-            }
-        }
+            region.Id == Constants.RootRegionId ? 0 : region.Id.Split('/').Count();
 
         public static IEnumerable<RegionEntity> GetRegions(
             this RegionEntity region,
@@ -72,26 +54,6 @@ namespace SimpleCalendar.Api.Core.Data
             }
 
             return result;
-        }
-
-        public static bool IsSuperAdministrator(this RegionEntity region, string userId) => region.IsInRole(userId, Constants.RegionRoles.SuperAdministrator);
-
-        public static bool IsUser(this RegionEntity region, string userId) => region.IsInRole(userId, Constants.RegionRoles.User);
-
-        private static bool IsInRole(
-            this RegionEntity region,
-            string userId,
-            string regionRoleId)
-        {
-            if (region.Memberships == null)
-            {
-                throw new InvalidOperationException("Roles cannot be null to determine if user is in role");
-            }
-
-            return false;
-
-            //return region.Memberships.Where(r => r.UserEmail == userId).Any(r => r.Role.HasFlag(role)) ||
-            //    (region.Id != Constants.RootRegionId && IsInRole(region.Parent, userId, role));
         }
     }
 }

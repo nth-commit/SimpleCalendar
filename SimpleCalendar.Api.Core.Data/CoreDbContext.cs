@@ -34,10 +34,11 @@ namespace SimpleCalendar.Api.Core.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<RegionEntity>().HasData(new RegionEntity()
-            {
-                Id = Constants.RootRegionId
-            });
+            modelBuilder.Entity<RegionEntity>().HasData(
+                new RegionEntity()
+                {
+                    Id = Constants.RootRegionId
+                });
 
             modelBuilder.Entity<RegionRoleEntity>().HasData(
                 new RegionRoleEntity()

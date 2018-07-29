@@ -1,5 +1,5 @@
 ﻿using Newtonsoft.Json;
-using SimpleCalendar.Api.Core.Regions;
+using SimpleCalendar.Api.Models;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -10,20 +10,20 @@ namespace SimpleCalendar.Api.UnitTests.Regions
 {
     public static class ResponseHttpMessageExtensions
     {
-        public static async Task<IEnumerable<RegionResult>> DeserializeRegionsAsync(
+        public static async Task<IEnumerable<Region>> DeserializeRegionsAsync(
             this HttpResponseMessage response)
         {
             response.EnsureSuccessStatusCode();
             var json = await response.Content.ReadAsStringAsync();
-            return JsonConvert.DeserializeObject<IEnumerable<RegionResult>>(json);
+            return JsonConvert.DeserializeObject<IEnumerable<Region>>(json);
         }
 
-        public static async Task<RegionResult> DeserializeRegionAsync(
+        public static async Task<Region> DeserializeRegionAsync(
             this HttpResponseMessage response)
         {
             response.EnsureSuccessStatusCode();
             var json = await response.Content.ReadAsStringAsync();
-            return JsonConvert.DeserializeObject<RegionResult>(json);
+            return JsonConvert.DeserializeObject<Region>(json);
         }
     }
 }

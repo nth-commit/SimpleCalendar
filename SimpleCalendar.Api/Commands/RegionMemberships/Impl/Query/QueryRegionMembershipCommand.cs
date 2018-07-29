@@ -53,7 +53,7 @@ namespace SimpleCalendar.Api.Commands.RegionMemberships.Impl.Query
             RegionEntity region = null;
             if (isRegionQuery)
             {
-                region = await _coreDbContext.GetRegionByCodesAsync(regionId);
+                region = await _coreDbContext.GetRegionByIdAsync(regionId);
                 if (region == null)
                 {
                     context.ModelState.AddModelError(nameof(regionId), "Region could not be found");
@@ -98,7 +98,7 @@ namespace SimpleCalendar.Api.Commands.RegionMemberships.Impl.Query
             return new OkObjectResult(entities.Select(e => new RegionMembership()
             {
                 Id = e.Id,
-                RegionId = regionsById[e.RegionId].GetId(),
+                RegionId = regionsById[e.RegionId].Id,
                 UserEmail = e.UserEmail,
                 RegionRoleId = e.RegionRoleId,
                 Permissions = new RegionMembershipAuthorization()

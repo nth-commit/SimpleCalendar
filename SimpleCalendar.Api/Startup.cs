@@ -51,6 +51,7 @@ namespace SimpleCalendar.Api
             services.AddAutoMapper(conf =>
             {
                 conf.AddApiCoreMappers();
+                conf.AddRegionMappers();
                 conf.AddRegionRoleMappers();
             });
 
@@ -59,6 +60,7 @@ namespace SimpleCalendar.Api
 
             services.AddUserPreparation();
 
+            services.AddRegionServices();
             services.AddRegionMembershipServices();
             services.AddRegionRoleServices();
             services.AddUserServices();

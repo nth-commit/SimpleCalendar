@@ -1,9 +1,11 @@
-﻿using SimpleCalendar.Api.Core.Regions;
-using SimpleCalendar.Api.Core.Data;
+﻿using SimpleCalendar.Api.Core.Data;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using SimpleCalendar.Api.Models;
+using SimpleCalendar.Api.UnitTests.Regions;
+using Newtonsoft.Json;
 
 namespace SimpleCalendar.Api.UnitTests
 {
@@ -19,7 +21,8 @@ namespace SimpleCalendar.Api.UnitTests
         {
             new RegionCreate()
             {
-                Name = "New Zealand"
+                Name = "New Zealand",
+                ParentId = Constants.RootRegionId
             },
             new RegionCreate()
             {
@@ -40,16 +43,33 @@ namespace SimpleCalendar.Api.UnitTests
 
         public static async Task GivenARegionHierarchyAsync(this GivenAnyContext context)
         {
-            var regionService = context.GetRequiredService<RegionService>();
+            var coreDbContext = context.GetCoreDbContext();
             foreach (var region in _regions)
             {
-                await regionService.CreateRegionAsync(region);
+                var id = string.Empty;
+                if (region.ParentId != Constants.RootRegionId)
+                {
+                    id += region.ParentId + "/";
+                }
+                id += region.Name.ToLower().Replace(' ', '-');
+
+                await coreDbContext.Regions.AddAsync(new RegionEntity()
+                {
+                    Id = id,
+                    ParentId = region.ParentId,
+                    DataJson = JsonConvert.SerializeObject(new
+                    {
+                        region.Name
+                    }),
+                    DataJsonVersion = 1
+                });
             }
+            await coreDbContext.SaveChangesAsync();
         }
 
         public static async Task<RegionEntity> GetAGivenRegionById(this GivenAnyContext context, string id)
         {
-            return await context.GetCoreDbContext().GetRegionByCodesAsync(id);
+            return await context.GetCoreDbContext().Regions.FindAsync(id);
         }
     }
 }

@@ -30,7 +30,7 @@ namespace SimpleCalendar.Api.Commands.RegionMemberships.Impl.Create
                 return new BadRequestObjectResult(context.ModelState);
             }
 
-            var region = await _coreDbContext.GetRegionByCodesAsync(create.RegionId);
+            var region = await _coreDbContext.GetRegionByIdAsync(create.RegionId);
             if (region == null)
             {
                 context.ModelState.AddModelError(nameof(RegionMembershipCreate.RegionId), "Region not found");

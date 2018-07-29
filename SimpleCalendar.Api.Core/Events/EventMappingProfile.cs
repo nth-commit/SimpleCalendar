@@ -38,7 +38,7 @@ namespace SimpleCalendar.Api.Core.Events
         public static EventResult MapToResult(this IMapper mapper, Event ev, RegionEntity region)
         {
             var result = mapper.Map<EventResult>(ev);
-            result.RegionId = string.Join(".", region.GetRegions().Select(r => r.Code));
+            result.RegionId = region.Id;
             return result;
         }
     }

@@ -22,18 +22,6 @@ namespace SimpleCalendar.Api.Core.Authorization
             return HasPermission(permission, region, regionRolesById, regionMembershipsByRegionId, isParentOfTargetRegion: false);
         }
 
-        private IEnumerable<RegionMembershipEntity> GetRegionMemberships(ClaimsPrincipal user)
-        {
-            return user.Claims
-                .Where(c => c.Type == ClaimsIdentity.DefaultRoleClaimType)
-                .Select(c => c.Value.Split(':'))
-                .Select(c => new RegionMembershipEntity()
-                {
-                    RegionId = c[0],
-                    RegionRoleId = c[1]
-                });
-        }
-
         private bool HasPermission(
             RegionPermission permission,
             RegionEntity region,

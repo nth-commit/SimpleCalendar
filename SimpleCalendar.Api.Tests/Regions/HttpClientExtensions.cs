@@ -1,4 +1,5 @@
-﻿using SimpleCalendar.Api.Core.Regions;
+﻿using Newtonsoft.Json;
+using SimpleCalendar.Api.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace SimpleCalendar.Api.UnitTests.Regions
 {
     public static class HttpClientExtensions
     {
-        public static async Task<IEnumerable<RegionResult>> GetRegionsAndAssertOKAsync(
+        public static async Task<IEnumerable<Region>> GetRegionsAndAssertOKAsync(
             this HttpClient client,
             string parentId = null)
         {
@@ -34,12 +35,24 @@ namespace SimpleCalendar.Api.UnitTests.Regions
             return await response.DeserializeRegionsAsync();
         }
 
-        public static async Task<RegionResult> GetRegionAndAssertOKAsync(
+        public static async Task<Region> GetRegionAndAssertOKAsync(
             this HttpClient client,
             string id)
         {
             var response = await client.GetAsync($"/regions/{id}");
             response.AssertStatusCodeOK();
+
+            return await response.DeserializeRegionAsync();
+        }
+
+        public static async Task<Region> CreateRegionAndAssertCreatedAsync(
+            this HttpClient client,
+            RegionCreate create)
+        {
+            var content = new StringContent(JsonConvert.SerializeObject(create), Encoding.UTF8, "application/json");
+
+            var response = await client.PostAsync("/regions", content);
+            response.AssertStatusCode(HttpStatusCode.Created);
 
             return await response.DeserializeRegionAsync();
         }

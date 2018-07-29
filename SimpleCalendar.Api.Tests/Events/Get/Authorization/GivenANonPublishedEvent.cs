@@ -26,7 +26,7 @@ namespace SimpleCalendar.Api.UnitTests.Events.Get.Authorization
 
             var dbContext = this.GetCoreDbContext();
 
-            var region = await dbContext.GetRegionByCodesAsync(RegionId);
+            var region = await dbContext.GetRegionByIdAsync(RegionId);
             if (region == null)
             {
                 throw new Exception("Region not found");

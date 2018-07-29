@@ -39,8 +39,9 @@ namespace SimpleCalendar.Api.UnitTests.Events.Create.Authorization
             [Fact]
             public async Task WhenICreateAnEventInALevel1Region_ThenItReturns403Unauthorized()
             {
-                ValidEvent.RegionId = Level1RegionId;
-                var response = await Client.CreateEventAsync(ValidEvent);
+                var invalidEvent = ValidEvent;
+                invalidEvent.RegionId = Level1RegionId;
+                var response = await Client.CreateEventAsync(invalidEvent);
                 Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
             }
         }

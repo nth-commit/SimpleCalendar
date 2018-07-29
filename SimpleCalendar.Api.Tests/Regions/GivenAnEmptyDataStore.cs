@@ -23,10 +23,8 @@ namespace SimpleCalendar.Api.UnitTests.Regions
             [Fact]
             public async Task WhenRegionsEndpointCalledWithParentId_ThenReturns400()
             {
-                var response = await Client.GetAsync("/regions?parentId=new_zealand");
+                var response = await Client.GetAsync("/regions?parentId=new-zealand");
                 Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
-                var error = await response.Content.ReadAsStringAsync();
-                Assert.Equal("Parameter parentId is invalid. Could not find region with parentId \"new_zealand\".", error);
             }
         }
     }

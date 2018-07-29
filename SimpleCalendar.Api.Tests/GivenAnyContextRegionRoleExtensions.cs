@@ -22,7 +22,7 @@ namespace SimpleCalendar.Api.UnitTests
         {
             var coreDbContext = context.GetCoreDbContext();
 
-            var region = await coreDbContext.GetRegionByCodesAsync(regionId);
+            var region = await coreDbContext.GetRegionByIdAsync(regionId);
             if (region == null)
             {
                 throw new Exception("Region does not exist");

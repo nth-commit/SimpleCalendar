@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using SimpleCalendar.Api.Commands.Regions;
 using SimpleCalendar.Api.Core.Data;
-using SimpleCalendar.Api.Core.Regions;
 using SimpleCalendar.Utiltiy.Validation;
 using System;
 using System.Collections.Generic;
@@ -13,46 +15,39 @@ namespace SimpleCalendar.Api.Controllers
     [Route("regions")]
     public class RegionsController : Controller
     {
-        private readonly RegionService _regionService;
-        private readonly CoreDbContext _coreDbContext;
-        private readonly IMapper _mapper;
+        private readonly Lazy<IQueryRegionCommand> _queryRegionCommand;
+        private readonly Lazy<IGetRegionCommand> _getRegionCommand;
+        private readonly Lazy<ICreateRegionCommand> _createRegionCommand;
+        private readonly IHostingEnvironment _hostingEnvironment;
 
         public RegionsController(
-            RegionService regionService,
-            CoreDbContext coreDbContext,
-            IMapper mapper)
+            Lazy<IQueryRegionCommand> queryRegionCommand,
+            Lazy<IGetRegionCommand> getRegionCommand,
+            Lazy<ICreateRegionCommand> createRegionCommand,
+            IHostingEnvironment hostingEnvironment)
         {
-            _regionService = regionService;
-            _coreDbContext = coreDbContext;
-            _mapper = mapper;
+            _queryRegionCommand = queryRegionCommand;
+            _getRegionCommand = getRegionCommand;
+            _createRegionCommand = createRegionCommand;
+            _hostingEnvironment = hostingEnvironment;
         }
 
         [HttpGet("")]
-        public async Task<IActionResult> List([FromQuery] string parentId = Core.Data.Constants.RootRegionId)
-        {
-            try
-            {
-                var result = await _regionService.ListRegionsAsync(parentId);
-                return Ok(result);
-            }
-            catch (ClientValidationException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
+        public Task<IActionResult> Query([FromQuery] string parentId = Constants.RootRegionId) =>
+            _queryRegionCommand.Value.InvokeAsync(ControllerContext, parentId);
 
         [HttpGet("{*id}")]
-        public async Task<IActionResult> Get([FromRoute] string id)
+        public Task<IActionResult> Get([FromRoute] string id) =>
+            _getRegionCommand.Value.InvokeAsync(ControllerContext, id);
+
+        [HttpPost]
+        public Task<IActionResult> Create([FromBody] Models.RegionCreate create)
         {
-            var region = await _regionService.GetRegionAsync(id);
-            if (region == null)
+            if (!_hostingEnvironment.IsUnitTest())
             {
-                return NotFound();
+                return Task.FromResult((IActionResult)NotFound());
             }
-            else
-            {
-                return Ok(region);
-            }
+            return _createRegionCommand.Value.InvokeAsync(ControllerContext, create);
         }
     }
 }

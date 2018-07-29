@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace SimpleCalendar.Api.Core.Regions
+namespace SimpleCalendar.Api.Models
 {
-    public class RegionResult
+    public class Region
     {
         public string Id { get; set; }
 
