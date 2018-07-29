@@ -25,7 +25,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "config", "config", "{82E6F7
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleCalendar.Utility.Authorization", "util\SimpleCalendar.Utility.Authorization\SimpleCalendar.Utility.Authorization.csproj", "{13DABBE3-963E-4A49-BE46-C1F3872DD6F0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleCalendar.Api.UnitTests", "SimpleCalendar.Api.Tests\SimpleCalendar.Api.UnitTests.csproj", "{C11B24C8-8B53-4C10-876D-BEB55AD4DD50}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleCalendar.Api.UnitTests", "SimpleCalendar.Api.UnitTests\SimpleCalendar.Api.UnitTests.csproj", "{C11B24C8-8B53-4C10-876D-BEB55AD4DD50}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleCalendar.Framework", "SimpleCalendar.Framework\SimpleCalendar.Framework.csproj", "{AE0190EB-ED05-4505-AFBB-89490573A4B4}"
 EndProject
