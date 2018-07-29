@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using SimpleCalendar.Api.Core.Data;
-using SimpleCalendar.Utiltiy.Validation;
+using SimpleCalendar.Api.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,26 +9,28 @@ namespace SimpleCalendar.Api.Commands.Regions.Impl.Query
 {
     public class QueryRegionCommand : IQueryRegionCommand
     {
-        private readonly CoreDbContext _coreDbContext;
+        private readonly IRegionCache _regionCache;
         private readonly RegionMapper _regionMapper;
 
         public QueryRegionCommand(
-            CoreDbContext coreDbContext,
+            IRegionCache regionCache,
             RegionMapper regionMapper)
         {
-            _coreDbContext = coreDbContext;
+            _regionCache = regionCache;
             _regionMapper = regionMapper;
         }
 
         public async Task<IActionResult> InvokeAsync(ActionContext context, string parentRegionId)
         {
-            var region = await _coreDbContext.GetRegionByIdAsync(parentRegionId, includeChildren: true);
+            var region = await _regionCache.GetRegionAsync(parentRegionId);
             if (region == null)
             {
                 context.ModelState.AddModelError(nameof(parentRegionId), $"Could not find region with {nameof(parentRegionId)} \"{parentRegionId}\"");
                 return new BadRequestObjectResult(context.ModelState);
             }
-            return new OkObjectResult(region.Children.Select(r => _regionMapper.MapToResult(r)));
+
+            var childRegions = await _regionCache.GetRegionsByParentAsync(parentRegionId);
+            return new OkObjectResult(childRegions.Select(r => _regionMapper.MapToResult(r)));
         }
     }
 }

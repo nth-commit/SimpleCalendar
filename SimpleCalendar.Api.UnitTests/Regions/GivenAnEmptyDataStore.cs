@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,6 +11,23 @@ namespace SimpleCalendar.Api.UnitTests.Regions
 {
     public class GivenAnEmptyDataStore : GivenAnyContext
     {
+        public GivenAnEmptyDataStore() => InitializeAsync().GetAwaiter().GetResult();
+
+        private async Task InitializeAsync()
+        {
+            var coreDbContext = this.GetCoreDbContext();
+
+            var regions = await coreDbContext.Regions
+                .Where(r => r.Id != Constants.RootRegionId)
+                .ToListAsync();
+
+            foreach (var region in regions)
+            {
+                coreDbContext.Regions.Remove(region);
+            }
+
+            await coreDbContext.SaveChangesAsync();
+        }
 
         public class Tests : GivenAnEmptyDataStore
         {

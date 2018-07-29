@@ -25,7 +25,7 @@ namespace SimpleCalendar.Api.Controllers
         }
 
         [HttpGet("")]
-        public async Task<IActionResult> List(
+        public async Task<IActionResult> Query(
             [FromQuery] string regionId,
             [FromQuery] DateTime? from,
             [FromQuery] DateTime? to)

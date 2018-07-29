@@ -4,20 +4,21 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using SimpleCalendar.Api.Core.Data;
+using SimpleCalendar.Api.Services;
 using SimpleCalendar.Utility.Authorization;
 
 namespace SimpleCalendar.Api.Commands.Regions.Impl.Get
 {
     public class GetRegionCommand : IGetRegionCommand
     {
-        private readonly CoreDbContext _coreDbContext;
+        private readonly IRegionCache _regionCache;
         private readonly RegionMapper _regionMapper;
 
         public GetRegionCommand(
-            CoreDbContext coreDbContext,
+            IRegionCache regionCache,
             RegionMapper regionMapper)
         {
-            _coreDbContext = coreDbContext;
+            _regionCache = regionCache;
             _regionMapper = regionMapper;
         }
 
@@ -29,7 +30,7 @@ namespace SimpleCalendar.Api.Commands.Regions.Impl.Get
                 return new BadRequestObjectResult(context.ModelState);
             }
 
-            var entity = await _coreDbContext.GetRegionByIdAsync(regionId);
+            var entity = await _regionCache.GetRegionAsync(regionId);
             if (entity == null)
             {
                 return new NotFoundResult();

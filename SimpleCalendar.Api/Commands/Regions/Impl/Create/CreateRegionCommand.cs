@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using SimpleCalendar.Api.Core.Data;
 using SimpleCalendar.Api.Models;
+using SimpleCalendar.Api.Services;
 using SimpleCalendar.Utility.Authorization;
 
 namespace SimpleCalendar.Api.Commands.Regions.Impl.Create

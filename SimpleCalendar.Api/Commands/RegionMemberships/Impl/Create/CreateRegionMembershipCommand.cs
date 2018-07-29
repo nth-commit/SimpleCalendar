@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SimpleCalendar.Api.Core.Data;
 using SimpleCalendar.Api.Models;
+using SimpleCalendar.Api.Services;
 using SimpleCalendar.Utility.Authorization;
 
 namespace SimpleCalendar.Api.Commands.RegionMemberships.Impl.Create
@@ -14,13 +15,16 @@ namespace SimpleCalendar.Api.Commands.RegionMemberships.Impl.Create
     {
         private readonly IUserAuthorizationService _authorizationService;
         private readonly CoreDbContext _coreDbContext;
+        private readonly IRegionCache _regionCache;
 
         public CreateRegionMembershipCommand(
             IUserAuthorizationService authorizationService,
-            CoreDbContext coreDbContext)
+            CoreDbContext coreDbContext,
+            IRegionCache regionCache)
         {
             _authorizationService = authorizationService;
             _coreDbContext = coreDbContext;
+            _regionCache = regionCache;
         }
 
         public async Task<IActionResult> InvokeAsync(ActionContext context, RegionMembershipCreate create)
@@ -30,7 +34,7 @@ namespace SimpleCalendar.Api.Commands.RegionMemberships.Impl.Create
                 return new BadRequestObjectResult(context.ModelState);
             }
 
-            var region = await _coreDbContext.GetRegionByIdAsync(create.RegionId);
+            var region = await _regionCache.GetRegionAsync(create.RegionId);
             if (region == null)
             {
                 context.ModelState.AddModelError(nameof(RegionMembershipCreate.RegionId), "Region not found");

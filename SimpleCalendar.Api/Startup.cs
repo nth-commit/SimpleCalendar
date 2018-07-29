@@ -40,6 +40,7 @@ namespace SimpleCalendar.Api
             services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
             services.AddTransient<IUserAccessor, HttpUserAccessor>();
             services.AddScoped<IRegionRolesAccessor, RegionRolesAccessor>();
+            services.AddTransient<IRegionCache, RegionCache>();
 
             ConfigureAuthenticationServices(services);
 

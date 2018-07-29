@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SimpleCalendar.Api.Core.Data;
 using SimpleCalendar.Api.Models;
+using SimpleCalendar.Api.Services;
 using SimpleCalendar.Framework;
 using SimpleCalendar.Utility.Authorization;
 
@@ -15,13 +16,16 @@ namespace SimpleCalendar.Api.Commands.RegionMemberships.Impl.Query
     {
         private readonly IUserAuthorizationService _authorizationService;
         private readonly CoreDbContext _coreDbContext;
+        private readonly IRegionCache _regionCache;
 
         public QueryRegionMembershipCommand(
             IUserAuthorizationService authorizationService,
-            CoreDbContext coreDbContext)
+            CoreDbContext coreDbContext,
+            IRegionCache regionCache)
         {
             _authorizationService = authorizationService;
             _coreDbContext = coreDbContext;
+            _regionCache = regionCache;
         }
 
         public async Task<IActionResult> InvokeAsync(ActionContext context, string regionId, string userEmail)
@@ -53,7 +57,7 @@ namespace SimpleCalendar.Api.Commands.RegionMemberships.Impl.Query
             RegionEntity region = null;
             if (isRegionQuery)
             {
-                region = await _coreDbContext.GetRegionByIdAsync(regionId);
+                region = await _regionCache.GetRegionAsync(regionId);
                 if (region == null)
                 {
                     context.ModelState.AddModelError(nameof(regionId), "Region could not be found");
@@ -91,7 +95,7 @@ namespace SimpleCalendar.Api.Commands.RegionMemberships.Impl.Query
             }
             else
             {
-                var regions = await Task.WhenAll(regionIds.Select(r => _coreDbContext.GetRegionByIdAsync(r)));
+                var regions = await Task.WhenAll(regionIds.Select(r => _regionCache.GetRegionAsync(r)));
                 regionsById = regions.ToDictionary(r => r.Id);
             }
 

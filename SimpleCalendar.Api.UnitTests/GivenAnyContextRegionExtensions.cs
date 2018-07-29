@@ -21,16 +21,6 @@ namespace SimpleCalendar.Api.UnitTests
         {
             new RegionCreate()
             {
-                Name = "New Zealand",
-                ParentId = Constants.RootRegionId
-            },
-            new RegionCreate()
-            {
-                Name = "Wellington",
-                ParentId = Level1RegionId
-            },
-            new RegionCreate()
-            {
                 Name = "Mount Victoria",
                 ParentId = Level2RegionId
             },
