@@ -38,6 +38,26 @@ namespace SimpleCalendar.Api.Core.Data
                 new RegionEntity()
                 {
                     Id = Constants.RootRegionId
+                },
+                new RegionEntity()
+                {
+                    Id = "new-zealand",
+                    ParentId = Constants.RootRegionId,
+                    DataJson = JsonConvert.SerializeObject(new
+                    {
+                        Name = "New Zealand"
+                    }),
+                    DataJsonVersion = 1
+                },
+                new RegionEntity()
+                {
+                    Id = "new-zealand/wellington",
+                    ParentId = "new-zealand",
+                    DataJson = JsonConvert.SerializeObject(new
+                    {
+                        Name = "Wellington"
+                    }),
+                    DataJsonVersion = 1
                 });
 
             modelBuilder.Entity<RegionRoleEntity>().HasData(
