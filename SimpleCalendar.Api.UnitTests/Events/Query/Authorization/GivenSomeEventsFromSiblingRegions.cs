@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace SimpleCalendar.Api.UnitTests.Events.List.Authorization
+namespace SimpleCalendar.Api.UnitTests.Events.Query.Authorization
 {
     public class GivenSomeEventsFromSiblingRegions : GivenAnEventsListEndpoint
     {
@@ -51,10 +51,8 @@ namespace SimpleCalendar.Api.UnitTests.Events.List.Authorization
             {
                 await this.GivenIAmARegionUserAsync(Region1User, Region1);
 
-                var response = await Client.ListEventsAsync();
-                response.AssertStatusCode(HttpStatusCode.OK);
+                var events = await Client.QueryEventsAndAssertOK();
 
-                var events = await response.DeserializeEventsAsync();
                 Assert.Equal(2, events.Count());
                 Assert.Equal(new List<string>() { "Event 1", "Event 2" }, events.Select(e => e.Name));
             }
@@ -64,10 +62,8 @@ namespace SimpleCalendar.Api.UnitTests.Events.List.Authorization
             {
                 await this.GivenIAmARegionUserAsync(Region2User, Region2);
 
-                var response = await Client.ListEventsAsync();
-                response.AssertStatusCode(HttpStatusCode.OK);
+                var events = await Client.QueryEventsAndAssertOK();
 
-                var events = await response.DeserializeEventsAsync();
                 Assert.Equal(2, events.Count());
                 Assert.Equal(new List<string>() { "Event 3", "Event 4" }, events.Select(e => e.Name));
             }

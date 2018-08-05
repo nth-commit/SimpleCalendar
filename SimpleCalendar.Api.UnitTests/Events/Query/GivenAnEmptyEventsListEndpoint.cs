@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace SimpleCalendar.Api.UnitTests.Events.List
+namespace SimpleCalendar.Api.UnitTests.Events.Query
 {
     public class GivenAnEmptyEventsListEndpoint : GivenAnEventsListEndpoint
     {
@@ -18,11 +18,13 @@ namespace SimpleCalendar.Api.UnitTests.Events.List
         {
         }
 
-        [Fact]
-        public async Task WhenIAmAnonymous_ItReturns200OK()
+        public class Tests : GivenAnEmptyEventsListEndpoint
         {
-            var response = await Client.ListEventsAsync();
-            response.AssertStatusCode(HttpStatusCode.OK);
+            [Fact]
+            public async Task WhenIAmAnonymous_ItReturns200OK()
+            {
+                await Client.QueryEventsAndAssertOK();
+            }
         }
     }
 }

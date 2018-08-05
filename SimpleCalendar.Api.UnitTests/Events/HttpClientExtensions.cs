@@ -26,7 +26,23 @@ namespace SimpleCalendar.Api.UnitTests.Events
             return await client.GetAsync($"/events/{eventId}");
         }
 
-        public static async Task<HttpResponseMessage> ListEventsAsync(
+        public static async Task<IEnumerable<EventOutput>> QueryEventsAndAssertOK(
+            this HttpClient client,
+            string regionId = Constants.RootRegionId,
+            DateTime? fromDate = null,
+            DateTime? toDate = null)
+        {
+            var response = await client.GetQueryEventsResponseAsync(
+                regionId: regionId,
+                fromDate: fromDate,
+                toDate: toDate);
+
+            response.AssertStatusCodeOK();
+
+            return await response.DeserializeEventsAsync();
+        }
+
+        public static async Task<HttpResponseMessage> GetQueryEventsResponseAsync(
             this HttpClient client,
             string regionId = null,
             DateTime? fromDate = null,

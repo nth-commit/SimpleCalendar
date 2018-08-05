@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace SimpleCalendar.Api.UnitTests.Events.List
+namespace SimpleCalendar.Api.UnitTests.Events.Query
 {
     public abstract class GivenAnEventsListEndpoint : GivenAnyContext
     {

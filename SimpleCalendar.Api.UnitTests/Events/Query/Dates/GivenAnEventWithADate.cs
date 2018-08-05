@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace SimpleCalendar.Api.UnitTests.Events.List.Dates
+namespace SimpleCalendar.Api.UnitTests.Events.Query.Dates
 {
     public class GivenAnEventWithADate : GivenAnEventsListEndpoint
     {
@@ -29,50 +29,40 @@ namespace SimpleCalendar.Api.UnitTests.Events.List.Dates
             [Fact]
             public async Task WhenIAskForEventsToBeforeThatDate_ItReturnsNoEvents()
             {
-                var response = await Client.ListEventsAsync(toDate: FromDate.AddDays(-1));
-                response.AssertStatusCode(HttpStatusCode.OK);
+                var events = await Client.QueryEventsAndAssertOK(toDate: FromDate.AddDays(-1));
 
-                var events = await response.DeserializeEventsAsync();
                 Assert.Empty(events);
             }
 
             [Fact]
             public async Task WhenIAskForEventsFromAfterThatDate_ItReturnsNoEvents()
             {
-                var response = await Client.ListEventsAsync(fromDate: ToDate.AddDays(1));
-                response.AssertStatusCode(HttpStatusCode.OK);
+                var events = await Client.QueryEventsAndAssertOK(fromDate: ToDate.AddDays(1));
 
-                var events = await response.DeserializeEventsAsync();
                 Assert.Empty(events);
             }
 
             [Fact]
             public async Task WhenIAskForEventsMatchingThoseDates_ItReturnsTheEvent()
             {
-                var response = await Client.ListEventsAsync(fromDate: FromDate, toDate: ToDate);
-                response.AssertStatusCode(HttpStatusCode.OK);
+                var events = await Client.QueryEventsAndAssertOK(fromDate: FromDate, toDate: ToDate);
 
-                var events = await response.DeserializeEventsAsync();
                 Assert.NotEmpty(events);
             }
 
             [Fact]
             public async Task WhenIAskForEventsOutsideTheEventsDateRange_ItReturnsTheEvent()
             {
-                var response = await Client.ListEventsAsync(fromDate: FromDate.AddDays(-1), toDate: ToDate.AddDays(1));
-                response.AssertStatusCode(HttpStatusCode.OK);
+                var events = await Client.QueryEventsAndAssertOK(fromDate: FromDate.AddDays(-1), toDate: ToDate.AddDays(1));
 
-                var events = await response.DeserializeEventsAsync();
                 Assert.NotEmpty(events);
             }
 
             [Fact(Skip = "Known defect")]
             public async Task WhenIAskForEventsInsideTheEventsDateRange_ItReturnsTheEvent()
             {
-                var response = await Client.ListEventsAsync(fromDate: FromDate.AddHours(6), toDate: ToDate.AddHours(-6));
-                response.AssertStatusCode(HttpStatusCode.OK);
+                var events = await Client.QueryEventsAndAssertOK(fromDate: FromDate.AddHours(6), toDate: ToDate.AddHours(-6));
 
-                var events = await response.DeserializeEventsAsync();
                 Assert.NotEmpty(events);
             }
         }

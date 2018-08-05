@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace SimpleCalendar.Api.UnitTests.Events.List
+namespace SimpleCalendar.Api.UnitTests.Events.Query
 {
     public class GivenSomeEventsAreDeleted : GivenAnEventsListEndpoint
     {
@@ -41,10 +41,7 @@ namespace SimpleCalendar.Api.UnitTests.Events.List
             public async Task WhenIAmARootAdministrator_ThenReturnAllNonDeletedEvents()
             {
                 this.GivenIAmARootSuperAdministrator();
-
-                var response = await Client.ListEventsAsync();
-                var events = await response.DeserializeEventsAsync();
-
+                var events = await Client.QueryEventsAndAssertOK();
                 Assert.Equal(NonDeletedEvents.Count(), events.Count());
             }
         }

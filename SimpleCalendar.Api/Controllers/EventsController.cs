@@ -43,6 +43,10 @@ namespace SimpleCalendar.Api.Controllers
                     To = to ?? DateTime.MaxValue
                 });
 
+        //[HttpGet("today")]
+        //public Task<IActionResult> QueryToday(
+        //    [FromQuery][Required]string regionId)
+
         [HttpGet("{id}")]
         public Task<IActionResult> Get([FromRoute] string id) =>
             _getEventsCommand.Value.InvokeAsync(ControllerContext, id);

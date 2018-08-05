@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace SimpleCalendar.Api.UnitTests.Events.List.Authorization
+namespace SimpleCalendar.Api.UnitTests.Events.Query.Authorization
 {
     public class GivenSomeEventsAreNotPublished : GivenAnEventsListEndpoint
     {
@@ -36,10 +36,8 @@ namespace SimpleCalendar.Api.UnitTests.Events.List.Authorization
         [Fact]
         public async Task WhenIAmAnAnonymousUser_ReturnThePublishedEvent()
         {
-            var response = await Client.ListEventsAsync();
-            response.AssertStatusCode(HttpStatusCode.OK);
+            var events = await Client.QueryEventsAndAssertOK();
 
-            var events = await response.DeserializeEventsAsync();
             Assert.Single(events);
             Assert.Equal(_publishedEventName, events.Single().Name);
         }
@@ -49,10 +47,8 @@ namespace SimpleCalendar.Api.UnitTests.Events.List.Authorization
         {
             await this.GivenIAmARegionUserAsync("UserId", Level2RegionId);
 
-            var response = await Client.ListEventsAsync();
-            response.AssertStatusCode(HttpStatusCode.OK);
+            var events = await Client.QueryEventsAndAssertOK();
 
-            var events = await response.DeserializeEventsAsync();
             Assert.Single(events);
             Assert.Equal(_publishedEventName, events.Single().Name);
         }
@@ -62,10 +58,8 @@ namespace SimpleCalendar.Api.UnitTests.Events.List.Authorization
         {
             await this.GivenIAmARegionSuperAdministratorAsync("Level3RegionAdministrator", Level3RegionId);
 
-            var response = await Client.ListEventsAsync();
-            response.AssertStatusCode(HttpStatusCode.OK);
+            var events = await Client.QueryEventsAndAssertOK();
 
-            var events = await response.DeserializeEventsAsync();
             Assert.Single(events);
             Assert.Equal(_publishedEventName, events.Single().Name);
         }
@@ -75,10 +69,8 @@ namespace SimpleCalendar.Api.UnitTests.Events.List.Authorization
         {
             await this.GivenIAmARegionUserAsync(_creatorEmail, Level2RegionId);
 
-            var response = await Client.ListEventsAsync();
-            response.AssertStatusCode(HttpStatusCode.OK);
+            var events = await Client.QueryEventsAndAssertOK();
 
-            var events = await response.DeserializeEventsAsync();
             Assert.Equal(EventDefinitions.Count(), events.Count());
         }
 
@@ -87,10 +79,8 @@ namespace SimpleCalendar.Api.UnitTests.Events.List.Authorization
         {
             await this.GivenIAmARegionSuperAdministratorAsync(_creatorEmail, Level2RegionId);
 
-            var response = await Client.ListEventsAsync();
-            response.AssertStatusCode(HttpStatusCode.OK);
+            var events = await Client.QueryEventsAndAssertOK();
 
-            var events = await response.DeserializeEventsAsync();
             Assert.Equal(EventDefinitions.Count(), events.Count());
         }
     }

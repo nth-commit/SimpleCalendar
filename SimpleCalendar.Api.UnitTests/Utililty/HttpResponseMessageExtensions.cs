@@ -11,5 +11,7 @@ namespace System.Net.Http
             => Assert.Equal(expectedStatusCode, response.StatusCode);
 
         public static void AssertStatusCodeOK(this HttpResponseMessage response) => response.AssertStatusCode(HttpStatusCode.OK);
+
+        public static void AssertStatusCodeBadRequest(this HttpResponseMessage response) => response.AssertStatusCode(HttpStatusCode.BadRequest);
     }
 }
