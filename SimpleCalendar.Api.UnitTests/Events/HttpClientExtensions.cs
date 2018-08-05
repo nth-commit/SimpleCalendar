@@ -1,5 +1,5 @@
 ﻿using Newtonsoft.Json;
-using SimpleCalendar.Api.Core.Events;
+using SimpleCalendar.Api.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +13,7 @@ namespace SimpleCalendar.Api.UnitTests.Events
     {
         public static async Task<HttpResponseMessage> CreateEventAsync(
             this HttpClient client,
-            EventCreate create)
+            EventInput create)
         {
             var content = new StringContent(JsonConvert.SerializeObject(create), Encoding.UTF8, "application/json");
             return await client.PostAsync("/events", content);

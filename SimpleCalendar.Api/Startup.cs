@@ -18,6 +18,7 @@ using SimpleCalendar.Framework;
 using SimpleCalendar.Framework.Identity;
 using SimpleCalendar.Utility.DependencyInjection;
 using Microsoft.Extensions.Configuration;
+using SimpleCalendar.Api.Filters;
 
 namespace SimpleCalendar.Api
 {
@@ -34,7 +35,10 @@ namespace SimpleCalendar.Api
         {
             var services = new ValidatableServiceCollection(innerServices);
 
-            services.AddMvc();
+            services.AddMvc(options =>
+            {
+                options.Filters.Add<ModelStateValidationFilter>();
+            });
             services.AddMemoryCache();
 
             services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
@@ -44,16 +48,15 @@ namespace SimpleCalendar.Api
 
             ConfigureAuthenticationServices(services);
 
-            services.AddApiCoreServices();
             services.AddApiCoreDataServices(_configuration);
             services.AddAuthorizationUtilityServices();
             services.AddApiCoreAuthorizationServices();
 
             services.AddAutoMapper(conf =>
             {
-                conf.AddApiCoreMappers();
                 conf.AddRegionMappers();
                 conf.AddRegionRoleMappers();
+                conf.AddEventMappers();
             });
 
             services.ConfigureAuth0();
@@ -65,6 +68,7 @@ namespace SimpleCalendar.Api
             services.AddRegionMembershipServices();
             services.AddRegionRoleServices();
             services.AddUserServices();
+            services.AddEventsServices();
 
             services.ValidateRequirements();
         }

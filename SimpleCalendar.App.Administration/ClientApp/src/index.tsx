@@ -22,7 +22,7 @@ async function renderApp() {
   const response = await fetch('/config')
   const configuration: IConfigurationState = {
    ...await response.json(),
-  //  baseRegionId: 'ROOT'
+  // baseRegionId: 'ROOT'
   }
 
   store.dispatch(configurationActionCreators.update(configuration))

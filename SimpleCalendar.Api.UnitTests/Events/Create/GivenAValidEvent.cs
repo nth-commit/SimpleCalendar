@@ -1,4 +1,4 @@
-﻿using SimpleCalendar.Api.Core.Events;
+﻿using SimpleCalendar.Api.Models;
 using SimpleCalendar.Api.UnitTests.Regions;
 using System;
 using System.Collections.Generic;
@@ -9,7 +9,7 @@ using Xunit;
 
 namespace SimpleCalendar.Api.UnitTests.Events.Create
 {
-    public class GivenAValidEvent : GivenIAmARootSuperAdministrator
+    public class GivenAValidEvent : GivenACreateEndpoint
     {
         protected const string Level1RegionId = GivenAnyContextRegionExtensions.Level1RegionId;
         protected const string Level2RegionId = GivenAnyContextRegionExtensions.Level2RegionId;
@@ -17,7 +17,7 @@ namespace SimpleCalendar.Api.UnitTests.Events.Create
 
         protected DateTime CurrentTime => new DateTime(2010, 10, 10);
 
-        protected EventCreate ValidEvent => new EventCreate()
+        protected EventInput ValidEvent => new EventInput()
         {
             Name = "My Event!",
             Description = "This is my event!",
@@ -31,7 +31,7 @@ namespace SimpleCalendar.Api.UnitTests.Events.Create
             this.GivenARegionHierarchyAsync().GetAwaiter().GetResult();
         }
 
-        public class Tests : GivenAValidEvent
+        public new class Tests : GivenAValidEvent
         {
             [Fact]
             public async Task WhenICreateAnEvent_ThenItReturns201Created()

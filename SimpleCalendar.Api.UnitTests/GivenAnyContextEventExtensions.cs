@@ -1,5 +1,4 @@
 ﻿using SimpleCalendar.Api.Core.Data;
-using SimpleCalendar.Api.Core.Events;
 using System;
 using System.Collections.Generic;
 using System.Text;

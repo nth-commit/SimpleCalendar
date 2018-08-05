@@ -50,7 +50,7 @@ namespace SimpleCalendar.Api.UnitTests.Events.Get.Authorization
             public async Task WhenIAmAnonymousAndGetTheEvent_ItReturns403Unauthorized()
             {
                 var response = await Client.GetEventAsync(EventId);
-                response.AssertStatusCode(HttpStatusCode.NotFound);
+                response.AssertStatusCode(HttpStatusCode.Unauthorized);
             }
 
             [Fact]
@@ -59,7 +59,7 @@ namespace SimpleCalendar.Api.UnitTests.Events.Get.Authorization
                 await this.GivenIAmARegionUserAsync("UserId", RegionId);
 
                 var response = await Client.GetEventAsync(EventId);
-                response.AssertStatusCode(HttpStatusCode.NotFound);
+                response.AssertStatusCode(HttpStatusCode.Unauthorized);
             }
 
             [Fact]

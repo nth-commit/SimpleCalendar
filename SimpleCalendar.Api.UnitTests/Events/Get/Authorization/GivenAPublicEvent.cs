@@ -45,10 +45,10 @@ namespace SimpleCalendar.Api.UnitTests.Events.Get.Authorization
         public class Tests : GivenAPublicEvent
         {
             [Fact]
-            public async Task WhenIAmAnonymousAndGetTheEvent_ItReturns403Unauthorized()
+            public async Task WhenIAmAnonymousAndGetTheEvent_ItReturnsNotFound()
             {
                 var response = await Client.GetEventAsync(EventId);
-                response.AssertStatusCode(HttpStatusCode.NotFound);
+                response.AssertStatusCode(HttpStatusCode.Unauthorized);
             }
         }
     }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace SimpleCalendar.Api.Core.Events
+namespace SimpleCalendar.Api.Models
 {
     public class Event
     {
@@ -22,10 +22,10 @@ namespace SimpleCalendar.Api.Core.Events
 
         public DateTime? Published { get; set; }
 
-        public string PublishedById { get; set; }
+        public string PublishedByEmail { get; set; }
 
         public DateTime? Deleted { get; set; }
 
-        public string DeletedById { get; set; }
+        public string DeletedByEmail { get; set; }
     }
 }
