@@ -9,16 +9,16 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Rewrite;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using SimpleCalendar.Api.Filters;
 using SimpleCalendar.Api.Services;
 using SimpleCalendar.Api.Core.Data;
 using SimpleCalendar.Framework;
 using SimpleCalendar.Framework.Identity;
 using SimpleCalendar.Utility.DependencyInjection;
-using Microsoft.Extensions.Configuration;
-using SimpleCalendar.Api.Filters;
 
 namespace SimpleCalendar.Api
 {
@@ -45,6 +45,7 @@ namespace SimpleCalendar.Api
             services.AddTransient<IUserAccessor, HttpUserAccessor>();
             services.AddScoped<IRegionRolesAccessor, RegionRolesAccessor>();
             services.AddTransient<IRegionCache, RegionCache>();
+            services.AddTransient<IDateTimeAccessor, DateTimeAccessor>();
 
             ConfigureAuthenticationServices(services);
 

@@ -58,7 +58,7 @@ namespace SimpleCalendar.Api.UnitTests.Events.Query.Dates
                 Assert.NotEmpty(events);
             }
 
-            [Fact(Skip = "Known defect")]
+            [Fact]
             public async Task WhenIAskForEventsInsideTheEventsDateRange_ItReturnsTheEvent()
             {
                 var events = await Client.QueryEventsAndAssertOK(fromDate: FromDate.AddHours(6), toDate: ToDate.AddHours(-6));

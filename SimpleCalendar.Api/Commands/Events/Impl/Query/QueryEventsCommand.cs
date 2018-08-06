@@ -38,17 +38,12 @@ namespace SimpleCalendar.Api.Commands.Events.Impl.Query
                 throw new Exception("Failed");
             }
 
-            var dbQuery = _dbContext.Events.Where(e => !e.IsDeleted);
-
-            if (query.From > DateTime.MinValue)
-            {
-                dbQuery = dbQuery.Where(e => e.StartTime >= query.From);
-            }
-
-            if (query.To < DateTime.MaxValue)
-            {
-                dbQuery = dbQuery.Where(e => e.EndTime <= query.To);
-            }
+            var dbQuery = _dbContext.Events
+                .Where(e => !e.IsDeleted)
+                .Where(e =>
+                    (query.From <= e.StartTime && e.StartTime <= query.To) ||
+                    (query.From <= e.EndTime && e.EndTime <= query.To) ||
+                    (e.StartTime < query.From && query.To < e.EndTime));
 
             var events = await dbQuery.ToListAsync();
             foreach (var ev in events)

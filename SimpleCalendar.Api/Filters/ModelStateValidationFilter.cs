@@ -35,7 +35,7 @@ namespace SimpleCalendar.Api.Filters
                     })
                     .Where(x =>
                         x.ValidationAttributes.Any() &&
-                        (!x.HasValue || !IsValueValid(x.Value, x.ValidationAttributes)));
+                        ((!x.HasValue && x.ValidationAttributes.OfType<RequiredAttribute>().Any()) || !IsValueValid(x.Value, x.ValidationAttributes)));
 
                 foreach (var invalidBoundParameter in invalidBoundParameters)
                 {

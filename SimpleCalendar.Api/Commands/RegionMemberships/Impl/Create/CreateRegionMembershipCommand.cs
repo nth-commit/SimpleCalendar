@@ -29,11 +29,6 @@ namespace SimpleCalendar.Api.Commands.RegionMemberships.Impl.Create
 
         public async Task<IActionResult> InvokeAsync(ActionContext context, RegionMembershipCreate create)
         {
-            if (!context.ModelState.IsValid)
-            {
-                return new BadRequestObjectResult(context.ModelState);
-            }
-
             var region = await _regionCache.GetRegionAsync(create.RegionId);
             if (region == null)
             {
