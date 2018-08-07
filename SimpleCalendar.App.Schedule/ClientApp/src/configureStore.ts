@@ -12,7 +12,6 @@ import { routerMiddleware, connectRouter } from 'connected-react-router'
 import * as StoreModule from './store'
 import { History } from 'history'
 import { ApplicationDispatch, ApplicationState } from './store'
-import registerEffects from 'src/effects'
 
 const spreadClassMiddleware: Middleware<{}, ApplicationState, ApplicationDispatch> = store => next => action => {
   return next({ ...action })
@@ -34,8 +33,6 @@ export default function configureStore(history: History, initialState: DeepParti
     )
   ) as StoreModule.ApplicationStore
 
-  registerEffects(store)
-
   // Enable Webpack hot module replacement for reducers
   if (module.hot) {
     module.hot.accept('./store', () => {
@@ -43,7 +40,6 @@ export default function configureStore(history: History, initialState: DeepParti
       store.replaceReducer(getRootReducer(nextRootReducer.reducers))
     })
   }
-  
 
   return store
 }

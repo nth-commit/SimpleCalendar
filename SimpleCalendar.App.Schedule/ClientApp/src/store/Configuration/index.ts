@@ -4,7 +4,7 @@ import { setConfiguration as setApiConfiguration } from 'src/services/Api'
 import { ApplicationThunkAction } from '../'
 
 export interface IConfigurationState {
-  baseRegionId: string
+  regionId: string
   host: string
   api: string
   auth: {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace SimpleCalendar.Api.Models
+namespace SimpleCalendar.Api.Commands.Events
 {
     public class Event
     {

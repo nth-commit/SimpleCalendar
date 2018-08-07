@@ -60,17 +60,17 @@ namespace SimpleCalendar.App.Schedule
             {
                 app2.Run(async context =>
                 {
-                    var baseRegionId = Configuration["BaseRegionId"];
+                    var regionId = Configuration["RegionId"];
                     var config = new
                     {
-                        host = hostsOptions.Value.Administration,
+                        host = hostsOptions.Value.Public,
                         api = hostsOptions.Value.Api,
                         auth = new
                         {
                             domain = auth0AuthOptions.Value.Domain,
                             clientId = auth0AuthOptions.Value.ClientId
                         },
-                        baseRegionId = string.IsNullOrEmpty(baseRegionId) ? "ROOT" : baseRegionId
+                        regionId = string.IsNullOrEmpty(regionId) ? "ROOT" : regionId
                     };
 
                     var json = JsonConvert.SerializeObject(config);

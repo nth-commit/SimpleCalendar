@@ -1,3 +1,4 @@
+import { DeepPartial } from 'redux'
 import { createBrowserHistory } from 'history'
 import { ROOT_REGION_ID } from 'src/constants'
 import configureStoreReal from 'src/configureStore'
@@ -6,10 +7,10 @@ import { configurationActionCreators, IConfigurationState } from 'src/store/Conf
 import { API_BASE_PATH } from './constants'
 import { fetchMock } from './mocks/fetch'
 
-const DEFAULT_CONFIGURATION = {
-  baseRegionId: ROOT_REGION_ID,
+const DEFAULT_CONFIGURATION: DeepPartial<IConfigurationState> = {
+  regionId: ROOT_REGION_ID,
   api: API_BASE_PATH
-} as IConfigurationState
+}
 
 export default function configureStore(configuration = DEFAULT_CONFIGURATION) {
   let store: ApplicationStore

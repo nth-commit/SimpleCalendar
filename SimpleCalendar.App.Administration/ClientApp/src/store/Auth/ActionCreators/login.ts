@@ -4,7 +4,7 @@ import { Api } from 'src/services/Api'
 
 export class AccessTokenNotFoundException { }
 
-export default function setAuthorizationStatus(accessToken: string): ApplicationThunkActionAsync {
+export default function login(accessToken: string): ApplicationThunkActionAsync {
   return async (dispatch) => {
     dispatch({ ...new LoginBegin(accessToken) })
 

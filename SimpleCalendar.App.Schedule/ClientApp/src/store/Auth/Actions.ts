@@ -1,23 +1,28 @@
 import { Action } from 'redux'
 import { IRegionMembership, IUser } from 'src/services/Api'
-import { AuthorizationStatus } from './'
+import { AuthenticationStatus } from './'
 
 export enum AuthActionTypes {
-  LOGIN_BEGIN = '[Auth] LOGIN_BEGIN',
-  LOGIN_COMPLETE = '[Auth] LOGIN_COMPLETE',
+  LOGIN_SKIPPED = '[Auth] LOGIN_SKIPPED',
+  LOGIN_SUCCESS_BEGIN = '[Auth] LOGIN_SUCCESS_BEGIN',
+  LOGIN_SUCCESS_COMPLETE = '[Auth] LOGIN_SUCCESS_COMPLETE',
   LOGOUT = '[Auth] LOGOUT',
   FETCH_REGION_MEMBERSHIPS_BEGIN = '[Auth] FETCH_REGION_MEMBERSHIPS_BEGIN',
   FETCH_REGION_MEMBERSHIPS_COMPLETE = '[Auth] FETCH_REGION_MEMBERSHIPS_COMPLETE',
   SET_AUTHORIZATION_STATUS = '[Auth] SET_AUTHORIZATION_STATUS'
 }
 
-export class LoginBegin implements Action {
-  readonly type = AuthActionTypes.LOGIN_BEGIN
+export class LoginSkipped implements Action {
+  readonly type = AuthActionTypes.LOGIN_SKIPPED
+}
+
+export class LoginSuccessBegin implements Action {
+  readonly type = AuthActionTypes.LOGIN_SUCCESS_BEGIN
   constructor(public accessToken: string) { }
 }
 
-export class LoginComplete implements Action {
-  readonly type = AuthActionTypes.LOGIN_COMPLETE
+export class LoginSuccessComplete implements Action {
+  readonly type = AuthActionTypes.LOGIN_SUCCESS_COMPLETE
   constructor(public user: IUser) { }
 }
 
@@ -36,12 +41,13 @@ export class FetchRegionMembershipsComplete implements Action {
 
 export class SetAuthorizationStatus implements Action {
   readonly type = AuthActionTypes.SET_AUTHORIZATION_STATUS
-  constructor(public status: AuthorizationStatus) { }
+  constructor(public status: AuthenticationStatus) { }
 }
 
 export type AuthAction = 
-  LoginBegin |
-  LoginComplete |
+  LoginSkipped |
+  LoginSuccessBegin |
+  LoginSuccessComplete |
   Logout |
   FetchRegionMembershipsBegin |
   FetchRegionMembershipsComplete |

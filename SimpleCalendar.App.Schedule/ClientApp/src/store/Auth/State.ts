@@ -1,13 +1,13 @@
 import { IUser } from 'src/services/Api'
 
-export enum AuthorizationStatus {
+export enum AuthenticationStatus {
   Indetermined = 1,
-  Authorized,
-  Unauthorized
+  Authenticated,
+  NotAuthenticated
 }
 
 export interface AuthState {
-  status: AuthorizationStatus
+  status: AuthenticationStatus
   accessToken: string
-  user: IUser
+  user: IUser | null
 }
