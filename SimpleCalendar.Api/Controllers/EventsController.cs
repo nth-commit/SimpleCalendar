@@ -83,7 +83,16 @@ namespace SimpleCalendar.Api.Controllers
                     To = to ?? DateTime.MaxValue
                 };
 
-        private DateTime GetTodayUtc(string timezone) =>
-            string.IsNullOrEmpty(timezone) ? _dateTimeAccessor.UtcNow : DateTime.MaxValue; // TODO
+        private DateTime GetTodayUtc(string timezone)
+        {
+            if (string.IsNullOrEmpty(timezone))
+            {
+                return _dateTimeAccessor.UtcNow;
+            }
+
+            var timezoneInfo = TimeZoneInfo.FindSystemTimeZoneById(timezone);
+            var utcOffset = timezoneInfo.GetUtcOffset(_dateTimeAccessor.UtcNow);
+            return _dateTimeAccessor.UtcNow.Add(utcOffset);
+        }
     }
 }
