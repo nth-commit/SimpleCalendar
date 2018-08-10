@@ -1,12 +1,13 @@
 import { ROOT_REGION_ID } from 'src/constants'
 import { getConfiguration } from './Configure'
 import { IRegion, IRegionMembership, IRegionMembershipQuery, IRegionRole, IRegionMembershipCreate, IUser } from './Models'
+import { IEvent } from './Models/Event'
 
 export class Api {
 
   private configuration = getConfiguration()
 
-  constructor(private accessToken: string) { }
+  constructor(private accessToken: string | null) { }
 
   getRegion(id: string): Promise<IRegion> {
     return this.getJson<IRegion>(this.getUrl(`regions/${id}`))
@@ -47,6 +48,13 @@ export class Api {
 
   getRegionRoles(): Promise<IRegionRole[]> {
     return this.getJson<IRegionRole[]>(this.getUrl('regionroles'))
+  }
+
+  queryEventsToday(regionId: string, timezone: string): Promise<IEvent[]> {
+    const search = new URLSearchParams()
+    search.append('regionId', regionId)
+    search.append('timezone', timezone)
+    return this.getJson(this.getUrl('events/today'), search)
   }
 
   async createRegionMembership(create: IRegionMembershipCreate): Promise<IRegionMembership> {

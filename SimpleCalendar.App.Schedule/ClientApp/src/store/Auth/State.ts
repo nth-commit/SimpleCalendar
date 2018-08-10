@@ -8,6 +8,6 @@ export enum AuthenticationStatus {
 
 export interface AuthState {
   status: AuthenticationStatus
-  accessToken: string
+  accessToken: string | null
   user: IUser | null
 }

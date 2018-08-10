@@ -35,11 +35,6 @@ namespace SimpleCalendar.Api.Middleware.UserPreparation
                 var userInfoClaims = await _userInfoService.GetUserInfoAsync(context);
 
                 var regionMembershipRoleClaims = await GetRegionMembershipRoleClaimsAsync(userInfoClaims, coreDbContext);
-                if (!regionMembershipRoleClaims.Any())
-                {
-                    context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
-                    return;
-                }
 
                 await EnsureUserAsync(coreDbContext, userInfoClaims);
 

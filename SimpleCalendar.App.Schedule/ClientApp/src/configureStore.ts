@@ -5,16 +5,29 @@ import {
   combineReducers,
   ReducersMapObject,
   DeepPartial,
-  Middleware
+  Middleware,
+  Action
 } from 'redux'
 import thunk from 'redux-thunk'
 import { routerMiddleware, connectRouter } from 'connected-react-router'
 import * as StoreModule from './store'
 import { History } from 'history'
-import { ApplicationDispatch, ApplicationState } from './store'
+import { ApplicationDispatch, ApplicationState, ErrorAction } from './store'
 
-const spreadClassMiddleware: Middleware<{}, ApplicationState, ApplicationDispatch> = store => next => action => {
+type ApplicationMiddleware = Middleware<{}, ApplicationState, ApplicationDispatch>
+
+const spreadClassMiddleware: ApplicationMiddleware = store => next => action => {
   return next({ ...action })
+}
+
+const isErrorAction = (action: Action): action is ErrorAction => 'error' in action
+
+const errorHandlingMiddleware: ApplicationMiddleware = () => next => action => {
+  if (isErrorAction(action)) {
+    console.log(action.error)
+  }
+
+  return next(action)
 }
 
 export default function configureStore(history: History, initialState: DeepPartial<StoreModule.ApplicationState>) {
@@ -28,6 +41,7 @@ export default function configureStore(history: History, initialState: DeepParti
       applyMiddleware(
         thunk,
         spreadClassMiddleware,
+        errorHandlingMiddleware,
         routerMiddleware(history)
       )
     )

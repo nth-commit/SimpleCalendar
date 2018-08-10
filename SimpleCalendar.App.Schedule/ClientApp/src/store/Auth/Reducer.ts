@@ -5,7 +5,13 @@ import { AuthState, AuthenticationStatus } from './State'
 const merge = (prevState: AuthState, newStatePartial: DeepPartial<AuthState>): AuthState =>
   Object.assign({}, prevState, newStatePartial)
 
-export const authReducer: Reducer = (state: AuthState, action: AuthAction): AuthState => {
+const DEFAULT_AUTH_STATE: AuthState = {
+  status: AuthenticationStatus.Indetermined,
+  accessToken: null,
+  user: null
+}
+
+export const authReducer: Reducer<AuthState, AuthAction> = (state = DEFAULT_AUTH_STATE, action): AuthState => {
   switch (action.type) {
     case AuthActionTypes.LOGIN_SKIPPED: {
       return merge(state, { status: AuthenticationStatus.NotAuthenticated })

@@ -1,31 +1,47 @@
 import * as React from 'react'
 import { appConnect } from 'src/store'
-import { regionActionCreators } from 'src/store/Region'
+import { regionActionCreators, regionSelectors } from 'src/store/Region'
+import { eventsActionCreators, eventSelectors } from 'src/store/Events'
 
 interface EffectsStateProps {
-  hasFetchedRegion: boolean
+  hasFetchRegionStarted: boolean
+  hasFetchEventsStarted: boolean
 }
 
 interface EffectsDispatchProps {
-  fetchRegion(): void
+  fetchRegion(): Promise<void>
+  fetchEvents(): Promise<void>
 }
 
-const Effects = ({
-  hasFetchedRegion, fetchRegion
-}: EffectsStateProps & EffectsDispatchProps) => {
+class Effects extends React.PureComponent<EffectsStateProps & EffectsDispatchProps> {
 
-  if (!hasFetchedRegion) {
-    fetchRegion()
+  async componentDidMount() {
+    const {
+      hasFetchRegionStarted, fetchRegion,
+      hasFetchEventsStarted, fetchEvents
+    } = this.props
+
+    if (!hasFetchRegionStarted) {
+      await fetchRegion()
+    }
+
+    if (!hasFetchEventsStarted) {
+      await fetchEvents()
+    }
   }
 
-  return <div />
+  render() {
+    return null
+  }
 }
 
 export default appConnect<EffectsStateProps, EffectsDispatchProps>(
   state => ({
-    hasFetchedRegion: state.region.isLoading || state.region.region || state.region.error
+    hasFetchRegionStarted: regionSelectors.hasFetchRegionStarted(state.region),
+    hasFetchEventsStarted: eventSelectors.hasFetchEventsStarted(state.events)
   }),
   dispatch => ({
-    fetchRegion: () => dispatch(regionActionCreators.fetchRegion())
+    fetchRegion: () => dispatch(regionActionCreators.fetchRegion()),
+    fetchEvents: () => dispatch(eventsActionCreators.fetchEvents())
   })
 )(Effects)

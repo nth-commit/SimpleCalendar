@@ -10,6 +10,8 @@ namespace SimpleCalendar.Api.Models
 
         public string Name { get; set; }
 
+        public string Timezone { get; set; } = "New Zealand Standard Time"; // TODO: Save in DB
+
         public RegionAuthorization Permissions { get; set; }
     }
 }

@@ -24,9 +24,9 @@ class UpdateConfiguration implements Action {
 
 declare type ConfigurationAction = UpdateConfiguration
 
-export const configurationReducer: Reducer = (
-  state: IConfigurationState = {} as IConfigurationState,
-  action: ConfigurationAction): IConfigurationState => {
+const DEFAULT_STATE = {} as IConfigurationState
+
+export const configurationReducer: Reducer<IConfigurationState, ConfigurationAction> = (state = DEFAULT_STATE, action): IConfigurationState => {
     switch (action.type) {
       case ConfigurationActionTypes.UPDATE:
         return Object.assign({}, state, action.configuration)

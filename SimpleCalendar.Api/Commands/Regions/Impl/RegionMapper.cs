@@ -36,7 +36,9 @@ namespace SimpleCalendar.Api.Commands.Regions.Impl
             {
                 CanAddMemberships = roles.ToDictionary(
                     r => r.Id,
-                    r => _authorizationService.CanCreateMembershipAsync(entity, r.Id).Result)
+                    r => _authorizationService.CanCreateMembershipAsync(entity, r.Id).Result),
+                CanCreateEvents = _authorizationService.CanCreateEventsAsync(entity).Result,
+                CanPublishEvents = _authorizationService.CanPublishEventsAsync(entity).Result
             };
 
             return result;

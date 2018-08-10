@@ -1,6 +1,7 @@
 export interface IRegion {
   id: string
   name: string
+  timezone: string
   permissions: {
     canAddMemberships: {
       [membershipId: string]: boolean

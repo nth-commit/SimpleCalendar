@@ -63,3 +63,14 @@ export const regionActionCreators = {
     }
   }
 }
+
+export const regionSelectors = {
+  hasFetchRegionStarted: (region: RegionState) => region.isLoading || region.region || region.error,
+  isFetchRegionCompleted: (region: RegionState) => !!region.region,
+  getRegion: (region: RegionState) => {
+    if (!region.region) {
+      throw new Error('Region not found')
+    }
+    return region.region
+  }
+}
