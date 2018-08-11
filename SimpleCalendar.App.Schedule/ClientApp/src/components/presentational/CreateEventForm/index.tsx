@@ -27,14 +27,10 @@ type ModelValidators = {
 interface IValidator<T = any> {
   name: string
   format(label: string): string
-  validate(value: T): boolean
+  validate(value: T, model: CreateEventFormModel | null): boolean
 }
 
-interface Validators {
-  [key: string]: IValidator<any>
-}
-
-const validators: Validators = {
+const validators = {
   required: {
     name: 'required',
     validate: value => !!value,
@@ -44,20 +40,45 @@ const validators: Validators = {
     name: 'future',
     validate: (value: Date | null) => !!value && new Date().getTime() < value.getTime(),
     format: label => `${label} must be a date in the future`
-  }
+  },
+  after: (afterKey: string, afterLabel: string) => ({
+    name: 'after',
+    validate: (value: Date | null, model: CreateEventFormModel | null) => {
+      if (!model) {
+        return true
+      }
+
+      const before = model[afterKey]
+      if (!before) {
+        return true
+      }
+
+      if (!(before instanceof Date)) {
+        throw new Error('Expected date')
+      }
+
+      if (!value) {
+        return true
+      }
+
+      return value > before
+    },
+    format: (label) => `${label} must be after ${afterLabel}`
+  })
 }
 
 const modelValidators: Partial<ModelValidators> = {
   name: validators.required,
-  startTime: [validators.required, validators.future]
+  startTime: [validators.required, validators.future],
+  endTime: [validators.required, validators.future, validators.after('startTime', 'Start')]
 }
 
 interface ValidationResult {
   success: boolean
-  failedValidators: string[]
+  errors: Array<(label: string) => string> 
 }
 
-const validate = (key: keyof CreateEventFormModel, value: CreateEventFormModelPropertyValues): ValidationResult => {
+const validate = (key: keyof CreateEventFormModel, value: CreateEventFormModelPropertyValues, model: CreateEventFormModel | null): ValidationResult => {
   const validatorForProp = modelValidators[key]
 
   const validatorsForProp = 
@@ -65,10 +86,10 @@ const validate = (key: keyof CreateEventFormModel, value: CreateEventFormModelPr
     Array.isArray(validatorForProp) ? validatorForProp :
     [validatorForProp]
 
-  const failedValidators = validatorsForProp.filter(v => !v.validate(value))
+  const failedValidators = validatorsForProp.filter(v => !v.validate(value, model))
   return {
     success: failedValidators.length === 0,
-    failedValidators: failedValidators.map(v => v.name)
+    errors: failedValidators.map(v => v.format)
   }
 }
 
@@ -93,7 +114,7 @@ export default class CreateEventForm extends React.PureComponent<CreateEventForm
     const isValid = keys.every(k => state[k].validationResult.success)
     if (isValid) {
       const result = {}
-      keys.forEach(k => result[k] = state[k].value)
+      keys.forEach(k => result[k] = state[k].valueParsed)
       props.onUpdate(result as CreateEventFormModel)
     } else {
       props.onUpdate(null)
@@ -159,7 +180,7 @@ export default class CreateEventForm extends React.PureComponent<CreateEventForm
       this.setFieldState(key, {
         value,
         valueParsed,
-        validationResult: validate(key, valueParsed)
+        validationResult: validate(key, valueParsed, this.getModel())
       })
     }
   }
@@ -177,6 +198,19 @@ export default class CreateEventForm extends React.PureComponent<CreateEventForm
     this.setState({
       [key]: { ...(x as any), ...partialFieldState }
     })
+  }
+
+  private getModel(): CreateEventFormModel | null {
+    const { state } = this
+    if (!state) {
+      return null
+    }
+
+    const keys = Object.keys(state) as Array<keyof CreateEventFormModel>
+
+    const result = {}
+    keys.forEach(k => result[k] = state[k].valueParsed)
+    return result as CreateEventFormModel
   }
 
   private parseValue<K extends CreateEventFormModelProperties>(key: K, value: string): CreateEventFormModelPropertyValues {
@@ -200,7 +234,7 @@ export default class CreateEventForm extends React.PureComponent<CreateEventForm
       value,
       valueParsed,
       isTouched: false,
-      validationResult: validate(key, valueParsed)
+      validationResult: validate(key, valueParsed, this.getModel())
     }
   }
 
@@ -208,6 +242,6 @@ export default class CreateEventForm extends React.PureComponent<CreateEventForm
     if (validationResult.success) {
       return
     }
-    return validators[validationResult.failedValidators[0]].format(label)
+    return validationResult.errors[0](label)
   }
 }
