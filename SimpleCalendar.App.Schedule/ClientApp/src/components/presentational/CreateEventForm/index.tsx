@@ -2,6 +2,7 @@ import * as React from 'react'
 import TextField, { TextFieldProps } from '@material-ui/core/TextField'
 import Grid from '@material-ui/core/Grid'
 import { IEventCreate } from 'src/services/Api'
+import { ValidationService, ValidationResult, validators } from 'src/services/Validation'
 
 type Nullable<T> = { [P in keyof T]: T[P] | null }
 
@@ -20,85 +21,25 @@ type CreateEventFormState = {
   [P in keyof CreateEventFormModel]: CreateEventFormFieldState<CreateEventFormModel[P]>
 }
 
-type ModelValidators = {
-  [P in keyof CreateEventFormModel]: IValidator<CreateEventFormModelPropertyValues> | Array<IValidator<CreateEventFormModelPropertyValues>>
-}
-
-interface IValidator<T = any> {
-  name: string
-  format(label: string): string
-  validate(value: T, model: CreateEventFormModel | null): boolean
-}
-
-const validators = {
-  required: {
-    name: 'required',
-    validate: value => !!value,
-    format: label => `${label} is required`
-  },
-  future: {
-    name: 'future',
-    validate: (value: Date | null) => !!value && new Date().getTime() < value.getTime(),
-    format: label => `${label} must be a date in the future`
-  },
-  after: (afterKey: string, afterLabel: string) => ({
-    name: 'after',
-    validate: (value: Date | null, model: CreateEventFormModel | null) => {
-      if (!model) {
-        return true
-      }
-
-      const before = model[afterKey]
-      if (!before) {
-        return true
-      }
-
-      if (!(before instanceof Date)) {
-        throw new Error('Expected date')
-      }
-
-      if (!value) {
-        return true
-      }
-
-      return value > before
-    },
-    format: (label) => `${label} must be after ${afterLabel}`
-  })
-}
-
-const modelValidators: Partial<ModelValidators> = {
-  name: validators.required,
-  startTime: [validators.required, validators.future],
-  endTime: [validators.required, validators.future, validators.after('startTime', 'Start')]
-}
-
-interface ValidationResult {
-  success: boolean
-  errors: Array<(label: string) => string> 
-}
-
-const validate = (key: keyof CreateEventFormModel, value: CreateEventFormModelPropertyValues, model: CreateEventFormModel | null): ValidationResult => {
-  const validatorForProp = modelValidators[key]
-
-  const validatorsForProp = 
-    !validatorForProp ? [] :
-    Array.isArray(validatorForProp) ? validatorForProp :
-    [validatorForProp]
-
-  const failedValidators = validatorsForProp.filter(v => !v.validate(value, model))
-  return {
-    success: failedValidators.length === 0,
-    errors: failedValidators.map(v => v.format)
-  }
-}
-
 interface CreateEventFormProps {
   onUpdate(event: CreateEventFormModel | null): void
   isSubmitted: boolean 
 }
 
+const validationService = new ValidationService<CreateEventFormModel>({
+  name: validators.required,
+  startTime: [validators.required, validators.future],
+  endTime: [validators.required, validators.future, validators.after('startTime')] 
+})
+
 export default class CreateEventForm extends React.PureComponent<CreateEventFormProps> {
+
+  private labelsByKey = {
+    'name': 'Name',
+    'startTime': 'Start',
+    'endTime': 'End',
+    'description': 'Description'
+  }
 
   state: CreateEventFormState = {
     name: this.initializeField('name'),
@@ -126,46 +67,46 @@ export default class CreateEventForm extends React.PureComponent<CreateEventForm
       <form noValidate={true} autoComplete="off">
         <Grid container={true}>
           <Grid item={true} sm={12}>
-            {this.renderTextField('name', 'Name')}
+            {this.renderTextField('name')}
           </Grid>
           <Grid item={true} sm={12}>
             <Grid container={true} spacing={32}>
               <Grid item={true} sm={6}>
-                {this.renderDateTimePicker('startTime', 'Start')}
+                {this.renderDateTimePicker('startTime')}
               </Grid>
               <Grid item={true} sm={6}>
-                {this.renderDateTimePicker('endTime', 'End')}
+                {this.renderDateTimePicker('endTime')}
               </Grid>
             </Grid>
           </Grid>
           <Grid item={true} sm={12}>
-            {this.renderTextField('description', 'Description', { multiline: true, rows: 8 })}
+            {this.renderTextField('description', { multiline: true, rows: 8 })}
           </Grid>
         </Grid>
       </form>
     )
   }
 
-  private renderTextField<K extends CreateEventFormModelProperties>(key: K, label: string, extraProps?: Partial<TextFieldProps>) {
+  private renderTextField<K extends CreateEventFormModelProperties>(key: K, extraProps?: Partial<TextFieldProps>) {
     const fieldState = this.state[key]
     const isTouched = this.props.isSubmitted || fieldState.isTouched
 
     return <TextField
       id={key}
-      label={label}
+      label={this.labelsByKey[key]}
       value={fieldState.value}
       onBlur={this.createOnBlurHandler(key)}
       onChange={this.createOnChangeHandler(key)}
       error={isTouched && !fieldState.validationResult.success}
-      helperText={isTouched && this.getValidationMessage(label, fieldState.validationResult)}
+      helperText={isTouched && this.getValidationMessage(key, fieldState.validationResult)}
       margin="normal"
       fullWidth={true}
       {...(extraProps || {})}
     />
   }
 
-  private renderDateTimePicker<K extends CreateEventFormModelProperties>(key: K, label: string, extraProps?: Partial<TextFieldProps>) {
-    return this.renderTextField(key, label, {
+  private renderDateTimePicker<K extends CreateEventFormModelProperties>(key: K, extraProps?: Partial<TextFieldProps>) {
+    return this.renderTextField(key, {
       type: 'datetime-local',
       InputLabelProps: {
         shrink: true
@@ -180,7 +121,7 @@ export default class CreateEventForm extends React.PureComponent<CreateEventForm
       this.setFieldState(key, {
         value,
         valueParsed,
-        validationResult: validate(key, valueParsed, this.getModel())
+        validationResult: validationService.validate(key, valueParsed, this.getModel())
       })
     }
   }
@@ -234,14 +175,14 @@ export default class CreateEventForm extends React.PureComponent<CreateEventForm
       value,
       valueParsed,
       isTouched: false,
-      validationResult: validate(key, valueParsed, this.getModel())
+      validationResult: validationService.validate(key, valueParsed, this.getModel())
     }
   }
 
-  private getValidationMessage(label: string, validationResult: ValidationResult): string | undefined {
+  private getValidationMessage(key: string, validationResult: ValidationResult): string | undefined {
     if (validationResult.success) {
       return
     }
-    return validationResult.errors[0](label)
+    return validationResult.errors[0](key, this.labelsByKey)
   }
 }
