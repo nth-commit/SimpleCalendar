@@ -65,12 +65,18 @@ export const regionActionCreators = {
 }
 
 export const regionSelectors = {
-  hasFetchRegionStarted: (region: RegionState) => region.isLoading || region.region || region.error,
-  isFetchRegionCompleted: (region: RegionState) => !!region.region,
-  getRegion: (region: RegionState) => {
-    if (!region.region) {
+  hasFetchRegionStarted: (state: RegionState): boolean => state.isLoading || state.region || state.error,
+  isFetchRegionCompleted: (state: RegionState): boolean => !!state.region,
+  getRegion: (state: RegionState): IRegion => {
+    if (!state.region) {
       throw new Error('Region not found')
     }
-    return region.region
+    return state.region
+  },
+  canCreateEventsInRegion: (state: RegionState): boolean => {
+    if (!state.region) {
+      return false
+    }
+    return state.region.permissions.canCreateEvents
   }
 }

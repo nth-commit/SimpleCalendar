@@ -5,7 +5,9 @@ export interface IRegion {
   permissions: {
     canAddMemberships: {
       [membershipId: string]: boolean
-    }
+    },
+    canCreateEvents: boolean
+    canPublishEvents: boolean
   }
 }
 
