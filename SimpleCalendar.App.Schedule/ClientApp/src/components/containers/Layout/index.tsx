@@ -54,7 +54,7 @@ class Layout extends React.PureComponent<LayoutStateProps & LayoutDispatchProps 
   private renderAddButton() {
     const { classes, addClicked } = this.props
     return (
-      <div style={{ position: 'absolute', right: 0, bottom: 0 }}>
+      <div style={{ position: 'fixed', right: 0, bottom: 0 }}>
         <Button variant="fab" color="primary" aria-label="Add" className={classes.button} onClick={addClicked}>
           <AddIcon />
         </Button>

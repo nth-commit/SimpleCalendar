@@ -3,6 +3,11 @@ import { getConfiguration } from './Configure'
 import { IRegion, IRegionMembership, IRegionMembershipQuery, IRegionRole, IRegionMembershipCreate, IUser } from './Models'
 import { IEvent, IEventCreate } from './Models/Event'
 
+declare type EventResponse = IEvent & {
+  startTime: string
+  endTime: string
+}
+
 export class Api {
 
   private configuration = getConfiguration()
@@ -50,16 +55,21 @@ export class Api {
     return this.getJson<IRegionRole[]>(this.getUrl('regionroles'))
   }
 
-  queryEventsToday(regionId: string, timezone: string): Promise<IEvent[]> {
+  async queryEventsToday(regionId: string, timezone: string): Promise<IEvent[]> {
     const search = new URLSearchParams()
     search.append('regionId', regionId)
     search.append('timezone', timezone)
-    return this.getJson(this.getUrl('events/today'), search)
+
+    const response = await this.get(this.getUrl('events/today'), search)
+    const json: EventResponse[] = await response.json()
+
+    return json.map(this.mapEventResponseToEvent)
   }
 
   async createEvent(create: IEventCreate): Promise<IEvent> {
     const response = await this.post(this.getUrl('events'), create)
-    return await response.json()
+    const json: EventResponse = await response.json()
+    return this.mapEventResponseToEvent(json)
   }
 
   async createRegionMembership(create: IRegionMembershipCreate): Promise<IRegionMembership> {
@@ -136,5 +146,13 @@ export class Api {
     const uri = new URL(this.configuration.baseUri)
     uri.pathname += path
     return uri
+  }
+
+  private mapEventResponseToEvent(eventResponse: EventResponse): IEvent {
+    return {
+      ...eventResponse,
+      startTime: new Date(eventResponse.startTime),
+      endTime: new Date(eventResponse.endTime)
+    }
   }
 }
