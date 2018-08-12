@@ -2,6 +2,7 @@ import { Reducer, Action } from 'redux'
 import { IRegion, Api } from 'src/services/Api'
 import { ErrorAction } from '../ErrorAction'
 import { ApplicationThunkActionAsync } from 'src/store/ApplicationStore'
+import { ApplicationState } from 'src/store/ApplicationState'
 
 export interface RegionState {
   isLoading: boolean
@@ -65,18 +66,18 @@ export const regionActionCreators = {
 }
 
 export const regionSelectors = {
-  hasFetchRegionStarted: (state: RegionState): boolean => state.isLoading || state.region || state.error,
-  isFetchRegionCompleted: (state: RegionState): boolean => !!state.region,
-  getRegion: (state: RegionState): IRegion => {
-    if (!state.region) {
+  hasFetchRegionStarted: ({ region }: ApplicationState): boolean => region.isLoading || region.region || region.error,
+  isFetchRegionCompleted: ({ region }: ApplicationState): boolean => !!region.region,
+  getRegion: ({ region }: ApplicationState): IRegion => {
+    if (!region.region) {
       throw new Error('Region not found')
     }
-    return state.region
+    return region.region
   },
-  canCreateEventsInRegion: (state: RegionState): boolean => {
-    if (!state.region) {
+  canCreateEventsInRegion: ({ region }: ApplicationState): boolean => {
+    if (!region.region) {
       return false
     }
-    return state.region.permissions.canCreateEvents
+    return region.region.permissions.canCreateEvents
   }
 }

@@ -7,6 +7,7 @@ import { dialogRegistration } from 'src/services/DialogRegistration'
 import { appConnect } from 'src/store'
 import CreateEventForm from 'src/components/presentational/CreateEventForm'
 import { eventsActionCreators, IEventCreateGivenRegion } from 'src/store/Events'
+import { uiActionCreators } from 'src/store/UI'
 
 interface CreateEventDialogDispatchProps {
   saveEvent(event: IEventCreateGivenRegion)
@@ -37,7 +38,10 @@ const UnconnectedCreateEventDialog = ({ saveEvent }: CreateEventDialogProps) => 
 const CreateEventDialog = appConnect<{}, CreateEventDialogDispatchProps>(
   undefined,
   dispatch => ({
-    saveEvent: event => dispatch(eventsActionCreators.createEvent(event))
+    saveEvent: event => {
+      dispatch(eventsActionCreators.createEvent(event))
+      dispatch(uiActionCreators.closeDialog())
+    }
   })
 )(UnconnectedCreateEventDialog)
 

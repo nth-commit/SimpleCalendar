@@ -13,19 +13,19 @@ export const eventsActionCreators = {
   fetchEvents: (): ApplicationThunkActionAsync => async (dispatch, getState) => {
     const state = getState()
 
-    if (eventSelectors.hasFetchEventsStarted(state.events)) {
+    if (eventSelectors.hasFetchEventsStarted(state)) {
       dispatch(new EventsActions.FetchEventsError('Event fetch has already started'))
       return
     }
 
-    if (!regionSelectors.isFetchRegionCompleted(state.region)) {
+    if (!regionSelectors.isFetchRegionCompleted(state)) {
       dispatch(new EventsActions.FetchEventsError('Region has not been loaded'))
       return
     }
 
     dispatch(new EventsActions.FetchEventsBegin())
 
-    const region = regionSelectors.getRegion(state.region)
+    const region = regionSelectors.getRegion(state)
     try {
       const events = await new Api(state.auth.accessToken).queryEventsToday(region.id, region.timezone)
       dispatch(new EventsActions.FetchEventsComplete(events))
@@ -36,10 +36,10 @@ export const eventsActionCreators = {
 
   createEvent: (create: IEventCreateGivenRegion): ApplicationThunkActionAsync => async (dispatch, getState) => {
     const state = getState()
-    const region = regionSelectors.getRegion(state.region)
+    const region = regionSelectors.getRegion(state)
 
     const createWithRegion: IEventCreate = { ...create, regionId: region.id }
-    const trackingId = trackingIdCounter++
+    const trackingId = (trackingIdCounter++).toString()
     dispatch(new EventsActions.CreateEventBegin(createWithRegion, trackingId))
 
     const api = new Api(state.auth.accessToken)

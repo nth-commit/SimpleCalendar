@@ -4,6 +4,7 @@ interface Array<T> {
   difference(other: T[]): T[]
   selectMany<V>(selector: (item: T) => V[]): V[]
   toObject<V = T>(keySelector: (item: T) => string, valueSelector?: (item: T) => V): { [key: string]: V }
+  orderBy<V>(orderSelector: (item: T) => V): T[]
 }
 
 Array.prototype.difference = function<T>(other: T[]): T[] {
@@ -20,6 +21,14 @@ Array.prototype.toObject = function<T, V = T>(
     const result = {}
     this.forEach(item => result[keySelector(item)] = valueSelector ? valueSelector(item) : item)
     return result
+}
+
+Array.prototype.orderBy = function<T, V>(orderSelector: (item: T) => V) {
+  return [...this].sort((a, b) => {
+    const keyA = orderSelector(a)
+    const keyB = orderSelector(b)
+    return keyA > keyB ? 1 : -1
+  })
 }
 
 interface ArrayConstructor {

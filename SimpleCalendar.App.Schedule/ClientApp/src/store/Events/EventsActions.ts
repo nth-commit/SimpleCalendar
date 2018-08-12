@@ -27,17 +27,17 @@ export class FetchEventsError implements ErrorAction {
 
 export class CreateEventBegin implements Action {
   readonly type = EventsActionTypes.CREATE_EVENT_BEGIN
-  constructor(public eventCreate: IEventCreate, public trackingId: number) { }
+  constructor(public create: IEventCreate, public trackingId: string) { }
 }
 
 export class CreateEventComplete implements Action {
   readonly type = EventsActionTypes.CREATE_EVENT_COMPLETE
-  constructor(public event: IEvent, public trackingId: number) { }
+  constructor(public event: IEvent, public trackingId: string) { }
 }
 
 export class CreateEventError implements ErrorAction {
   readonly type = EventsActionTypes.CREATE_EVENT_ERROR
-  constructor(public error: any, public trackingId: number) { }
+  constructor(public error: any, public trackingId: string) { }
 }
 
 export type EventsAction =

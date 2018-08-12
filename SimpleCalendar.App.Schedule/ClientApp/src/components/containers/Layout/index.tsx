@@ -66,7 +66,7 @@ class Layout extends React.PureComponent<LayoutStateProps & LayoutDispatchProps 
 export default appConnect<LayoutStateProps, LayoutDispatchProps>(
   state => ({
     isLoading: state.auth.status === AuthenticationStatus.Indetermined,
-    canCreateEvents: regionSelectors.canCreateEventsInRegion(state.region)
+    canCreateEvents: regionSelectors.canCreateEventsInRegion(state)
   }),
   dispatch => ({
     didMount: () => {
