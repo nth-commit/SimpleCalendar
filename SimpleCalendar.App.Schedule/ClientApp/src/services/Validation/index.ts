@@ -6,14 +6,14 @@ export interface ValidationResult {
 }
 
 export type ValidatorConfig<T> = {
-  [P in keyof T]?: IValidator | IValidator[]
+  [P in keyof T]: IValidator | IValidator[]
 }
 
 export class ValidationService<T> {
 
-  constructor(private config: ValidatorConfig<T> = {}) { }
+  constructor(private config: ValidatorConfig<T>) { }
 
-  validate(key: keyof T, value: any, model: T | null): ValidationResult {
+  validate(key: string, value: any, model: T | null): ValidationResult {
     const keyConfig = this.config[key]
 
     const keyValidators = 

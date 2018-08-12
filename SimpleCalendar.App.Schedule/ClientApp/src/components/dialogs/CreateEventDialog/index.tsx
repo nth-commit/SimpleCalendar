@@ -3,8 +3,6 @@ import DialogTitle from '@material-ui/core/DialogTitle'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogActions from '@material-ui/core/DialogActions'
 import Button from '@material-ui/core/Button'
-
-
 import { dialogRegistration } from 'src/services/DialogRegistration'
 import { appConnect } from 'src/store'
 import CreateEventForm from 'src/components/presentational/CreateEventForm'
@@ -15,7 +13,7 @@ const UnconnectedCreateEventDialog = () => {
     <React.Fragment>
       <DialogTitle>Create event</DialogTitle>
       <DialogContent>
-        <CreateEventForm onUpdate={console.log} isSubmitted={false} />
+        <CreateEventForm onValidChange={console.log} />
       </DialogContent>
       <DialogActions>
         <Button variant="raised" color="primary">Save</Button>

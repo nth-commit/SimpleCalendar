@@ -2,63 +2,37 @@ import * as React from 'react'
 import TextField, { TextFieldProps } from '@material-ui/core/TextField'
 import Grid from '@material-ui/core/Grid'
 import { IEventCreate } from 'src/services/Api'
-import { ValidationService, ValidationResult, validators } from 'src/services/Validation'
+import { validators } from 'src/services/Validation'
+import ValidatableFormComponent from '../ValidatableFormComponent'
 
 type Nullable<T> = { [P in keyof T]: T[P] | null }
-
 type CreateEventFormModelProperties = Exclude<keyof IEventCreate, 'regionId'>
 type CreateEventFormModel = Nullable<Pick<IEventCreate, CreateEventFormModelProperties>>
-type CreateEventFormModelPropertyValues = string | Date | null
 
-interface CreateEventFormFieldState<P> {
-  value: string
-  valueParsed: P
-  validationResult: ValidationResult
-  isTouched: boolean
-}
-
-type CreateEventFormState = {
-  [P in keyof CreateEventFormModel]: CreateEventFormFieldState<CreateEventFormModel[P]>
-}
-
-interface CreateEventFormProps {
-  onUpdate(event: CreateEventFormModel | null): void
-  isSubmitted: boolean 
-}
-
-const validationService = new ValidationService<CreateEventFormModel>({
-  name: validators.required,
-  startTime: [validators.required, validators.future],
-  endTime: [validators.required, validators.future, validators.after('startTime')] 
-})
-
-export default class CreateEventForm extends React.PureComponent<CreateEventFormProps> {
-
-  private labelsByKey = {
+export default class CreateEventForm extends ValidatableFormComponent<CreateEventFormModel> {
+  protected fields = ['startTime', 'endTime', 'name', 'description']
+  protected labelsByField: { [field: string]: string; } = {
     'name': 'Name',
     'startTime': 'Start',
     'endTime': 'End',
     'description': 'Description'
   }
-
-  state: CreateEventFormState = {
-    name: this.initializeField('name'),
-    description: this.initializeField('description'),
-    startTime: this.initializeField('startTime'),
-    endTime: this.initializeField('endTime')
+  protected validatorConfig = {
+    name: validators.required,
+    startTime: [validators.required, validators.future],
+    endTime: [validators.required, validators.future, validators.after('startTime')],
+    description: [validators.required]
   }
 
-  componentDidUpdate() {
-    const { state, props } = this
-    const keys = Object.keys(state) as Array<keyof CreateEventFormModel>
-
-    const isValid = keys.every(k => state[k].validationResult.success)
-    if (isValid) {
-      const result = {}
-      keys.forEach(k => result[k] = state[k].valueParsed)
-      props.onUpdate(result as CreateEventFormModel)
-    } else {
-      props.onUpdate(null)
+  protected parseValue(field: string, value: string) {
+    switch (field) {
+      case 'name':
+      case 'description':
+        return value ? value : null
+      case 'startTime':
+      case 'endTime':
+        return value ? new Date(value) : null
+      default: throw new Error('Unhandled')
     }
   }
 
@@ -87,18 +61,16 @@ export default class CreateEventForm extends React.PureComponent<CreateEventForm
     )
   }
 
-  private renderTextField<K extends CreateEventFormModelProperties>(key: K, extraProps?: Partial<TextFieldProps>) {
-    const fieldState = this.state[key]
-    const isTouched = this.props.isSubmitted || fieldState.isTouched
-
+  private renderTextField<K extends CreateEventFormModelProperties>(field: K, extraProps?: Partial<TextFieldProps>) {
+    const fieldState = this.state[field]
     return <TextField
-      id={key}
-      label={this.labelsByKey[key]}
+      id={field}
+      label={this.labelsByField[field]}
       value={fieldState.value}
-      onBlur={this.createOnBlurHandler(key)}
-      onChange={this.createOnChangeHandler(key)}
-      error={isTouched && !fieldState.validationResult.success}
-      helperText={isTouched && this.getValidationMessage(key, fieldState.validationResult)}
+      onBlur={this.createOnBlurHandler(field)}
+      onChange={this.createOnChangeHandler(field)}
+      error={!this.isValid(field)}
+      helperText={this.getValidationMessage(field)}
       margin="normal"
       fullWidth={true}
       {...(extraProps || {})}
@@ -114,75 +86,15 @@ export default class CreateEventForm extends React.PureComponent<CreateEventForm
     })
   }
 
-  private createOnChangeHandler<K extends CreateEventFormModelProperties>(key: K) {
+  private createOnChangeHandler<K extends CreateEventFormModelProperties>(field: K) {
     return (ev: React.ChangeEvent<HTMLInputElement>) => {
-      const { value } = ev.currentTarget
-      const valueParsed = this.parseValue(key, value)
-      this.setFieldState(key, {
-        value,
-        valueParsed,
-        validationResult: validationService.validate(key, valueParsed, this.getModel())
-      })
+      this.setFieldValue(field, ev.currentTarget.value)
     }
   }
 
   private createOnBlurHandler<K extends CreateEventFormModelProperties>(key: K) {
     return () => {
-      this.setFieldState(key, {
-        isTouched: true
-      })
+      this.setFieldTouched(key)
     }
-  }
-
-  private setFieldState<K extends CreateEventFormModelProperties>(key: K, partialFieldState: Partial<CreateEventFormFieldState<any>>) {
-    const x = this.state[key]
-    this.setState({
-      [key]: { ...(x as any), ...partialFieldState }
-    })
-  }
-
-  private getModel(): CreateEventFormModel | null {
-    const { state } = this
-    if (!state) {
-      return null
-    }
-
-    const keys = Object.keys(state) as Array<keyof CreateEventFormModel>
-
-    const result = {}
-    keys.forEach(k => result[k] = state[k].valueParsed)
-    return result as CreateEventFormModel
-  }
-
-  private parseValue<K extends CreateEventFormModelProperties>(key: K, value: string): CreateEventFormModelPropertyValues {
-    switch (key) {
-      case 'name':
-      case 'description':
-        return value ? value : null
-      case 'startTime':
-      case 'endTime':
-        return value ? new Date(value) : null
-      default: throw new Error('Unhandled')
-    }
-  }
-
-  private initializeField(key: 'startTime' | 'endTime'): CreateEventFormFieldState<Date | null>
-  private initializeField(key: 'name' | 'description'): CreateEventFormFieldState<string | null>
-  private initializeField<K extends CreateEventFormModelProperties>(key: K): CreateEventFormFieldState<Date | string | null> {
-    const value = ''
-    const valueParsed = this.parseValue(key, '')
-    return {
-      value,
-      valueParsed,
-      isTouched: false,
-      validationResult: validationService.validate(key, valueParsed, this.getModel())
-    }
-  }
-
-  private getValidationMessage(key: string, validationResult: ValidationResult): string | undefined {
-    if (validationResult.success) {
-      return
-    }
-    return validationResult.errors[0](key, this.labelsByKey)
   }
 }
