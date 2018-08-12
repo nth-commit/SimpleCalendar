@@ -1,22 +1,20 @@
 import * as React from 'react'
 import TextField, { TextFieldProps } from '@material-ui/core/TextField'
 import Grid from '@material-ui/core/Grid'
-import { IEventCreate } from 'src/services/Api'
 import { validators } from 'src/services/Validation'
+import { IEventCreateGivenRegion } from 'src/store/Events'
 import ValidatableFormComponent from '../ValidatableFormComponent'
 
-type Nullable<T> = { [P in keyof T]: T[P] | null }
-type CreateEventFormModelProperties = Exclude<keyof IEventCreate, 'regionId'>
-type CreateEventFormModel = Nullable<Pick<IEventCreate, CreateEventFormModelProperties>>
-
-export default class CreateEventForm extends ValidatableFormComponent<CreateEventFormModel> {
+export default class CreateEventForm extends ValidatableFormComponent<IEventCreateGivenRegion> {
   protected fields = ['startTime', 'endTime', 'name', 'description']
+
   protected labelsByField: { [field: string]: string; } = {
     'name': 'Name',
     'startTime': 'Start',
     'endTime': 'End',
     'description': 'Description'
   }
+
   protected validatorConfig = {
     name: validators.required,
     startTime: [validators.required, validators.future],
@@ -61,7 +59,7 @@ export default class CreateEventForm extends ValidatableFormComponent<CreateEven
     )
   }
 
-  private renderTextField<K extends CreateEventFormModelProperties>(field: K, extraProps?: Partial<TextFieldProps>) {
+  private renderTextField<K extends keyof IEventCreateGivenRegion>(field: K, extraProps?: Partial<TextFieldProps>) {
     const fieldState = this.state[field]
     return <TextField
       id={field}
@@ -77,8 +75,8 @@ export default class CreateEventForm extends ValidatableFormComponent<CreateEven
     />
   }
 
-  private renderDateTimePicker<K extends CreateEventFormModelProperties>(key: K, extraProps?: Partial<TextFieldProps>) {
-    return this.renderTextField(key, {
+  private renderDateTimePicker<K extends keyof IEventCreateGivenRegion>(field: K, extraProps?: Partial<TextFieldProps>) {
+    return this.renderTextField(field, {
       type: 'datetime-local',
       InputLabelProps: {
         shrink: true
@@ -86,15 +84,15 @@ export default class CreateEventForm extends ValidatableFormComponent<CreateEven
     })
   }
 
-  private createOnChangeHandler<K extends CreateEventFormModelProperties>(field: K) {
+  private createOnChangeHandler<K extends keyof IEventCreateGivenRegion>(field: K) {
     return (ev: React.ChangeEvent<HTMLInputElement>) => {
       this.setFieldValue(field, ev.currentTarget.value)
     }
   }
 
-  private createOnBlurHandler<K extends CreateEventFormModelProperties>(key: K) {
+  private createOnBlurHandler<K extends keyof IEventCreateGivenRegion>(field: K) {
     return () => {
-      this.setFieldTouched(key)
+      this.setFieldTouched(field)
     }
   }
 }

@@ -3,7 +3,7 @@ import { ValidationResult, ValidatorConfig, ValidationService } from 'src/servic
 
 export interface ValidatableFormComponentProps<TModel> {
   onValidChange?: (model: TModel | null) => void
-  onChange?: (model: TModel) => void
+  onChange?: (model: Nullable<TModel>) => void
   forceTouched?: boolean
 }
 
@@ -19,6 +19,8 @@ export type ValidatableFormComponentState<TModel> = {
 }
 
 export type ModelKey<TModel> = Array<keyof TModel>
+
+export type Nullable<T> = { [P in keyof T]: T[P] | null }
 
 export default abstract class ValidatableFormComponent<TModel> extends React.PureComponent<ValidatableFormComponentProps<TModel>, ValidatableFormComponentState<TModel>> {
   protected abstract fields: string[]
@@ -52,7 +54,7 @@ export default abstract class ValidatableFormComponent<TModel> extends React.Pur
     fields.forEach(k => result[k] = state[k].valueParsed)
     
     if (props.onChange) {
-      props.onChange(result as TModel)
+      props.onChange(result as Nullable<TModel>)
     }
 
     if (props.onValidChange) {

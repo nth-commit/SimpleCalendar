@@ -6,23 +6,40 @@ import Button from '@material-ui/core/Button'
 import { dialogRegistration } from 'src/services/DialogRegistration'
 import { appConnect } from 'src/store'
 import CreateEventForm from 'src/components/presentational/CreateEventForm'
+import { eventsActionCreators, IEventCreateGivenRegion } from 'src/store/Events'
 
-const UnconnectedCreateEventDialog = () => {
+interface CreateEventDialogDispatchProps {
+  saveEvent(event: IEventCreateGivenRegion)
+}
+
+declare type CreateEventDialogProps = CreateEventDialogDispatchProps
+
+const UnconnectedCreateEventDialog = ({ saveEvent }: CreateEventDialogProps) => {
+  let event: IEventCreateGivenRegion | null = null
+
+  const onValidChange = (e: IEventCreateGivenRegion | null) => event = e
+
+  const onSave = () => event && saveEvent(event)
 
   return (
     <React.Fragment>
       <DialogTitle>Create event</DialogTitle>
       <DialogContent>
-        <CreateEventForm onValidChange={console.log} />
+        <CreateEventForm onValidChange={onValidChange} />
       </DialogContent>
       <DialogActions>
-        <Button variant="raised" color="primary">Save</Button>
+        <Button variant="raised" color="primary" onClick={onSave}>Save</Button>
       </DialogActions>
     </React.Fragment>
   )
 }
 
-const CreateEventDialog = appConnect()(UnconnectedCreateEventDialog)
+const CreateEventDialog = appConnect<{}, CreateEventDialogDispatchProps>(
+  undefined,
+  dispatch => ({
+    saveEvent: event => dispatch(eventsActionCreators.createEvent(event))
+  })
+)(UnconnectedCreateEventDialog)
 
 export const CREATE_EVENT_DIALOG_ID = 'create-event'
 

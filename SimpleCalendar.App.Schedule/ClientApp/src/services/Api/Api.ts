@@ -1,7 +1,7 @@
 import { ROOT_REGION_ID } from 'src/constants'
 import { getConfiguration } from './Configure'
 import { IRegion, IRegionMembership, IRegionMembershipQuery, IRegionRole, IRegionMembershipCreate, IUser } from './Models'
-import { IEvent } from './Models/Event'
+import { IEvent, IEventCreate } from './Models/Event'
 
 export class Api {
 
@@ -55,6 +55,11 @@ export class Api {
     search.append('regionId', regionId)
     search.append('timezone', timezone)
     return this.getJson(this.getUrl('events/today'), search)
+  }
+
+  async createEvent(create: IEventCreate): Promise<IEvent> {
+    const response = await this.post(this.getUrl('events'), create)
+    return await response.json()
   }
 
   async createRegionMembership(create: IRegionMembershipCreate): Promise<IRegionMembership> {
