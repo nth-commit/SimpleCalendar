@@ -1,90 +1,80 @@
+import * as moment from 'moment'
 import { ApplicationState } from 'src/store/ApplicationState'
-import { IEvent, IEventCreate } from 'src/services/Api'
+import { IEvent } from 'src/services/Api'
 import { PendingEventState } from 'src/store/Events/EventsState'
 
+export enum TimeGrouping {
+  Unknown = 0,
+  Today,
+  Tomorrow,
+  ThisWeek,
+  NextWeek,
+  ThisMonth,
+  NextMonth,
+  Later
+} 
+
 declare interface EventGroupingDefinition {
+  timeGrouping: TimeGrouping 
   name: string
-  predicate: (event: (IEvent | IEventCreate)) => boolean
-}
-
-const doesEventSpanDates = (event: IEvent | IEventCreate, start: Date, end: Date): boolean => {
-  const eventStart = event.startTime
-  const eventEnd = event.endTime
-
-  if (eventStart <= start && start <= eventEnd) { return true }
-  if (eventStart <= end && end <= eventEnd) { return true }
-  if (start < eventStart && eventEnd < end) { return true }
-  return false
+  predicate: (event: (IEvent)) => boolean
 }
 
 const eventGroupingDefinitions: EventGroupingDefinition[] = [
   {
+    timeGrouping: TimeGrouping.Today,
     name: 'Today',
-    predicate: event => {
-      const startOfToday = new Date()
-      startOfToday.setHours(0, 0, 0, 0)
-
-      const endOfToday = new Date()
-      endOfToday.setHours(23, 59, 59, 0)
-
-      return doesEventSpanDates(event, startOfToday, endOfToday)
-    }
+    predicate: event => moment().isSame(event.startTime, 'days')
   },
   {
+    timeGrouping: TimeGrouping.Tomorrow,
     name: 'Tomorrow',
-    predicate: event => {
-      const startOfTomorrow = new Date()
-      startOfTomorrow.setHours(24, 0, 0, 0)
-
-      const endOfTomorrow = new Date()
-      endOfTomorrow.setHours(24 + 23, 59, 59, 0)
-
-      return doesEventSpanDates(event, startOfTomorrow, endOfTomorrow)
-    }
+    predicate: event => moment().diff(event.startTime, 'days') === 1
   },
   {
+    timeGrouping: TimeGrouping.ThisWeek,
     name: 'This Week',
-    predicate: event => {
-      return false
-    }
+    predicate: event => moment().isSame(event.startTime, 'weeks')
   },
   {
+    timeGrouping: TimeGrouping.NextWeek,
     name: 'Next Week',
-    predicate: event => {
-      return false
-    }
+    predicate: event => moment().diff(event.startTime, 'weeks') === 1
   },
   {
+    timeGrouping: TimeGrouping.ThisMonth,
     name: 'This Month',
-    predicate: event => {
-      return false
-    }
+    predicate: event => moment().isSame(event.startTime, 'month')
   },
   {
+    timeGrouping: TimeGrouping.NextMonth,
     name: 'Next Month',
-    predicate: event => {
-      return false
-    }
+    predicate: event => moment().diff(event.startTime, 'month') === 1
   },
   {
+    timeGrouping: TimeGrouping.Later,
     name: 'Later',
     predicate: () => true
   }
 ]
 
 export interface EventGroup {
+  timeGrouping: TimeGrouping
   name: string
-  events: Array<IEvent | IEventCreate>
+  events: IEvent[]
 }
 
-const getEvents = ({ events }: ApplicationState): Array<IEvent | IEventCreate> => {
+const getEvents = ({ events }: ApplicationState): IEvent[] => {
   if (!events.events) {
     throw new Error('Events not found')
   }
 
   return [
     ...events.events,
-    ...Object.map(events.pendingEvents, (item: PendingEventState) => item.create)
+    ...Object.map(events.pendingEvents, (item: PendingEventState, trackingId: string) => ({
+      ...item.create,
+      id: trackingId
+    }))
   ].orderBy(e => e.startTime)
 }
 
@@ -98,7 +88,7 @@ export const eventSelectors = {
   getEvents,
 
   getEventGroups: (state: ApplicationState): EventGroup[] => {
-    const map = Map.fromArray(eventGroupingDefinitions, item => item.name, () => [] as Array<IEvent | IEventCreate>)
+    const map = Map.fromArray(eventGroupingDefinitions, item => item.name, () => [] as IEvent[])
 
     getEvents(state).forEach(event => {
       const grouping = eventGroupingDefinitions.find(g => g.predicate(event))
@@ -117,8 +107,9 @@ export const eventSelectors = {
 
     return eventGroupingDefinitions
       .map(g => ({
+        timeGrouping: g.timeGrouping,
         name: g.name,
-        events: map.get(g.name) as Array<IEvent | IEventCreate>
+        events: map.get(g.name) as IEvent[]
       } as EventGroup))
       .filter(g => g.events.length)
   }

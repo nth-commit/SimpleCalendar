@@ -92,7 +92,7 @@ namespace SimpleCalendar.Api.Controllers
 
             var timezoneInfo = TimeZoneInfo.FindSystemTimeZoneById(timezone);
             var utcOffset = timezoneInfo.GetUtcOffset(_dateTimeAccessor.UtcNow);
-            return _dateTimeAccessor.UtcNow.Add(utcOffset);
+            return _dateTimeAccessor.UtcNow.Subtract(utcOffset);
         }
     }
 }

@@ -41,8 +41,10 @@ class Layout extends React.PureComponent<LayoutStateProps & LayoutDispatchProps 
     return (
       <div>
         <Navbar />
-        <div>
-          {children}
+        <div className="layout-container">
+          <div className="layout-content">
+            {children}
+          </div>
         </div>
         {canCreateEvents && this.renderAddButton()}
         <DialogTrigger />

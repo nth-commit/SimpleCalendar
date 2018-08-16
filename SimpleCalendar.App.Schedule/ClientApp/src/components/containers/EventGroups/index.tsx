@@ -1,27 +1,20 @@
 import * as React from 'react'
 import { appConnect } from 'src/store'
-import { eventSelectors, EventGroup } from 'src/store/Events'
-import { IEventCreate, IEvent } from 'src/services/Api'
+import { eventSelectors, EventGroup as EventGroupModel } from 'src/store/Events'
+import EventList from 'src/components/presentational/EventList'
+import EventGroup from 'src/components/presentational/EventGroup'
 
 interface EventGroupsStateProps {
   isLoading: boolean
-  eventGroups: EventGroup[]
+  eventGroups: EventGroupModel[]
 }
 
 // tslint:disable-next-line:no-empty-interface
 interface EventGroupsDispatchProps {
+  onEventClick(): void
 }
 
 declare type EventGroupsProps = EventGroupsStateProps & EventGroupsDispatchProps
-
-const EventGroup = (eventGroup: EventGroup) => (
-  <div>
-    <div>{eventGroup.name}</div>
-    {EventList(eventGroup.events)}
-  </div>
-)
-
-const EventList = (events: Array<IEvent | IEventCreate>) => <pre>{JSON.stringify(events, undefined, '  ')}</pre>
 
 const EventGroups = ({ isLoading, eventGroups }: EventGroupsProps) => {
   if (isLoading) {
@@ -33,14 +26,14 @@ const EventGroups = ({ isLoading, eventGroups }: EventGroupsProps) => {
   }
 
   if (eventGroups.length === 1) {
-    return EventList(eventGroups[0].events)
+    return <EventList {...eventGroups[0]} />
   }
 
   return (
     <div>
       {eventGroups.map(g => (
         <div key={g.name}>
-          {EventGroup(g)}
+          <EventGroup eventGroup={g} />
         </div>
       ))}
     </div>
@@ -56,5 +49,6 @@ export default appConnect<EventGroupsStateProps, EventGroupsDispatchProps>(
     }
   },
   dispatch => ({
+    onEventClick: () => { }
   })
 )(EventGroups)
