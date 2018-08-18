@@ -1,12 +1,7 @@
 import { ROOT_REGION_ID } from 'src/constants'
 import { getConfiguration } from './Configure'
 import { IRegion, IRegionMembership, IRegionMembershipQuery, IRegionRole, IRegionMembershipCreate, IUser } from './Models'
-import { IEvent, IEventCreate } from './Models/Event'
-
-declare type EventResponse = IEvent & {
-  startTime: string
-  endTime: string
-}
+import { IEvent, IEventResponse, IEventCreate } from './Models/Event'
 
 export class Api {
 
@@ -61,14 +56,14 @@ export class Api {
     search.append('timezone', timezone)
 
     const response = await this.get(this.getUrl('events/today'), search)
-    const json: EventResponse[] = await response.json()
+    const json: IEventResponse[] = await response.json()
 
     return json.map(this.mapEventResponseToEvent)
   }
 
   async createEvent(create: IEventCreate): Promise<IEvent> {
     const response = await this.post(this.getUrl('events'), create)
-    const json: EventResponse = await response.json()
+    const json: IEventResponse = await response.json()
     return this.mapEventResponseToEvent(json)
   }
 
@@ -148,7 +143,7 @@ export class Api {
     return uri
   }
 
-  private mapEventResponseToEvent(eventResponse: EventResponse): IEvent {
+  private mapEventResponseToEvent(eventResponse: IEventResponse): IEvent {
     return {
       ...eventResponse,
       startTime: new Date(eventResponse.startTime),

@@ -1,10 +1,18 @@
-export interface IEvent {
+export interface IBaseEvent {
   id: string
   regionId: string
-  startTime: Date
-  endTime: Date
   name: string
   description: string
+}
+
+export interface IEvent extends IBaseEvent {
+  startTime: Date
+  endTime: Date
+}
+
+export interface IEventResponse extends IBaseEvent {
+  startTime: string
+  endTime: string
 }
 
 export interface IEventCreate {

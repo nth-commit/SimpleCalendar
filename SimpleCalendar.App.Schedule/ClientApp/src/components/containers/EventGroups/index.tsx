@@ -1,12 +1,12 @@
 import * as React from 'react'
 import { appConnect } from 'src/store'
-import { eventSelectors, EventGroup as EventGroupModel } from 'src/store/Events'
+import { eventSelectors, EventGroupCollection } from 'src/store/Events'
 import EventList from 'src/components/presentational/EventList'
 import EventGroup from 'src/components/presentational/EventGroup'
 
 interface EventGroupsStateProps {
   isLoading: boolean
-  eventGroups: EventGroupModel[]
+  eventGroupCollection: EventGroupCollection | null
 }
 
 // tslint:disable-next-line:no-empty-interface
@@ -16,11 +16,16 @@ interface EventGroupsDispatchProps {
 
 declare type EventGroupsProps = EventGroupsStateProps & EventGroupsDispatchProps
 
-const EventGroups = ({ isLoading, eventGroups }: EventGroupsProps) => {
+const EventGroups = ({ isLoading, eventGroupCollection }: EventGroupsProps) => {
   if (isLoading) {
     return null
   }
 
+  if (!eventGroupCollection) {
+    throw new Error('Expected eventGroupCollection to be populated when isLoading is false')
+  }
+
+  const eventGroups = eventGroupCollection.getGroups()
   if (eventGroups.length === 0) {
     return <div>Nothing here!</div>
   }
@@ -32,7 +37,7 @@ const EventGroups = ({ isLoading, eventGroups }: EventGroupsProps) => {
   return (
     <div>
       {eventGroups.map(g => (
-        <div key={g.name}>
+        <div key={g.timeGrouping}>
           <EventGroup eventGroup={g} />
         </div>
       ))}
@@ -45,7 +50,7 @@ export default appConnect<EventGroupsStateProps, EventGroupsDispatchProps>(
     const isLoading = !eventSelectors.isFetchEventsCompleted(state)
     return {
       isLoading,
-      eventGroups: isLoading ?  [] : eventSelectors.getEventGroups(state)
+      eventGroupCollection: isLoading ? null : eventSelectors.getEventGroups(state)
     }
   },
   dispatch => ({
