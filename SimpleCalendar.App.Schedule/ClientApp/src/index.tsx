@@ -9,6 +9,7 @@ import configureStore from './configureStore'
 import { ApplicationState } from './store'
 import * as RoutesModule from './routes'
 import './extensions'
+import './dialogs'
 
 import { IConfigurationState, configurationActionCreators } from './store/Configuration'
 
@@ -17,6 +18,7 @@ let routes = RoutesModule.routes
 const history = createBrowserHistory({ basename: '/' })
 const initialState = (window as any).initialReduxState as ApplicationState
 const store = configureStore(history, initialState)
+
 
 async function renderApp() {
   const response = await fetch('/config')

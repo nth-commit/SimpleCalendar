@@ -51,7 +51,7 @@ export default function configureStore(history: History, initialState: DeepParti
   if (module.hot) {
     module.hot.accept('./store', () => {
       const nextRootReducer = require<typeof StoreModule>('./store')
-      store.replaceReducer(getRootReducer(nextRootReducer.reducers))
+      store.replaceReducer(connectRouter(history)(getRootReducer(nextRootReducer.reducers)))
     })
   }
 

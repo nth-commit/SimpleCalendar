@@ -3,7 +3,6 @@ import DialogTitle from '@material-ui/core/DialogTitle'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogActions from '@material-ui/core/DialogActions'
 import Button from '@material-ui/core/Button'
-import { dialogRegistration } from 'src/services/DialogRegistration'
 import { appConnect } from 'src/store'
 import { eventsActionCreators, IEventCreateGivenRegion, eventSelectors } from 'src/store/Events'
 import { uiActionCreators } from 'src/store/UI'
@@ -30,13 +29,17 @@ const UnconnectedEventDetailsDialog = ({ event }: EventDetailsDialogProps) => {
         <pre>{JSON.stringify(event, undefined, '  ')}</pre>
       </DialogContent>
       <DialogActions>
-        <Button variant="raised" color="primary">Close</Button>
+        <Button variant="raised" color="primary">Close!</Button>
       </DialogActions>
     </React.Fragment>
   )
 }
 
-const EventDetailsDialog = appConnect<EventDetailsDialogStateProps, EventDetailsDialogDispatchProps>(
+export interface EventDetailsDialogOptions {
+  eventId: string
+}
+
+export const EventDetailsDialog = appConnect<EventDetailsDialogStateProps, EventDetailsDialogDispatchProps>(
   state => ({
     event: eventSelectors.getEventSelector(state, (state.ui.dialogOptions as EventDetailsDialogOptions).eventId)
   }),
@@ -49,16 +52,3 @@ const EventDetailsDialog = appConnect<EventDetailsDialogStateProps, EventDetails
 )(UnconnectedEventDetailsDialog)
 
 export const EVENT_DETAILS_DIALOG_ID = 'event-details'
-
-export interface EventDetailsDialogOptions {
-  eventId: string
-}
-
-dialogRegistration.register(
-  EVENT_DETAILS_DIALOG_ID,
-  EventDetailsDialog as any,
-  {
-    fullWidth: true,
-    disableBackdropClick: true
-  }
-)
