@@ -11,6 +11,7 @@ import EventDate from './EventDate'
 interface EventListItemProps {
   event: IEvent
   timeGrouping: TimeGrouping
+  onClick?(): void
 }
 
 const styles = (theme: Theme) => ({
@@ -32,8 +33,8 @@ const styles = (theme: Theme) => ({
   }
 })
 
-const EventList = ({ event, timeGrouping, classes }: EventListItemProps & { classes: any }) => (
-  <Card className={classes.card}>
+const EventList = ({ event, timeGrouping, onClick, classes }: EventListItemProps & { classes: any }) => (
+  <Card className={classes.card} onClick={onClick} style={{ cursor: onClick ? 'pointer' : 'default' }}>
     <EventDate event={event} timeGrouping={timeGrouping} size={100} />
     <CardContent className={classes.cardContent}>
       <Typography className={classes.eventName}>{event.name}</Typography>

@@ -1,6 +1,7 @@
 import * as React from 'react'
 import Typography from '@material-ui/core/Typography'
 import { withStyles } from '@material-ui/core'
+import { IEvent } from 'src/services/Api'
 import { EventGroup, TimeGrouping } from 'src/store/Events'
 import EventList from 'src/components/presentational/EventList'
 
@@ -12,6 +13,7 @@ const styles = theme => ({
 
 interface EventGroupProps {
   eventGroup: EventGroup
+  onEventClick?(event: IEvent): void
   classes: any
 }
 
@@ -29,12 +31,14 @@ const getEventGroupName = (eventGroup: EventGroup): string => {
   }
 }
 
-const EventGroup = ({ eventGroup, classes }: EventGroupProps) => (
+const EventGroup = ({ eventGroup, onEventClick, classes }: EventGroupProps) => (
   <div>
     <Typography variant="caption" align="center" className={classes.typography}>
       {getEventGroupName(eventGroup)}
     </Typography>
-    <EventList {...eventGroup} />
+    <EventList
+      {...eventGroup}
+      onEventClick={onEventClick} />
   </div>
 )
 

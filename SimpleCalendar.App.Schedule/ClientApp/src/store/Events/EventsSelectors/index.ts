@@ -20,14 +20,25 @@ const getEvents = ({ events }: ApplicationState): IEvent[] => {
 }
 
 export const eventSelectors = {
-  hasFetchEventsStarted: ({ events }: ApplicationState): boolean =>
+  hasFetchEventsStartedSelector: ({ events }: ApplicationState): boolean =>
     events.isLoading || events.events || events.error,
 
-  isFetchEventsCompleted: ({ events }: ApplicationState): boolean =>
+  isFetchEventsCompletedSelector: ({ events }: ApplicationState): boolean =>
     !!events.events,
 
-  getEvents,
+  getEventsSelector: getEvents,
 
-  getEventGroups: (state: ApplicationState): EventGroupCollection =>
-    new EventGroupCollection(getEvents(state))
+  getEventGroupsSelector: (state: ApplicationState): EventGroupCollection =>
+    new EventGroupCollection(getEvents(state)),
+
+  getEventSelector: (state: ApplicationState, eventId: string): IEvent => {
+    const events = getEvents(state)
+    
+    const event = events.find(e => e.id === eventId)
+    if (!event) {
+      throw new Error('Event not found')
+    }
+
+    return event
+  }
 }

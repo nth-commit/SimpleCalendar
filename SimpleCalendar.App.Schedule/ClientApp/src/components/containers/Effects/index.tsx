@@ -38,7 +38,7 @@ class Effects extends React.PureComponent<EffectsStateProps & EffectsDispatchPro
 export default appConnect<EffectsStateProps, EffectsDispatchProps>(
   state => ({
     hasFetchRegionStarted: regionSelectors.hasFetchRegionStarted(state),
-    hasFetchEventsStarted: eventSelectors.hasFetchEventsStarted(state)
+    hasFetchEventsStarted: eventSelectors.hasFetchEventsStartedSelector(state)
   }),
   dispatch => ({
     fetchRegion: () => dispatch(regionActionCreators.fetchRegion()),

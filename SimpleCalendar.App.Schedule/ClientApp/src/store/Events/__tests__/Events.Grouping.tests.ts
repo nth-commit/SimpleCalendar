@@ -74,7 +74,7 @@ describe('Store.Events.Grouping', () => {
 
     await dispatch(eventsActionCreators.fetchEvents())
 
-    const eventGroups = eventSelectors.getEventGroups(getState())
+    const eventGroups = eventSelectors.getEventGroupsSelector(getState())
     expect(eventGroups.hasGroup(TimeGrouping.Today)).toEqual(true)
   })
 
@@ -88,7 +88,7 @@ describe('Store.Events.Grouping', () => {
 
     await dispatch(eventsActionCreators.fetchEvents())
 
-    const eventGroups = eventSelectors.getEventGroups(getState())
+    const eventGroups = eventSelectors.getEventGroupsSelector(getState())
     expect(eventGroups.hasGroup(TimeGrouping.Today)).toEqual(true)
   })
 
@@ -102,7 +102,7 @@ describe('Store.Events.Grouping', () => {
 
     await dispatch(eventsActionCreators.fetchEvents())
 
-    const eventGroups = eventSelectors.getEventGroups(getState())
+    const eventGroups = eventSelectors.getEventGroupsSelector(getState())
     expect(eventGroups.hasGroup(TimeGrouping.Tomorrow)).toEqual(true)
   })
 
@@ -116,7 +116,7 @@ describe('Store.Events.Grouping', () => {
 
     await dispatch(eventsActionCreators.fetchEvents())
 
-    const eventGroups = eventSelectors.getEventGroups(getState())
+    const eventGroups = eventSelectors.getEventGroupsSelector(getState())
     expect(eventGroups.hasGroup(TimeGrouping.ThisWeek)).toEqual(true)
   })
 
@@ -130,7 +130,7 @@ describe('Store.Events.Grouping', () => {
 
     await dispatch(eventsActionCreators.fetchEvents())
 
-    const eventGroups = eventSelectors.getEventGroups(getState())
+    const eventGroups = eventSelectors.getEventGroupsSelector(getState())
     expect(eventGroups.hasGroup(TimeGrouping.Today)).toEqual(true)
   })
 })

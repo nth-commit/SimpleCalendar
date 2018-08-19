@@ -13,7 +13,7 @@ export const eventsActionCreators = {
   fetchEvents: (): ApplicationThunkActionAsync => async (dispatch, getState) => {
     const state = getState()
 
-    if (eventSelectors.hasFetchEventsStarted(state)) {
+    if (eventSelectors.hasFetchEventsStartedSelector(state)) {
       dispatch(new EventsActions.FetchEventsError('Event fetch has already started'))
       return
     }
