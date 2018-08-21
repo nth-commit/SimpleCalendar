@@ -1,40 +1,45 @@
 import * as React from 'react'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import DialogContent from '@material-ui/core/DialogContent'
-import DialogActions from '@material-ui/core/DialogActions'
-import Button from '@material-ui/core/Button'
+import IconButton from '@material-ui/core/IconButton'
+import CloseIcon from '@material-ui/icons/Close'
 import { appConnect } from 'src/store'
-import { eventsActionCreators, IEventCreateGivenRegion, eventSelectors } from 'src/store/Events'
+import { eventSelectors } from 'src/store/Events'
 import { uiActionCreators } from 'src/store/UI'
 import { IEvent } from 'src/services/Api'
+import EventDetails from 'src/components/presentational/EventDetails'
+import HorizontalRule from 'src/components/presentational/HorizontalRule'
 
 interface EventDetailsDialogStateProps {
   event: IEvent
 }
 
 interface EventDetailsDialogDispatchProps {
-  saveEvent(event: IEventCreateGivenRegion)
+  close(): void
 }
 
 declare type EventDetailsDialogProps =
   EventDetailsDialogStateProps &
   EventDetailsDialogDispatchProps
 
-const UnconnectedEventDetailsDialog = ({ event }: EventDetailsDialogProps) => {
-
+const UnconnectedEventDetailsDialog = ({ event, close }: EventDetailsDialogProps) => {
   return (
     <React.Fragment>
-      <DialogTitle>{event.name}</DialogTitle>
+      <div style={{ display: 'flex', alignItems: 'center' }}>
+        <IconButton style={{ marginTop: '5px' }} onClick={close}>
+          <CloseIcon />
+        </IconButton>
+        <DialogTitle style={{ paddingLeft: '0' }}>
+          {event.name}
+        </DialogTitle>
+      </div>
+      <HorizontalRule />
       <DialogContent>
-        <pre>{JSON.stringify(event, undefined, '  ')}</pre>
+        <EventDetails event={event} />
       </DialogContent>
-      <DialogActions>
-        <Button variant="raised" color="primary">Close!</Button>
-      </DialogActions>
     </React.Fragment>
   )
 }
-
 export interface EventDetailsDialogOptions {
   eventId: string
 }
@@ -44,10 +49,7 @@ export const EventDetailsDialog = appConnect<EventDetailsDialogStateProps, Event
     event: eventSelectors.getEventSelector(state, (state.ui.dialogOptions as EventDetailsDialogOptions).eventId)
   }),
   dispatch => ({
-    saveEvent: event => {
-      dispatch(eventsActionCreators.createEvent(event))
-      dispatch(uiActionCreators.closeDialog())
-    }
+    close: () => dispatch(uiActionCreators.closeDialog())
   })
 )(UnconnectedEventDetailsDialog)
 

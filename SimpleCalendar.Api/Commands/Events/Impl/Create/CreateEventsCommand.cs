@@ -64,7 +64,7 @@ namespace SimpleCalendar.Api.Commands.Events.Impl.Create
             {
                 var entity = _mapper.MapToEntity(ev);
                 entity.RegionId = region.Id;
-                entity.IsPublic = true; // TODO: Privacy
+                entity.IsPublic = true; // TODO: Privacy settings
 
                 await _coreDbContext.Events.AddAsync(entity);
                 await _coreDbContext.SaveChangesAsync();
