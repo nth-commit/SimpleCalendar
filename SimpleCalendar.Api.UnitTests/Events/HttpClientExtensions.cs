@@ -56,6 +56,17 @@ namespace SimpleCalendar.Api.UnitTests.Events
             return await response.DeserializeEventsAsync();
         }
 
+        public static async Task<IEnumerable<EventOutput>> QueryMyEventsAndAssertOK(
+            this HttpClient client,
+            string regionId)
+        {
+            var response = await client.GetQueryMyEventsResponseAsync(regionId: regionId);
+
+            response.AssertStatusCodeOK();
+
+            return await response.DeserializeEventsAsync();
+        }
+
         public static async Task<HttpResponseMessage> GetQueryEventsResponseAsync(
             this HttpClient client,
             string regionId = null,
@@ -100,6 +111,20 @@ namespace SimpleCalendar.Api.UnitTests.Events
             }
 
             return await client.DoQueryAsync("/events/today", query);
+        }
+
+        public static async Task<HttpResponseMessage> GetQueryMyEventsResponseAsync(
+            this HttpClient client,
+            string regionId = null)
+        {
+            var query = new Dictionary<string, string>();
+
+            if (!string.IsNullOrEmpty(regionId))
+            {
+                query.Add("regionId", regionId);
+            }
+
+            return await client.DoQueryAsync("/events/my", query);
         }
 
         private static async Task<HttpResponseMessage> DoQueryAsync(

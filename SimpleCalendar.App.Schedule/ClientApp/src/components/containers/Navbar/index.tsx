@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { push } from 'connected-react-router'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import Button from '@material-ui/core/Button'
@@ -15,29 +16,36 @@ export interface NavbarStateProps {
 export interface NavbarDispatchProps {
   login(): void
   logout(): void
+  navigateToMyEvents(): void
 }
 
-const Navbar = ({ isAuthenticated, profileImageSrc, login, logout }: NavbarStateProps & NavbarDispatchProps) => {
-
-  return (
-    <div style={{ flexGrow: 1 }}>
-      <AppBar position="static" color="default">
-        <Toolbar style={{ display: 'flex' }}>
-          {isAuthenticated ?
-            <div style={{ width: '100%', display: 'flex' }}>
-              <div style={{ flex: 1 }} />
-              <UserMenuTrigger profileImageSrc={profileImageSrc as string} logoutClicked={logout} />
-            </div> :
-            <div style={{ width: '100%', display: 'flex' }}>
-              <div style={{ flex: 1 }} />
-              <Button variant="contained" color="primary" onClick={login}>Login</Button>
-            </div>
-          }
-        </Toolbar>
-      </AppBar>
-    </div>
-  )
-}
+const Navbar = ({
+  isAuthenticated,
+  profileImageSrc,
+  login,
+  logout,
+  navigateToMyEvents
+}: NavbarStateProps & NavbarDispatchProps) => (
+  <div style={{ flexGrow: 1 }}>
+    <AppBar position="static" color="default">
+      <Toolbar style={{ display: 'flex' }}>
+        {isAuthenticated ?
+          <div style={{ width: '100%', display: 'flex' }}>
+            <div style={{ flex: 1 }} />
+            <UserMenuTrigger
+              profileImageSrc={profileImageSrc as string}
+              myEventsClicked={navigateToMyEvents}
+              logoutClicked={logout} />
+          </div> :
+          <div style={{ width: '100%', display: 'flex' }}>
+            <div style={{ flex: 1 }} />
+            <Button variant="contained" color="primary" onClick={login}>Login</Button>
+          </div>
+        }
+      </Toolbar>
+    </AppBar>
+  </div>
+)
 
 export default appConnect<NavbarStateProps, NavbarDispatchProps>(
   state => {
@@ -49,6 +57,7 @@ export default appConnect<NavbarStateProps, NavbarDispatchProps>(
   },
   dispatch => ({
     login: () => dispatch(authActionCreators.login()),
-    logout: () => dispatch(authActionCreators.logout())
+    logout: () => dispatch(authActionCreators.logout()),
+    navigateToMyEvents: () => dispatch(push('/my-events'))
   })
 )(Navbar)

@@ -40,6 +40,7 @@ const UnconnectedEventDetailsDialog = ({ event, close }: EventDetailsDialogProps
     </React.Fragment>
   )
 }
+
 export interface EventDetailsDialogOptions {
   eventId: string
 }

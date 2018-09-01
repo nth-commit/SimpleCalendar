@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using SimpleCalendar.Api.Commands.Events;
 using SimpleCalendar.Api.Models;
 using SimpleCalendar.Api.Services;
+using SimpleCalendar.Framework;
 using SimpleCalendar.Utility.Validation;
 using System;
 using System.ComponentModel.DataAnnotations;
@@ -56,6 +57,14 @@ namespace SimpleCalendar.Api.Controllers
                         inherit: inherit,
                         from: GetTodayUtc(timezone)));
 
+        [HttpGet("my")]
+        public Task<IActionResult> QueryMy([FromQuery][Required]string regionId) =>
+            _queryEventsCommand.Value.InvokeAsync(
+                ControllerContext,
+                CreateQuery(
+                    regionId: regionId,
+                    userEmail: User.GetUserEmail()));
+
         [HttpGet("{id}")]
         public Task<IActionResult> Get([FromRoute] string id) =>
             _getEventsCommand.Value.InvokeAsync(ControllerContext, id);
@@ -72,12 +81,14 @@ namespace SimpleCalendar.Api.Controllers
 
         private EventQuery CreateQuery(
             string regionId,
+            string userEmail = null,
             bool? inherit = null,
             DateTime? from = null,
             DateTime? to = null) =>
                 new EventQuery()
                 {
                     RegionId = regionId,
+                    UserEmail = userEmail,
                     Inherit = inherit ?? true,
                     From = from ?? DateTime.MinValue,
                     To = to ?? DateTime.MaxValue

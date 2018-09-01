@@ -10,6 +10,11 @@ namespace SimpleCalendar.Api.UnitTests.Events.QueryToday
 {
     public class ValidationTests : GivenAnEmptyEventsListEndpoint
     {
+        public ValidationTests()
+        {
+            this.GivenTheCurrentUtcDateTime(new DateTime(2000, 02, 20));
+        }
+
         [Fact]
         public Task WhenIQueryTodayWithoutTimezone_ItReturnsOK() =>
             Client.QueryEventsTodayAndAssertOK();

@@ -34,7 +34,7 @@ namespace SimpleCalendar.Api.UnitTests.Events.QueryToday
                 regionId: Constants.RootRegionId,
                 timezone: "UTC-11");
 
-            Assert.Single(events);
+            Assert.Empty(events);
         }
     }
 }

@@ -38,12 +38,15 @@ namespace SimpleCalendar.Api.Commands.Events.Impl.Query
                 throw new Exception("Failed");
             }
 
+            var isQueryingUser = !string.IsNullOrEmpty(query.UserEmail);
+
             var dbQuery = _dbContext.Events
                 .Where(e => !e.IsDeleted)
                 .Where(e =>
                     (query.From <= e.StartTime && e.StartTime <= query.To) ||
                     (query.From <= e.EndTime && e.EndTime <= query.To) ||
-                    (e.StartTime < query.From && query.To < e.EndTime));
+                    (e.StartTime < query.From && query.To < e.EndTime))
+                .Where(e => !isQueryingUser || e.CreatedByEmail == query.UserEmail);
 
             var events = await dbQuery.ToListAsync();
             foreach (var ev in events)

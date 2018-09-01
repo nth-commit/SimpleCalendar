@@ -9,6 +9,8 @@ namespace SimpleCalendar.Api.Models
     {
         public string RegionId { get; set; }
 
+        public string UserEmail { get; set; }
+
         public bool Inherit { get; set; }
 
         public DateTime From { get; set; }
