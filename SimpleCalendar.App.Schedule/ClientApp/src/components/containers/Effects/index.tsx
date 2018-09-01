@@ -1,7 +1,8 @@
 import * as React from 'react'
 import { appConnect } from 'src/store'
 import { regionActionCreators, regionSelectors } from 'src/store/Region'
-import { eventsActionCreators, eventSelectors } from 'src/store/Events'
+import { eventsActionCreators, hasFetchEventsStartedSelector } from 'src/store/Events'
+import { EventCollectionType } from 'src/store/Events/EventsActions'
 
 interface EffectsStateProps {
   hasFetchRegionStarted: boolean
@@ -38,7 +39,7 @@ class Effects extends React.PureComponent<EffectsStateProps & EffectsDispatchPro
 export default appConnect<EffectsStateProps, EffectsDispatchProps>(
   state => ({
     hasFetchRegionStarted: regionSelectors.hasFetchRegionStarted(state),
-    hasFetchEventsStarted: eventSelectors.hasFetchEventsStartedSelector(state)
+    hasFetchEventsStarted: hasFetchEventsStartedSelector(state, EventCollectionType.TODAY)
   }),
   dispatch => ({
     fetchRegion: () => dispatch(regionActionCreators.fetchRegion()),

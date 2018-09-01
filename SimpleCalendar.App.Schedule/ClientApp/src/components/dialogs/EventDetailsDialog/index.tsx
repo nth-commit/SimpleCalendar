@@ -4,11 +4,12 @@ import DialogContent from '@material-ui/core/DialogContent'
 import IconButton from '@material-ui/core/IconButton'
 import CloseIcon from '@material-ui/icons/Close'
 import { appConnect } from 'src/store'
-import { eventSelectors } from 'src/store/Events'
+import { getEventSelector } from 'src/store/Events'
 import { uiActionCreators } from 'src/store/UI'
 import { IEvent } from 'src/services/Api'
 import EventDetails from 'src/components/presentational/EventDetails'
 import HorizontalRule from 'src/components/presentational/HorizontalRule'
+import { EventCollectionType } from 'src/store/Events/EventsActions'
 
 interface EventDetailsDialogStateProps {
   event: IEvent
@@ -42,13 +43,17 @@ const UnconnectedEventDetailsDialog = ({ event, close }: EventDetailsDialogProps
 }
 
 export interface EventDetailsDialogOptions {
+  collection: EventCollectionType
   eventId: string
 }
 
 export const EventDetailsDialog = appConnect<EventDetailsDialogStateProps, EventDetailsDialogDispatchProps>(
-  state => ({
-    event: eventSelectors.getEventSelector(state, (state.ui.dialogOptions as EventDetailsDialogOptions).eventId)
-  }),
+  state => {
+    const { collection, eventId } = state.ui.dialogOptions as EventDetailsDialogOptions
+    return {
+      event: getEventSelector(state, collection, eventId)
+    }
+  },
   dispatch => ({
     close: () => dispatch(uiActionCreators.closeDialog())
   })

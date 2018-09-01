@@ -3,7 +3,8 @@ import * as fetchMock from 'fetch-mock'
 import configureStore from 'src/__testutils__/configureStore'
 import { mock as mockDate, reset as resetDate } from 'src/__testutils__/mocks/date'
 import { eventsActionCreators } from '../EventsActionCreators'
-import { eventSelectors, TimeGrouping } from '../EventsSelectors'
+import { getEventGroupsSelector, TimeGrouping } from '../EventsSelectors'
+import { EventCollectionType } from 'src/store/Events/EventsActions'
 
 const MOMENT_ON_MONDAY = Object.freeze(moment.utc('2010-02-15'))
 
@@ -74,7 +75,7 @@ describe('Store.Events.Grouping', () => {
 
     await dispatch(eventsActionCreators.fetchEvents())
 
-    const eventGroups = eventSelectors.getEventGroupsSelector(getState())
+    const eventGroups = getEventGroupsSelector(getState(), EventCollectionType.TODAY)
     expect(eventGroups.hasGroup(TimeGrouping.Today)).toEqual(true)
   })
 
@@ -88,7 +89,7 @@ describe('Store.Events.Grouping', () => {
 
     await dispatch(eventsActionCreators.fetchEvents())
 
-    const eventGroups = eventSelectors.getEventGroupsSelector(getState())
+    const eventGroups = getEventGroupsSelector(getState(), EventCollectionType.TODAY)
     expect(eventGroups.hasGroup(TimeGrouping.Today)).toEqual(true)
   })
 
@@ -102,7 +103,7 @@ describe('Store.Events.Grouping', () => {
 
     await dispatch(eventsActionCreators.fetchEvents())
 
-    const eventGroups = eventSelectors.getEventGroupsSelector(getState())
+    const eventGroups = getEventGroupsSelector(getState(), EventCollectionType.TODAY)
     expect(eventGroups.hasGroup(TimeGrouping.Tomorrow)).toEqual(true)
   })
 
@@ -116,7 +117,7 @@ describe('Store.Events.Grouping', () => {
 
     await dispatch(eventsActionCreators.fetchEvents())
 
-    const eventGroups = eventSelectors.getEventGroupsSelector(getState())
+    const eventGroups = getEventGroupsSelector(getState(), EventCollectionType.TODAY)
     expect(eventGroups.hasGroup(TimeGrouping.ThisWeek)).toEqual(true)
   })
 
@@ -130,7 +131,7 @@ describe('Store.Events.Grouping', () => {
 
     await dispatch(eventsActionCreators.fetchEvents())
 
-    const eventGroups = eventSelectors.getEventGroupsSelector(getState())
+    const eventGroups = getEventGroupsSelector(getState(), EventCollectionType.TODAY)
     expect(eventGroups.hasGroup(TimeGrouping.Today)).toEqual(true)
   })
 })

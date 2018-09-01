@@ -11,33 +11,53 @@ export enum EventsActionTypes {
   CREATE_EVENT_ERROR = '[Events] CREATE_EVENT_ERROR',
 }
 
+export enum EventCollectionType {
+  TODAY = 1,
+  MY = 2
+}
+
 export class FetchEventsBegin implements Action {
   readonly type = EventsActionTypes.FETCH_EVENTS_BEGIN
+  constructor(
+    public collectionType: EventCollectionType) { }
 }
 
 export class FetchEventsComplete implements Action {
   readonly type = EventsActionTypes.FETCH_EVENTS_COMPLETE
-  constructor(public events: any[]) { }
+  constructor(
+    public collectionType: EventCollectionType,
+    public events: any[]) { }
 }
 
 export class FetchEventsError implements ErrorAction {
   readonly type = EventsActionTypes.FETCH_EVENTS_ERROR
-  constructor(public error: any) { }
+  constructor(
+    public collectionType: EventCollectionType,
+    public error: any) { }
 }
 
 export class CreateEventBegin implements Action {
   readonly type = EventsActionTypes.CREATE_EVENT_BEGIN
-  constructor(public create: IEventCreate, public trackingId: string) { }
+  constructor(
+    public collectionType: EventCollectionType,
+    public create: IEventCreate,
+    public trackingId: string) { }
 }
 
 export class CreateEventComplete implements Action {
   readonly type = EventsActionTypes.CREATE_EVENT_COMPLETE
-  constructor(public event: IEvent, public trackingId: string) { }
+  constructor(
+    public collectionType: EventCollectionType,
+    public event: IEvent,
+    public trackingId: string) { }
 }
 
 export class CreateEventError implements ErrorAction {
   readonly type = EventsActionTypes.CREATE_EVENT_ERROR
-  constructor(public error: any, public trackingId: string) { }
+  constructor(
+    public collectionType: EventCollectionType,
+    public error: any,
+    public trackingId: string) { }
 }
 
 export type EventsAction =

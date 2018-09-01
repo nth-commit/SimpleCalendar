@@ -1,17 +1,22 @@
 import { IEvent, IEventCreate } from 'src/services/Api'
 
-export interface PendingEventState {
+export interface EventCreationState {
   create: IEventCreate
   errors: any[]
 }
 
-export interface PendingEventsState {
-  [trackingId: string]: PendingEventState
+export interface EventCreationsState {
+  [trackingId: string]: EventCreationState
+}
+
+export interface EventCollectionState {
+  isLoading: boolean
+  events: IEvent[] | null
+  pendingEvents: EventCreationsState
+  error: any
 }
 
 export interface EventsState {
-  isLoading: boolean
-  events: IEvent[] | null
-  pendingEvents: PendingEventsState
-  error: any
+  today: EventCollectionState
+  my: EventCollectionState
 }
