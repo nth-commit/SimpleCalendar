@@ -61,6 +61,16 @@ export class Api {
     return json.map(this.mapEventResponseToEvent)
   }
 
+  async queryMyEvents(regionId: string): Promise<IEvent[]> {
+    const search = new URLSearchParams()
+    search.append('regionId', regionId)
+
+    const response = await this.get(this.getUrl('events/my'), search)
+    const json: IEventResponse[] = await response.json()
+
+    return json.map(this.mapEventResponseToEvent)
+  }
+
   async createEvent(create: IEventCreate): Promise<IEvent> {
     const response = await this.post(this.getUrl('events'), create)
     const json: IEventResponse = await response.json()

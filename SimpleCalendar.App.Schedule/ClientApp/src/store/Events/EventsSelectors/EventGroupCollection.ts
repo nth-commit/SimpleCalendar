@@ -9,7 +9,8 @@ export enum TimeGrouping {
   NextWeek,
   ThisMonth,
   NextMonth,
-  Later
+  Later,
+  Historical
 } 
 
 export interface EventGroup {
@@ -101,6 +102,10 @@ const eventTimeGroupDefinitions: EventGroupingDefinition[] = [
   },
   {
     timeGrouping: TimeGrouping.Later,
+    predicate: event => moment().diff(event.endTime) < 0
+  },
+  {
+    timeGrouping: TimeGrouping.Historical,
     predicate: () => true
   }
 ]

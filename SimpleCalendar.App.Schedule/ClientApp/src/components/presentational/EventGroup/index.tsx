@@ -26,7 +26,7 @@ const getEventGroupName = (eventGroup: EventGroup): string => {
     case TimeGrouping.ThisMonth: return 'This Month'
     case TimeGrouping.NextMonth: return 'Next Month'
     case TimeGrouping.Later: return 'Later'
-    case TimeGrouping.Tomorrow: return 'Tomorrow'
+    case TimeGrouping.Historical: return 'Past'
     default: throw new Error('Unrecognised TimeGrouping')
   }
 }

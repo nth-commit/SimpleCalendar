@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using SimpleCalendar.Api.Core.Data;
 
@@ -27,7 +28,19 @@ namespace SimpleCalendar.Api.Commands.Users.Impl
             }
 
             var claimsBySub = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, string>>>(user.ClaimsBySubJson);
-            return new OkObjectResult(claimsBySub[user.OriginatingSub]);
+
+            var result = claimsBySub[user.OriginatingSub].ToDictionary(
+                kvp => kvp.Key,
+                kvp => (object)kvp.Value);
+
+            var hasCreatedEvent = await _coreDbContext.Events
+                .Where(e => e.CreatedByEmail == email)
+                .Where(e => !e.IsDeleted)
+                .AnyAsync();
+
+            result.Add("hasCreatedEvent", hasCreatedEvent);
+
+            return new OkObjectResult(result);
         }
     }
 }

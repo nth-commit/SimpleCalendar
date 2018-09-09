@@ -19,6 +19,7 @@ const DEFAULT_EVENTS_STATE: EventsState = {
 
 export const eventsReducer: Reducer<EventsState, EventsActions.EventsAction> = (state = DEFAULT_EVENTS_STATE, action) => {
   switch (action.type) {
+    case EventsActionTypes.CLEAR_EVENTS: return clearEvents(state, action)
     case EventsActionTypes.FETCH_EVENTS_BEGIN: return updateEventCollection(state, action.collectionType, collection => ({ ...collection, isLoading: true  }))
     case EventsActionTypes.FETCH_EVENTS_COMPLETE: return updateEventCollection(state, action.collectionType, collection => ({ ...collection, isLoading: false, events: action.events }))
     case EventsActionTypes.FETCH_EVENTS_ERROR: return updateEventCollection(state, action.collectionType, collection => ({ ...collection, isLoading: false, error: action.error }))
@@ -27,6 +28,9 @@ export const eventsReducer: Reducer<EventsState, EventsActions.EventsAction> = (
     default: return state
   }
 }
+
+const clearEvents: InvokedReducer<EventsState, EventsActions.ClearEvents> = (state, { collectionType }) =>
+  updateEventCollection(state, collectionType, () => DEFAULT_EVENT_COLLECTION_STATE)
 
 const createEventBegin: InvokedReducer<EventsState, EventsActions.CreateEventBegin> = (state, { collectionType, create, trackingId }) =>
   updateEventCollection(state, collectionType, collection => ({
@@ -61,3 +65,4 @@ const updateEventCollection = (
 export * from './EventsSelectors'
 export * from './EventsActionCreators'
 export * from './EventsState'
+export { EventCollectionType } from './EventsActions'

@@ -6,6 +6,7 @@ import MenuItem from '@material-ui/core/MenuItem'
 export interface UserMenuTriggerProps {
   logoutClicked(): void
   myEventsClicked(): void
+  showMyEvents: boolean
   profileImageSrc: string
 }
 
@@ -35,7 +36,7 @@ class UserMenuTrigger extends React.Component<UserMenuTriggerProps> {
 
   render() {
     const { anchorEl } = this.state
-    const { profileImageSrc } = this.props
+    const { profileImageSrc, showMyEvents } = this.props
 
     return (
       <div>
@@ -50,7 +51,7 @@ class UserMenuTrigger extends React.Component<UserMenuTriggerProps> {
           anchorEl={anchorEl || undefined}
           open={!!anchorEl}
           onClose={this.handleClose}>
-            <MenuItem onClick={this.handleMyEventsClick}>My Events</MenuItem>
+            {showMyEvents && <MenuItem onClick={this.handleMyEventsClick}>My Events</MenuItem>}
             <MenuItem onClick={this.handleLogOutClick}>Logout</MenuItem>
         </Menu>
       </div>

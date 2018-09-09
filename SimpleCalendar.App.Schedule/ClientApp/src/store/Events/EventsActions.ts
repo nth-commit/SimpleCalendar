@@ -3,6 +3,7 @@ import { ErrorAction } from 'src/store'
 import { IEventCreate, IEvent } from 'src/services/Api'
 
 export enum EventsActionTypes {
+  CLEAR_EVENTS = '[Events] CLEAR_EVENTS',
   FETCH_EVENTS_BEGIN = '[Events] FETCH_EVENTS_BEGIN',
   FETCH_EVENTS_COMPLETE = '[Events] FETCH_EVENTS_COMPLETE',
   FETCH_EVENTS_ERROR = '[Events] FETCH_EVENTS_ERROR',
@@ -14,6 +15,12 @@ export enum EventsActionTypes {
 export enum EventCollectionType {
   TODAY = 1,
   MY = 2
+}
+
+export class ClearEvents implements Action {
+  readonly type = EventsActionTypes.CLEAR_EVENTS
+  constructor(
+    public collectionType: EventCollectionType) { }
 }
 
 export class FetchEventsBegin implements Action {
@@ -61,6 +68,7 @@ export class CreateEventError implements ErrorAction {
 }
 
 export type EventsAction =
+  ClearEvents |
   FetchEventsBegin |
   FetchEventsComplete |
   FetchEventsError |

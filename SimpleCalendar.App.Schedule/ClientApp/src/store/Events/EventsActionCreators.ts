@@ -10,7 +10,15 @@ let trackingIdCounter = 0
 
 export const eventsActionCreators = {
 
-  fetchEvents: (collection: EventsActions.EventCollectionType = EventsActions.EventCollectionType.TODAY): ApplicationThunkActionAsync => async (dispatch, getState) => {
+  fetchEvents: (
+    collection: EventsActions.EventCollectionType = EventsActions.EventCollectionType.TODAY,
+    shouldClearEvents: boolean = false
+  ): ApplicationThunkActionAsync => async (dispatch, getState) => {
+
+    if (shouldClearEvents) {
+      dispatch(new EventsActions.ClearEvents(collection))
+    }
+
     const state = getState()
 
     if (hasFetchEventsStartedSelector(state, collection)) {
@@ -26,8 +34,14 @@ export const eventsActionCreators = {
     dispatch(new EventsActions.FetchEventsBegin(collection))
 
     const region = regionSelectors.getRegion(state)
+    const api = new Api(state.auth.accessToken)
+    const eventsPromise =
+      collection === EventsActions.EventCollectionType.TODAY ? api.queryEventsToday(region.id, region.timezone) :
+      collection === EventsActions.EventCollectionType.MY ? api.queryMyEvents(region.id) :
+      Promise.resolve([])
+
     try {
-      const events = await new Api(state.auth.accessToken).queryEventsToday(region.id, region.timezone)
+      const events = await eventsPromise
       dispatch(new EventsActions.FetchEventsComplete(collection, events))
     } catch (e) {
       dispatch(new EventsActions.FetchEventsError(collection, e))

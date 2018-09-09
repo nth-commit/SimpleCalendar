@@ -1,6 +1,6 @@
 import * as React from 'react'
 import Dialog from '@material-ui/core/Dialog'
-import { appConnect } from 'src/store'
+import { applicationConnect } from 'src/store'
 import { dialogRegistration } from 'src/services/DialogRegistration'
 import { uiActionCreators } from 'src/store/UI'
 
@@ -29,7 +29,7 @@ class DialogTrigger extends React.Component<DialogTriggerStateProps & DialogTrig
   }
 }
 
-export default appConnect<DialogTriggerStateProps>(
+export default applicationConnect<DialogTriggerStateProps>(
   state => ({
     dialogId: state.ui.dialogId
   }),

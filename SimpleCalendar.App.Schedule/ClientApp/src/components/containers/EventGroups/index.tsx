@@ -1,12 +1,11 @@
 import * as React from 'react'
-import { appConnect } from 'src/store'
+import { applicationConnect } from 'src/store'
 import { IEvent } from 'src/services/Api'
-import { EventGroupCollection, isFetchEventsCompletedSelector, getEventGroupsSelector } from 'src/store/Events'
+import { EventGroupCollection, isFetchEventsCompletedSelector, getEventGroupsSelector, EventCollectionType } from 'src/store/Events'
 import { uiActionCreators } from 'src/store/UI'
 import EventList from 'src/components/presentational/EventList'
 import EventGroup from 'src/components/presentational/EventGroup'
 import { EVENT_DETAILS_DIALOG_ID, EventDetailsDialogOptions } from 'src/components/dialogs/EventDetailsDialog'
-import { EventCollectionType } from 'src/store/Events/EventsActions'
 
 interface EventGroupsStateProps {
   isLoading: boolean
@@ -15,6 +14,10 @@ interface EventGroupsStateProps {
 
 interface EventGroupsDispatchProps {
   openEventDetails(event: IEvent): void
+}
+
+interface EventGroupsOwnProps {
+  collection: EventCollectionType
 }
 
 declare type EventGroupsProps = EventGroupsStateProps & EventGroupsDispatchProps
@@ -53,18 +56,18 @@ const EventGroups = ({ isLoading, eventGroupCollection, openEventDetails }: Even
   )
 }
 
-export default appConnect<EventGroupsStateProps, EventGroupsDispatchProps>(
-  state => {
-    const isLoading = !isFetchEventsCompletedSelector(state, EventCollectionType.TODAY)
+export default applicationConnect<EventGroupsStateProps, EventGroupsDispatchProps, EventGroupsOwnProps>(
+  (state, { collection }) => {
+    const isLoading = !isFetchEventsCompletedSelector(state, collection)
     return {
       isLoading,
-      eventGroupCollection: isLoading ? null : getEventGroupsSelector(state, EventCollectionType.TODAY)
+      eventGroupCollection: isLoading ? null : getEventGroupsSelector(state, collection)
     }
   },
-  dispatch => ({
+  (dispatch, { collection }) => ({
     openEventDetails: event => {
       const options: EventDetailsDialogOptions = {
-        collection: EventCollectionType.TODAY,
+        collection,
         eventId: event.id,
       }
       dispatch(uiActionCreators.openDialog(EVENT_DETAILS_DIALOG_ID, options))

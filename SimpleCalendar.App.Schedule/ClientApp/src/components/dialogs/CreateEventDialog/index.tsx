@@ -3,7 +3,7 @@ import DialogTitle from '@material-ui/core/DialogTitle'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogActions from '@material-ui/core/DialogActions'
 import Button from '@material-ui/core/Button'
-import { appConnect } from 'src/store'
+import { applicationConnect } from 'src/store'
 import CreateEventForm from 'src/components/presentational/CreateEventForm'
 import { eventsActionCreators, IEventCreateGivenRegion } from 'src/store/Events'
 import { uiActionCreators } from 'src/store/UI'
@@ -34,7 +34,7 @@ const UnconnectedCreateEventDialog = ({ saveEvent }: CreateEventDialogProps) => 
   )
 }
 
-export const CreateEventDialog = appConnect<{}, CreateEventDialogDispatchProps>(
+export const CreateEventDialog = applicationConnect<{}, CreateEventDialogDispatchProps>(
   undefined,
   dispatch => ({
     saveEvent: event => {

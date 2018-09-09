@@ -3,7 +3,7 @@ import DialogTitle from '@material-ui/core/DialogTitle'
 import DialogContent from '@material-ui/core/DialogContent'
 import IconButton from '@material-ui/core/IconButton'
 import CloseIcon from '@material-ui/icons/Close'
-import { appConnect } from 'src/store'
+import { applicationConnect } from 'src/store'
 import { getEventSelector } from 'src/store/Events'
 import { uiActionCreators } from 'src/store/UI'
 import { IEvent } from 'src/services/Api'
@@ -47,7 +47,7 @@ export interface EventDetailsDialogOptions {
   eventId: string
 }
 
-export const EventDetailsDialog = appConnect<EventDetailsDialogStateProps, EventDetailsDialogDispatchProps>(
+export const EventDetailsDialog = applicationConnect<EventDetailsDialogStateProps, EventDetailsDialogDispatchProps>(
   state => {
     const { collection, eventId } = state.ui.dialogOptions as EventDetailsDialogOptions
     return {
