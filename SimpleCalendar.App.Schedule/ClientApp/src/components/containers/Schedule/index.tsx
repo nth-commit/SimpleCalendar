@@ -49,14 +49,20 @@ class Schedule extends React.Component<ScheduleStateProps & ScheduleDispatchProp
             <div className="layout-content">
               <Switch>
                 <Route exact={true} path='/'>
-                  <Loader loadAction={fetchEvents(EventCollectionType.TODAY)} isLoadedFunc={isFetchEventsCompleted(EventCollectionType.TODAY)}>
-                    <EventGroups collection={EventCollectionType.TODAY} />
-                  </Loader>
+                  <div className="home">
+                    <Loader loadAction={fetchEvents(EventCollectionType.TODAY)} isLoadedFunc={isFetchEventsCompleted(EventCollectionType.TODAY)}>
+                      <EventGroups collection={EventCollectionType.TODAY} />
+                    </Loader>
+                    <div/>
+                  </div>
                 </Route>
                 <Route exact={true} path='/my-events'>
-                  <Loader loadAction={fetchEvents(EventCollectionType.MY)} isLoadedFunc={isFetchEventsCompleted(EventCollectionType.MY)}>
-                    <EventGroups collection={EventCollectionType.MY} />
-                  </Loader>
+                  <div className="my-events">
+                    <Loader loadAction={fetchEvents(EventCollectionType.MY)} isLoadedFunc={isFetchEventsCompleted(EventCollectionType.MY)}>
+                      <EventGroups collection={EventCollectionType.MY} />
+                    </Loader>
+                    <div/>
+                  </div>
                 </Route>
                 <Route><div>Not found!</div></Route>
               </Switch>

@@ -37,6 +37,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleCalendar.Api.Core.Aut
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleCalendar.App.Schedule", "SimpleCalendar.App.Schedule\SimpleCalendar.App.Schedule.csproj", "{BBAC4A2C-F1E2-4EE7-AB2E-83FFF3B1843D}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleCalendar.Api.Test.Data", "SimpleCalendar.Api.Test.Data\SimpleCalendar.Api.Test.Data.csproj", "{0455AE03-727D-4482-8014-91EED7852715}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleCalendar.Api.Test.EntityFrameworkCore", "SimpleCalendar.Api.Test.EntityFrameworkCore\SimpleCalendar.Api.Test.EntityFrameworkCore.csproj", "{154EF2F4-7F8D-432A-854F-650BD8DA5305}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -149,6 +153,22 @@ Global
 		{BBAC4A2C-F1E2-4EE7-AB2E-83FFF3B1843D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{BBAC4A2C-F1E2-4EE7-AB2E-83FFF3B1843D}.Release|x64.ActiveCfg = Release|Any CPU
 		{BBAC4A2C-F1E2-4EE7-AB2E-83FFF3B1843D}.Release|x64.Build.0 = Release|Any CPU
+		{0455AE03-727D-4482-8014-91EED7852715}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0455AE03-727D-4482-8014-91EED7852715}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0455AE03-727D-4482-8014-91EED7852715}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{0455AE03-727D-4482-8014-91EED7852715}.Debug|x64.Build.0 = Debug|Any CPU
+		{0455AE03-727D-4482-8014-91EED7852715}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0455AE03-727D-4482-8014-91EED7852715}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0455AE03-727D-4482-8014-91EED7852715}.Release|x64.ActiveCfg = Release|Any CPU
+		{0455AE03-727D-4482-8014-91EED7852715}.Release|x64.Build.0 = Release|Any CPU
+		{154EF2F4-7F8D-432A-854F-650BD8DA5305}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{154EF2F4-7F8D-432A-854F-650BD8DA5305}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{154EF2F4-7F8D-432A-854F-650BD8DA5305}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{154EF2F4-7F8D-432A-854F-650BD8DA5305}.Debug|x64.Build.0 = Debug|Any CPU
+		{154EF2F4-7F8D-432A-854F-650BD8DA5305}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{154EF2F4-7F8D-432A-854F-650BD8DA5305}.Release|Any CPU.Build.0 = Release|Any CPU
+		{154EF2F4-7F8D-432A-854F-650BD8DA5305}.Release|x64.ActiveCfg = Release|Any CPU
+		{154EF2F4-7F8D-432A-854F-650BD8DA5305}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

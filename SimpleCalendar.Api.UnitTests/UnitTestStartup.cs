@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -19,8 +18,9 @@ namespace SimpleCalendar.Api.UnitTests
 
         public UnitTestStartup(
             IConfiguration configuration,
+            IHostingEnvironment hostingEnvironment,
             MockCollection mockCollection)
-            : base(configuration)
+            : base(configuration, hostingEnvironment)
         {
             _mockCollection = mockCollection;
         }
@@ -29,7 +29,7 @@ namespace SimpleCalendar.Api.UnitTests
         {
             // Need to add EntityFramework services before Startup services, as first configuration counts for EF
             services.AddEntityFrameworkInMemoryDatabase();
-            services.AddDbContext<CoreDbContext>(optionsBuilder => optionsBuilder.UseInMemoryDatabase(databaseName: "Test"));
+            services.AddDbContext<CoreDbContext>(optionsBuilder => optionsBuilder.UseInMemoryDatabase(databaseName: "UnitTests"));
 
             base.ConfigureServices(services);
 

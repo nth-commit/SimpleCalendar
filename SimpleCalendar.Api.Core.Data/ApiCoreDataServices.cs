@@ -1,12 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using SimpleCalendar.Api.Core.Data;
-using SimpleCalendar.Utility.Configuration;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -17,8 +12,13 @@ namespace Microsoft.Extensions.DependencyInjection
             IConfiguration configuration)
         {
             services.AddEntityFrameworkSqlServer();
-            services.AddDbContext<CoreDbContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString(typeof(CoreDbContext))));
+
+            if (!services.Any(s => s.ServiceType == typeof(CoreDbContext)))
+            {
+                services.AddDbContext<CoreDbContext>(options =>
+                    options.UseSqlServer(configuration.GetConnectionString(typeof(CoreDbContext))));
+            }
+
             return services;
         }
     }

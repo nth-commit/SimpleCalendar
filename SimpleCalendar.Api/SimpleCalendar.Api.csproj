@@ -16,9 +16,9 @@
   <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="5.0.1" />
     <PackageReference Include="IdentityModel" Version="3.8.0" />
-    <PackageReference Include="Microsoft.AspNetCore" Version="2.1.2" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="2.1.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore" Version="2.1.4" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="2.1.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.1.3" />
     <PackageReference Include="Microsoft.AspNetCore.Rewrite" Version="2.1.1" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="5.2.2" />
   </ItemGroup>
@@ -26,6 +26,8 @@
   <ItemGroup>
     <ProjectReference Include="..\SimpleCalendar.Api.Core.Authorization\SimpleCalendar.Api.Core.Authorization.csproj" />
     <ProjectReference Include="..\SimpleCalendar.Api.Models\SimpleCalendar.Api.Models.csproj" />
+    <ProjectReference Include="..\SimpleCalendar.Api.Test.Data\SimpleCalendar.Api.Test.Data.csproj" />
+    <ProjectReference Include="..\SimpleCalendar.Api.Test.EntityFrameworkCore\SimpleCalendar.Api.Test.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\SimpleCalendar.Framework\SimpleCalendar.Framework.csproj" />
     <ProjectReference Include="..\util\SimpleCalendar.Utility.Authorization\SimpleCalendar.Utility.Authorization.csproj" />
     <ProjectReference Include="..\util\SimpleCalendar.Utility.Configuration\SimpleCalendar.Utility.Configuration.csproj" />

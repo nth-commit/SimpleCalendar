@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
+﻿using System.IdentityModel.Tokens.Jwt;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -19,16 +16,21 @@ using SimpleCalendar.Api.Core.Data;
 using SimpleCalendar.Framework;
 using SimpleCalendar.Framework.Identity;
 using SimpleCalendar.Utility.DependencyInjection;
+using SimpleCalendar.Api.Test.Data;
 
 namespace SimpleCalendar.Api
 {
     public class Startup
     {
         private readonly IConfiguration _configuration;
+        private readonly IHostingEnvironment _hostingEnvironment;
 
-        public Startup(IConfiguration configuration)
+        public Startup(
+            IConfiguration configuration,
+            IHostingEnvironment hostingEnvironment)
         {
             _configuration = configuration;
+            _hostingEnvironment = hostingEnvironment;
         }
 
         public virtual void ConfigureServices(IServiceCollection innerServices)
@@ -48,6 +50,11 @@ namespace SimpleCalendar.Api
             services.AddTransient<IDateTimeAccessor, DateTimeAccessor>();
 
             ConfigureAuthenticationServices(services);
+
+            if (_hostingEnvironment.IsDevelopment())
+            {
+                services.AddTestData<Startup>();
+            }
 
             services.AddApiCoreDataServices(_configuration);
             services.AddAuthorizationUtilityServices();
@@ -106,13 +113,14 @@ namespace SimpleCalendar.Api
             IApplicationBuilder app,
             IHostingEnvironment env,
             ILoggerFactory loggerFactory,
-            CoreDbContext coreDbContext)
+            CoreDbContext coreDbContext,
+            ITestDataInitializer<Startup> testDataInitializer)
         {
             loggerFactory.AddConsole();
 
             if (env.IsDevelopment())
             {
-                coreDbContext.Database.EnsureCreated();
+                testDataInitializer.Initialize().GetAwaiter().GetResult();
             }
 
             if (!env.IsDevelopment() && !env.IsUnitTest())

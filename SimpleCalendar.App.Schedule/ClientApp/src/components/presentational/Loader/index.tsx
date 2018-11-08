@@ -35,5 +35,9 @@ export default applicationConnect<LoaderStateProps, LoaderDispatchProps, LoaderO
   }),
   (dispatch, { loadAction }) => ({
     load: () => dispatch(loadAction())
-  })
+  }),
+  undefined,
+  {
+    pure: false
+  }
 )(Loader)
