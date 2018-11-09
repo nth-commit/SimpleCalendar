@@ -1,14 +1,20 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Moq;
 using SimpleCalendar.Api.Core.Data;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
+using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 
 namespace SimpleCalendar.Api.Test.Data
@@ -44,11 +50,10 @@ namespace SimpleCalendar.Api.Test.Data
                 await initializer.Initialize(coreDbContext);
             }
 
-
             var client = testServer.CreateClient();
             foreach (var initializer in _httpClientTestDataInitalizers)
             {
-                await initializer.InitializeSection(client);
+                await initializer.Initialize(client);
             }
         }
 
@@ -65,7 +70,7 @@ namespace SimpleCalendar.Api.Test.Data
         {
             webHostBuilder
                 .UseStartup<TStartup>()
-                .UseEnvironment("TestData")
+                .UseEnvironment("UnitTests")
                 .ConfigureAppConfiguration(ConfigureAppConfiguration)
                 .ConfigureServices(ConfigureServices);
         }
@@ -83,6 +88,46 @@ namespace SimpleCalendar.Api.Test.Data
                 optionsBuilder.UseInMemoryDatabase(databaseName: "Test.Data", databaseRoot: _databaseRoot));
 
             services.AddSingleton(_loggerFactory);
+
+            services
+                .AddAuthentication(options =>
+                {
+                    options.DefaultAuthenticateScheme = "TestScheme";
+                    options.DefaultChallengeScheme = "TestScheme";
+                })
+                .AddScheme<AuthenticationSchemeOptions, StubbedAuthenticationHandler>("TestScheme", options =>
+                {
+                });
+
+            services.AddTransient<IUserInfoService, StubbedUserInfoService>();
+        }
+
+        public class StubbedAuthenticationHandler : AuthenticationHandler<AuthenticationSchemeOptions>
+        {
+            public StubbedAuthenticationHandler(
+                IOptionsMonitor<AuthenticationSchemeOptions> options, ILoggerFactory logger, UrlEncoder encoder, ISystemClock clock)
+                    : base(options, logger, encoder, clock)
+            {
+            }
+
+            protected override Task<AuthenticateResult> HandleAuthenticateAsync()
+            {
+                var identity = new ClaimsIdentity("TestAuthenticationType");
+                var principal = new ClaimsPrincipal(identity);
+                return Task.FromResult(AuthenticateResult.Success(new AuthenticationTicket(principal, "TestScheme")));
+            }
+        }
+
+        public class StubbedUserInfoService : IUserInfoService
+        {
+            public Task<IEnumerable<Claim>> GetUserInfo(HttpContext httpContext)
+            {
+                return Task.FromResult(new Claim[]
+                {
+                    new Claim("email", "michaelfry2002@gmail.com"),
+                    new Claim("sub", "sub")
+                }.AsEnumerable());
+            }
         }
     }
 }

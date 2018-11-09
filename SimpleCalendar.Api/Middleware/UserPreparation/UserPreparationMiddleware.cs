@@ -1,13 +1,10 @@
-﻿using IdentityModel.Client;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Options;
+﻿using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using SimpleCalendar.Api.Core.Data;
 using SimpleCalendar.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -32,7 +29,7 @@ namespace SimpleCalendar.Api.Middleware.UserPreparation
         {
             if (context.User.Identity.IsAuthenticated)
             {
-                var userInfoClaims = await _userInfoService.GetUserInfoAsync(context);
+                var userInfoClaims = await _userInfoService.GetUserInfo(context);
 
                 var regionMembershipRoleClaims = await GetRegionMembershipRoleClaimsAsync(userInfoClaims, coreDbContext);
 

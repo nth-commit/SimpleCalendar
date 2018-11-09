@@ -5,6 +5,6 @@ namespace SimpleCalendar.Api.Test.Data
 {
     public interface IHttpClientTestDataInitializer
     {
-        Task InitializeSection(HttpClient client);
+        Task Initialize(HttpClient client);
     }
 }

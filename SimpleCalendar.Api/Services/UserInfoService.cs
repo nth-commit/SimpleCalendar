@@ -7,7 +7,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
-namespace SimpleCalendar.Api.Middleware.UserPreparation.Impl
+namespace SimpleCalendar.Api.Services
 {
     public class UserInfoService : IUserInfoService
     {
@@ -19,7 +19,7 @@ namespace SimpleCalendar.Api.Middleware.UserPreparation.Impl
             _memoryCache = memoryCache;
         }
 
-        public async Task<IEnumerable<Claim>> GetUserInfoAsync(HttpContext httpContext)
+        public async Task<IEnumerable<Claim>> GetUserInfo(HttpContext httpContext)
         {
             var securityToken = httpContext.GetSecurityToken();
             return await _memoryCache.GetOrCreateAsync($"{nameof(UserInfoService)}:{securityToken}", async (entry) =>

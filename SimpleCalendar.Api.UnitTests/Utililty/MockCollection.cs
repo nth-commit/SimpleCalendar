@@ -20,7 +20,7 @@ namespace SimpleCalendar.Api.UnitTests.Utililty
         public MockCollection()
         {
             UserInfoService
-                .Setup(x => x.GetUserInfoAsync(It.IsAny<HttpContext>()))
+                .Setup(x => x.GetUserInfo(It.IsAny<HttpContext>()))
                 .ReturnsAsync<HttpContext, IUserInfoService, IEnumerable<Claim>>(context =>
                     context.User.Claims);
         }

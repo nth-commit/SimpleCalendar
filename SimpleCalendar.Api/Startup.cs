@@ -17,6 +17,7 @@ using SimpleCalendar.Framework;
 using SimpleCalendar.Framework.Identity;
 using SimpleCalendar.Utility.DependencyInjection;
 using SimpleCalendar.Api.Test.Data;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace SimpleCalendar.Api
 {
@@ -37,6 +38,11 @@ namespace SimpleCalendar.Api
         {
             var services = new ValidatableServiceCollection(innerServices);
 
+            if (_hostingEnvironment.IsDevelopment())
+            {
+                services.AddTestData<Startup>();
+            }
+
             services.AddMvc(options =>
             {
                 options.Filters.Add<ModelStateValidationFilter>();
@@ -49,11 +55,9 @@ namespace SimpleCalendar.Api
             services.AddTransient<IRegionCache, RegionCache>();
             services.AddTransient<IDateTimeAccessor, DateTimeAccessor>();
 
-            ConfigureAuthenticationServices(services);
-
-            if (_hostingEnvironment.IsDevelopment())
+            if (!_hostingEnvironment.IsUnitTest())
             {
-                services.AddTestData<Startup>();
+                ConfigureAuthenticationServices(services);
             }
 
             services.AddApiCoreDataServices(_configuration);
@@ -70,7 +74,7 @@ namespace SimpleCalendar.Api
             services.ConfigureAuth0();
             services.ConfigureHosts();
 
-            services.AddUserPreparation();
+            services.TryAddTransient<IUserInfoService, UserInfoService>();
 
             services.AddRegionServices();
             services.AddRegionMembershipServices();

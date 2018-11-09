@@ -21,6 +21,8 @@ namespace Microsoft.Extensions.DependencyInjection
 
             services.AddTransient<IDbContextTestDataInitializer, RegionInitializer>();
 
+            services.AddTransient<IHttpClientTestDataInitializer, RegionMembershipInitializer>();
+
             return services;
         }
     }

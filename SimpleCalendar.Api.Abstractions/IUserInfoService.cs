@@ -1,14 +1,12 @@
 ﻿using Microsoft.AspNetCore.Http;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
-namespace SimpleCalendar.Api.Middleware.UserPreparation
+namespace SimpleCalendar.Api
 {
     public interface IUserInfoService
     {
-        Task<IEnumerable<Claim>> GetUserInfoAsync(HttpContext httpContext);
+        Task<IEnumerable<Claim>> GetUserInfo(HttpContext httpContext);
     }
 }
